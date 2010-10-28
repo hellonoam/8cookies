@@ -1,0 +1,9 @@
+{
+  "name": "My First Extension",
+  "version": "1.0",
+  "description": "The first extension that I made.",
+  "browser_action": {
+    "popup": "popup.html",
+    "default_icon": "icon.png"
+  }
+}
