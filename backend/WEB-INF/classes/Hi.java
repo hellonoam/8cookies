@@ -24,7 +24,7 @@ public class Hi extends HttpServlet {
         out.println("<title>Hola</title>");
         out.println("</head>");
         out.println("<body bgcolor=\"white\">");
-        out.println("<h1> Hello world </h1>");
+        out.println("<h1> Hello2 world </h1>");
         out.println("</body>");
         out.println("</html>");
     }
