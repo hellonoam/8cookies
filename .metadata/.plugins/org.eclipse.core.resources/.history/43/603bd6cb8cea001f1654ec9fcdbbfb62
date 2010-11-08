@@ -1,0 +1,22 @@
+import javax.servlet.http.HttpServlet;
+
+
+/**
+ * My test servlet
+ *
+ * @author Noam Szpiro
+ */
+
+public class Hi extends HttpServlet {
+
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+    {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        out.println("{ 'hello':'No' }");
+		out.close();
+    }
+}
