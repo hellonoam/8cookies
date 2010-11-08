@@ -1,8 +1,10 @@
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * My test servlet
@@ -19,13 +21,7 @@ public class Hi extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Hola</title>");
-        out.println("</head>");
-        out.println("<body bgcolor=\"white\">");
-        out.println("<h1> Hello2 world </h1>");
-        out.println("</body>");
-        out.println("</html>");
+        out.println("{ 'hello':'Nono' }");
+		out.close();
     }
 }

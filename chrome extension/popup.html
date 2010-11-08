@@ -1,11 +1,33 @@
 <html>
 <body>
 	<script src="jQuery.js"></script>
-	<script type="text/javascript"> 	
-		$.ajax({
-			url: "http://www.google.com/hello"
-		});
+	<script type="text/javascript">
+   		$(document).ready(function() { init(); });
+
+ 		function init(){
+ 			console.log("loaded");
+ 			$(".send").click(function() {
+ 				console.log("message being sent");
+				getData();
+ 			});
+ 		}
+ 		
+ 		function getData(){
+ 			var req = new XMLHttpRequest();
+			req.open(
+			    "GET",
+			    "http://localhost/bfc/Hi",
+			   	true);
+			req.onload = function() { 	
+				console.log(
+					req.responseXML
+				)
+			};
+			req.send(null);
+		}
+		
 	</script>
-	<p>hello world</p>
+	<p>Cloud Browsing</p>
+	<input type="button" value="Get Info" class="send"/>
 </body>
 </html>

@@ -1,7 +1,12 @@
 {
-  "name": "My First Extension",
+  "name": "Browse from the cloud",
   "version": "1.0",
-  "description": "The first extension that I made.",
+  "description": "Saves the browser information in the cloud, which allows users to browse from any computer",
+  "permissions": [
+    "http://api.flickr.com/",
+	"http://localhost/*"
+
+  ],
   "browser_action": {
     "popup": "popup.html",
     "default_icon": "icon.png"
