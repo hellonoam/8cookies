@@ -21,7 +21,7 @@ public class Hi extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        out.println("{ 'hello':'Nono' }");
+        out.println("hello");
 		out.close();
     }
 }

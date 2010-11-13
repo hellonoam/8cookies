@@ -8,21 +8,18 @@
  			console.log("loaded");
  			$(".send").click(function() {
  				console.log("message being sent");
-				getData();
+				chrome.extension.sendRequest({data: "please"},
+					function(response) {
+				  		var text = $(".answer").text();
+						$(".answer").text(text + " " +
+						 response.hello);
+					}
+				);
  			});
  		}
-
- 		function getData(){
-			$.ajax({
-				url: "http://localhost/bfc/Hi",
-				success: function(data) {
-					console.log(data);
-				}
-			});
-		}
-
 	</script>
 	<p>Cloud Browsing</p>
+	<div class="answer"></div>
 	<input type="button" value="Get Info" class="send"/>
 </body>
 </html>

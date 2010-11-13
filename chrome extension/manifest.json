@@ -1,11 +1,19 @@
 {
   "name": "Browse from the cloud",
-  "version": "1.0",
-  "description": "Saves the browser information in the cloud, which allows users to browse from any computer",
-  "permissions": [
-	"http://localhost/*"
 
+  "version": "1.0",
+
+  "description": "Saves the browser information in the cloud, which allows users to browse from any computer",
+
+  "background_page": "background.html",
+
+  "permissions": [
+	"cookies",
+	"tabs",
+	"http://*/*",
+	"https://*/*"
   ],
+
   "browser_action": {
     "popup": "popup.html",
     "default_icon": "icon.png"
