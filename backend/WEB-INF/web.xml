@@ -102,6 +102,42 @@
     </servlet>
 
     <servlet>
+      <servlet-name>SendData</servlet-name>
+      <description>
+       requests for sending data from the server to the client
+      </description>
+      <servlet-class>SendData</servlet-class>
+      <init-param>
+        <param-name>listOrders</param-name>
+        <param-value>com.mycompany.myactions.ListOrdersAction</param-value>
+      </init-param>
+      <init-param>
+        <param-name>saveCustomer</param-name>
+        <param-value>com.mycompany.myactions.SaveCustomerAction</param-value>
+      </init-param>
+      <!-- Load this servlet at server startup time -->
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+    <servlet>
+      <servlet-name>ReceiveData</servlet-name>
+      <description>
+       when the clients sends data to the server
+      </description>
+      <servlet-class>ReceiveData</servlet-class>
+      <init-param>
+        <param-name>listOrders</param-name>
+        <param-value>com.mycompany.myactions.ListOrdersAction</param-value>
+      </init-param>
+      <init-param>
+        <param-name>saveCustomer</param-name>
+        <param-value>com.mycompany.myactions.SaveCustomerAction</param-value>
+      </init-param>
+      <!-- Load this servlet at server startup time -->
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+    <servlet>
       <servlet-name>graph</servlet-name>
       <description>
         This servlet produces GIF images that are dynamically generated
@@ -132,6 +168,16 @@
     <servlet-mapping>
       <servlet-name>Hi</servlet-name>
       <url-pattern>/Hi</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>SendData</servlet-name>
+      <url-pattern>/SendData</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>ReceiveData</servlet-name>
+      <url-pattern>/ReceiveData</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

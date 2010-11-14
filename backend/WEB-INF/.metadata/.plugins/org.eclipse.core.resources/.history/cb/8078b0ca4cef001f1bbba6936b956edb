@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+/**
+ * My test servlet
+ *
+ * @author Noam Szpiro
+ */
+
+@SuppressWarnings("serial")
+public class ReceiveData extends HttpServlet {
+	
+	final static int buffer_size = 4096;
+
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+    {
+    	//reading the request
+//    	request.setCharacterEncoding("text/html");
+    	BufferedReader br = request.getReader();
+    	CharArrayWriter data = new CharArrayWriter();
+    	char[] buf = new char[buffer_size]; 
+    	int read;
+    	while((read = br.read(buf, 0, buffer_size)) != -1)
+    		data.write(buf, 0, read);
+    	//data now holds the values sent from client
+    	
+    	//converting data to JSON
+    	JsonParser jp = new JsonParser();
+    	JsonElement json = jp.parse(data.toString());
+    	
+    	//sending the response
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("received");
+		out.close();
+    }
+}

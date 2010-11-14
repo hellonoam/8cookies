@@ -7,19 +7,18 @@
  		function init(){
  			console.log("loaded");
  			$(".send").click(function() {
- 				console.log("message being sent");
-				chrome.extension.sendRequest({data: "please"},
-					function(response) {
-				  		var text = $(".answer").text();
-						$(".answer").text(text + " " +
-						 response.hello);
-					}
-				);
+ 				console.log("request to send cookies, sent to bg");
+				chrome.extension.sendRequest({ type: "send" });
  			});
+			$(".receive").click(function() {
+				console.log("request to receive cookies, sent to bg");
+				chrome.extension.sendRequest({ type: "receive" });
+			});
  		}
 	</script>
 	<p>Cloud Browsing</p>
 	<div class="answer"></div>
-	<input type="button" value="Get Info" class="send"/>
+	<input type="button" class="receive" value="Receive Cookies"/>
+	<input type="button" class="send" value="Send Cookies"/>
 </body>
 </html>

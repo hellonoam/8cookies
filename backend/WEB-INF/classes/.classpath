@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/usr/local/apache-tomcat-7.0.4/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/backend/bin/gson-1.5.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
