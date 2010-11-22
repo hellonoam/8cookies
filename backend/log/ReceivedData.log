@@ -2,20 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2010-11-14T00:38:22</date>
-  <millis>1289695102060</millis>
-  <sequence>19</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>11</thread>
-  <message>json:null</message>
-</record>
-<record>
-  <date>2010-11-14T00:41:17</date>
-  <millis>1289695277387</millis>
-  <sequence>20</sequence>
+  <date>2010-11-22T00:01:25</date>
+  <millis>1290384085786</millis>
+  <sequence>21</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
@@ -24,20 +13,53 @@
   <message>json:null</message>
 </record>
 <record>
-  <date>2010-11-14T00:41:54</date>
-  <millis>1289695314123</millis>
-  <sequence>21</sequence>
+  <date>2010-11-22T00:01:25</date>
+  <millis>1290384085787</millis>
+  <sequence>22</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
   <method>doGet</method>
-  <thread>13</thread>
-  <message>json:null</message>
+  <thread>12</thread>
+  <message>data received: </message>
 </record>
 <record>
-  <date>2010-11-14T00:42:05</date>
-  <millis>1289695325519</millis>
-  <sequence>22</sequence>
+  <date>2010-11-22T00:01:25</date>
+  <millis>1290384085787</millis>
+  <sequence>23</sequence>
+  <logger>ReceiveData</logger>
+  <level>SEVERE</level>
+  <class>ReceiveData</class>
+  <method>doGet</method>
+  <thread>12</thread>
+  <message>with request.getParam: null</message>
+</record>
+<record>
+  <date>2010-11-22T00:01:27</date>
+  <millis>1290384087442</millis>
+  <sequence>24</sequence>
+  <logger>ReceiveData</logger>
+  <level>SEVERE</level>
+  <class>SendData</class>
+  <method>doGet</method>
+  <thread>13</thread>
+  <message>in send data</message>
+</record>
+<record>
+  <date>2010-11-22T00:01:31</date>
+  <millis>1290384091568</millis>
+  <sequence>25</sequence>
+  <logger>ReceiveData</logger>
+  <level>SEVERE</level>
+  <class>ReceiveData</class>
+  <method>doGet</method>
+  <thread>14</thread>
+  <message>inside do get</message>
+</record>
+<record>
+  <date>2010-11-22T00:01:31</date>
+  <millis>1290384091569</millis>
+  <sequence>26</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
@@ -46,13 +68,24 @@
   <message>json:null</message>
 </record>
 <record>
-  <date>2010-11-14T00:44:12</date>
-  <millis>1289695452410</millis>
-  <sequence>23</sequence>
+  <date>2010-11-22T00:01:31</date>
+  <millis>1290384091570</millis>
+  <sequence>27</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
   <method>doGet</method>
-  <thread>15</thread>
-  <message>json:null</message>
+  <thread>14</thread>
+  <message>data received: </message>
+</record>
+<record>
+  <date>2010-11-22T00:01:31</date>
+  <millis>1290384091570</millis>
+  <sequence>28</sequence>
+  <logger>ReceiveData</logger>
+  <level>SEVERE</level>
+  <class>ReceiveData</class>
+  <method>doGet</method>
+  <thread>14</thread>
+  <message>with request.getParam: null</message>
 </record>

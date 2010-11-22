@@ -1,5 +1,3 @@
-import java.io.BufferedReader;
-import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.FileHandler;
@@ -11,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -22,37 +21,43 @@ import com.google.gson.JsonParser;
 
 @SuppressWarnings("serial")
 public class ReceiveData extends HttpServlet {
-	
-	private final static int buffer_size = 4096;
-	private static Logger logger = Logger.getLogger(ReceiveData.class.getName()); 
+	public static JsonArray cookies;
+	public static Logger logger = Logger.getLogger(ReceiveData.class.getName()); 
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
     {
-    	//reading the request
-//    	request.setCharacterEncoding("text/html");
-    	BufferedReader br = request.getReader();
-    	CharArrayWriter data = new CharArrayWriter();
-    	char[] buf = new char[buffer_size]; 
-    	int read;
-    	while((read = br.read(buf, 0, buffer_size)) != -1)
-    		data.write(buf, 0, read);
-    	//data now holds the values sent from client
-    	
-    	//converting data to JSON
+    	logger.severe("inside do get");
     	JsonParser jp = new JsonParser();
-    	JsonElement json = jp.parse(data.toString());
+    	//reading the cookies as json
+    	JsonElement json = jp.parse(request.getParameter("cookiesFromClient").toString());
     	Handler fileHandler = new FileHandler(
     			"/Users/noamszpiro/Dropbox/Part II Project/code/" +
     			"Browsing-from-the-cloud/backend/log/ReceivedData.log");
     	logger.addHandler(fileHandler);
-    	logger.severe("json:" + json.toString());
-    	
+    	logger.severe("XXXXXXXX - JSON - XXXXXXXXX");
+    	if (!json.isJsonArray())
+    		logger.severe("json was not an array");
+    	else
+    		logger.severe("cookies received successfully");
+    	JsonArray ja = json.getAsJsonArray();
+    	//The cookies are now in this array
+
+    	cookies = ja;   	
+
     	//sending the response
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("received");
+        out.println("received!");
 		out.close();
     }
+    
+    public void doPost(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+        {
+    		logger.severe("inside do post");
+    		doGet(request, response);
+        }
 }

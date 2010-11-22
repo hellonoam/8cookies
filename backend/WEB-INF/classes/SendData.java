@@ -21,7 +21,7 @@ public class SendData extends HttpServlet {
     {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("{ cookies: 'hello' }");
+        out.println(ReceiveData.cookies.toString());
 		out.close();
     }
 }

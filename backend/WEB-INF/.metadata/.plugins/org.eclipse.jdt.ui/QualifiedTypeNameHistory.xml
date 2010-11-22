@@ -4,4 +4,13 @@
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="javax.servlet.ServletException"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.CharArrayWriter"/>
+<fullyQualifiedTypeName name="java.util.logging.FileHandler"/>
+<fullyQualifiedTypeName name="com.sun.net.ssl.internal.www.protocol.https.Handler"/>
+<fullyQualifiedTypeName name="java.util.logging.Handler"/>
+<fullyQualifiedTypeName name="java.util.logging.Logger"/>
+<fullyQualifiedTypeName name="com.google.gson.JsonParser"/>
+<fullyQualifiedTypeName name="com.google.gson.JsonElement"/>
+<fullyQualifiedTypeName name="ReceiveData"/>
 </qualifiedTypeNameHistroy>

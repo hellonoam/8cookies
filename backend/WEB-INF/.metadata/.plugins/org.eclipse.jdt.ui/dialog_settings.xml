@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item value="/usr/local/apache-tomcat-7.0.4/lib" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/backend/bin" key="org.eclipse.jdt.ui.lastextjar"/>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="true" key="group_libraries"/>
 		<item value="false" key="linkWithEditor"/>

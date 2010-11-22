@@ -12,29 +12,48 @@
 
 	function sendData(){
 		console.log("in sendData");
-		var cookies;
-		chrome.cookies.getAll({}, function(data) { cookies = data; });
-		console.log("cookies:" + cookies.length);
-		$.ajax({
-			//since the server receives the data
-			url: "http://localhost/bfc/ReceiveData",
-			data: cookies,
-			success: function(data) {
-				console.log("data from server: " + data);
-			}
+		chrome.cookies.getAll({}, function(cookies) { 
+			console.log("cookies length: " + cookies.length);
+			$.ajax({
+				type: "POST",
+				//since the server receives the data
+				url: "http://localhost/bfc/ReceiveData",
+				data: {	
+					cookiesFromClient: JSON.stringify(cookies)
+				},
+				success: function(data) {
+					console.log("data from server: " + data);
+				}
+			});
 		});
 	}
 
 	function receiveData(){
 		console.log("in receiveData");
-		var cookies;
 		$.ajax({
 			//since the server sends the data
 			url: "http://localhost/bfc/SendData",
 			success: function(data) {
-				console.log("data from server: " + data);
-				// for (int i=0; i<data.length; i++)
-				// chrome.cookies.set(data[i]);
+				var cookies = JSON.parse(data);
+				console.log("received " + cookies.length + " cookies");
+				for (var i=0; i<cookies.length; i++) {
+					var newCookie = new Object;
+					var current = cookies[i];
+					newCookie.url = ((newCookie.secure) ? 
+						"https://" : "http://") + current.domain;
+					newCookie.name = current.name;
+					newCookie.value = current.value;
+					if (!current.hostOnly)
+						newCookie.domain = current.domain;
+					newCookie.path = current.path;
+					newCookie.secure = current.secure;
+					newCookie.httpOnly = current.httpOnly;
+					if (!current.session)
+						newCookie.expirationDate = current.expirationData;
+					newCookie.storeId = current.storeId;
+					chrome.cookies.set(newCookie);
+				}
+				console.log("cookies were set successfully");
 			}
 		});
 	}

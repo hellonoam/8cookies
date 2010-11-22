@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="25" version="2.0">
+<workbench progressCount="28" version="2.0">
 <workbenchAdvisor/>
-<window height="768" width="1024" x="75" y="32">
+<window height="768" width="1110" x="42" y="22">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -31,20 +31,25 @@
 <folder appearance="1" expanded="2">
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Hi.java" partName="Hi.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/backend/WEB-INF/classes/Hi.java" title="Hi.java" tooltip="classes/Hi.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/classes/Hi.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="468" selectionTopPixel="0"/>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReceiveData.java" partName="ReceiveData.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/backend/WEB-INF/classes/ReceiveData.java" title="ReceiveData.java" tooltip="classes/ReceiveData.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/classes/ReceiveData.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1198" selectionTopPixel="366"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SendData.java" partName="SendData.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/backend/WEB-INF/classes/SendData.java" title="SendData.java" tooltip="classes/SendData.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/classes/SendData.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="554" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Errors (8 items)"/>
+<category IMemento.internal.id="Warnings (1 item)"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="84" org.eclipse.ui.ide.markerType="114" org.eclipse.ui.ide.pathField="144" org.eclipse.ui.ide.resourceField="114" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -53,6 +58,9 @@
 <visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
 </viewState>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
 </view>
 <view id="org.eclipse.jdt.ui.PackageExplorer" partName="Package Explorer">
 <viewState group_libraries="1" layout="2" linkWithEditor="0" rootMode="1" workingSetName="Aggregate for window 1289147829708">
@@ -83,13 +91,10 @@
 </customFilters>
 </viewState>
 </view>
-<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
-<viewState/>
-</view>
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -150,11 +155,16 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.jdt.ui.PackageExplorer"/>
-<view id="org.eclipse.ui.views.ProblemView"/>
-<view id="org.eclipse.jdt.ui.JavadocView"/>
-<view id="org.eclipse.jdt.ui.SourceView"/>
-<view id="org.eclipse.ui.views.ContentOutline"/>
-<fastViewBars/>
+<fastViewBars>
+<fastViewBar fastViewLocation="1024" id="bottom" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
+<fastViews>
+<view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
+<view id="org.eclipse.jdt.ui.JavadocView" ratio="0.3"/>
+<view id="org.eclipse.jdt.ui.SourceView" ratio="0.3"/>
+<view id="org.eclipse.ui.console.ConsoleView" ratio="0.29868227"/>
+</fastViews>
+</fastViewBar>
+</fastViewBars>
 <layout>
 <mainWindow>
 <info folder="true" part="left">
@@ -177,32 +187,26 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.25" ratioLeft="254" ratioRight="762" relationship="2" relative="left"/>
+<info part="org.eclipse.ui.editorss" ratio="0.15832575" ratioLeft="174" ratioRight="925" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.74963397" ratioLeft="512" ratioRight="171" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ProblemView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
-<page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
-<page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
+<folder appearance="2" expanded="0">
+<page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.ui.JavadocView" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.ui.SourceView" label="LabelNotFound"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <page content="com.google.gwt.eclipse.DevModeView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-<part id="1"/>
-<part id="2"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 <info folder="true" part="right" ratio="0.7493438" ratioLeft="571" ratioRight="191" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.eclipse.ui.texteditor.TemplatesView" label="LabelNotFound"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 </mainWindow>
@@ -213,9 +217,143 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/classes/Hi.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/classes/ReceiveData.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/classes/SendData.java"/>
 </editors>
-<item active="true" historyLabel="Hi.java" index="0">
-<position info="not_deleted" x="95" y="0"/>
+<item historyLabel="Hi.java" index="0">
+<position info="not_deleted" x="569" y="0"/>
+</item>
+<item historyLabel="Hi.java" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="63" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="0" y="671"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="63" y="0"/>
+</item>
+<item historyLabel="Hi.java" index="0">
+<position info="not_deleted" x="227" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="63" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1804" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="564" y="11"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="0" y="671"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="564" y="11"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="982" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="962" y="14"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1064" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1092" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1165" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1187" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1190" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="906" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="633" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="906" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="643" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="906" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="602" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="543" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="602" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1529" y="6"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="602" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1529" y="6"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="554" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1529" y="6"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="554" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1529" y="6"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1267" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1331" y="7"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="467" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1331" y="7"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1204" y="0"/>
+</item>
+<item historyLabel="SendData.java" index="2">
+<position info="not_deleted" x="554" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1204" y="0"/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position/>
+</item>
+<item historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="1646" y="0"/>
+</item>
+<item active="true" historyLabel="ReceiveData.java" index="1">
+<position info="not_deleted" x="2099" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -223,6 +361,12 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="right"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
@@ -231,10 +375,17 @@
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
 <trimItem IMemento.internal.id="com.google.gdt.eclipse.suite.status.trim"/>
+<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SendData.java" tooltip="classes/SendData.java">
+<persistable path="/classes/SendData.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReceiveData.java" tooltip="classes/ReceiveData.java">
+<persistable path="/classes/ReceiveData.java"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Hi.java" tooltip="classes/Hi.java">
 <persistable path="/classes/Hi.java"/>
 </file>
