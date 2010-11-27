@@ -1,0 +1,11 @@
+host cookies
+
+sql lite
+
+app engine -> database -> merge ->  syncing maybe every 10 min or check something else -> users -> profiles
+
+- 
+
+
+- check for paths  
+- problems with cookies with the same domain and different paths

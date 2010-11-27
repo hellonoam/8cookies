@@ -2,90 +2,35 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2010-11-22T00:01:25</date>
-  <millis>1290384085786</millis>
-  <sequence>21</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>12</thread>
-  <message>json:null</message>
-</record>
-<record>
-  <date>2010-11-22T00:01:25</date>
-  <millis>1290384085787</millis>
-  <sequence>22</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>12</thread>
-  <message>data received: </message>
-</record>
-<record>
-  <date>2010-11-22T00:01:25</date>
-  <millis>1290384085787</millis>
+  <date>2010-11-27T16:31:36</date>
+  <millis>1290875496638</millis>
   <sequence>23</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
   <method>doGet</method>
   <thread>12</thread>
-  <message>with request.getParam: null</message>
+  <message>XXXXXXXX - JSON - XXXXXXXXX</message>
 </record>
 <record>
-  <date>2010-11-22T00:01:27</date>
-  <millis>1290384087442</millis>
+  <date>2010-11-27T16:31:36</date>
+  <millis>1290875496639</millis>
   <sequence>24</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
-  <class>SendData</class>
+  <class>ReceiveData</class>
   <method>doGet</method>
-  <thread>13</thread>
-  <message>in send data</message>
+  <thread>12</thread>
+  <message>cookies received successfully</message>
 </record>
 <record>
-  <date>2010-11-22T00:01:31</date>
-  <millis>1290384091568</millis>
+  <date>2010-11-27T16:32:54</date>
+  <millis>1290875574346</millis>
   <sequence>25</sequence>
   <logger>ReceiveData</logger>
   <level>SEVERE</level>
   <class>ReceiveData</class>
   <method>doGet</method>
-  <thread>14</thread>
+  <thread>13</thread>
   <message>inside do get</message>
-</record>
-<record>
-  <date>2010-11-22T00:01:31</date>
-  <millis>1290384091569</millis>
-  <sequence>26</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>14</thread>
-  <message>json:null</message>
-</record>
-<record>
-  <date>2010-11-22T00:01:31</date>
-  <millis>1290384091570</millis>
-  <sequence>27</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>14</thread>
-  <message>data received: </message>
-</record>
-<record>
-  <date>2010-11-22T00:01:31</date>
-  <millis>1290384091570</millis>
-  <sequence>28</sequence>
-  <logger>ReceiveData</logger>
-  <level>SEVERE</level>
-  <class>ReceiveData</class>
-  <method>doGet</method>
-  <thread>14</thread>
-  <message>with request.getParam: null</message>
 </record>

@@ -37,9 +37,10 @@
 				var cookies = JSON.parse(data);
 				console.log("received " + cookies.length + " cookies");
 				for (var i=0; i<cookies.length; i++) {
+					//maybe move this mambo jambo to another function
 					var newCookie = new Object;
 					var current = cookies[i];
-					newCookie.url = ((newCookie.secure) ? 
+					newCookie.url = ((current.secure) ? 
 						"https://" : "http://") + current.domain;
 					newCookie.name = current.name;
 					newCookie.value = current.value;
@@ -55,6 +56,22 @@
 				}
 				console.log("cookies were set successfully");
 			}
+		});
+	}
+	
+	function deleteCookies(){
+		console.log("deleting cookies...");
+		chrome.cookies.getAll({}, function(cookies) {
+			for(var i=0; i<cookies.length; i++){
+				var current = cookies[i];
+				var cookies2Remove = new Object;
+				cookies2Remove.url = ((current.secure) ? 
+					"https://" : "http://") + current.domain;	
+				cookies2Remove.name = current.name;
+				cookies2Remove.storeId = current.storeId;
+				chrome.cookies.remove(cookies2Remove);
+			}
+			console.log(cookies.length + " cookies have been deleted");
 		});
 	}
 </script>
