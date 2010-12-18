@@ -14,11 +14,21 @@
 				console.log("request to receive cookies, sent to bg");
 				chrome.extension.sendRequest({ type: "receive" });
 			});
+			$(".deleteFromServer").click(function() {
+				console.log("request to delete from server, sent to bg");
+				chrome.extension.sendRequest({ type: "deleteFromServer" });
+			});
+			$(".deleteLocal").click(function() {
+				console.log("request to delete local, sent to bg");
+				chrome.extension.sendRequest({ type: "deleteLocal" });
+			});
  		}
 	</script>
 	<p>Cloud Browsing</p>
-	<div class="answer"></div>
+	<div class="usernameDiv">username: <input type="text" class="username"></div>
 	<input type="button" class="receive" value="Receive Cookies"/>
 	<input type="button" class="send" value="Send Cookies"/>
+	<input type="button" class="deleteFromServer" value="delete cookies from server">
+	<input type="button" class="deleteLocal" value="delete local cookies">
 </body>
 </html>

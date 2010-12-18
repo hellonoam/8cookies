@@ -1,5 +1,0 @@
- public class Test {
-     public static void main(String args[]) {
-         System.out.println(((double)4.00) - ((double)3.10));
-     }
- }

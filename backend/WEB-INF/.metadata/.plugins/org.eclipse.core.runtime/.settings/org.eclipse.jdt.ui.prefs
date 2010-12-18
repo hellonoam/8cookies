@@ -1,4 +1,4 @@
-#Fri Nov 19 10:31:06 GMT 2010
+#Mon Nov 29 01:11:23 GMT 2010
 content_assist_proposals_foreground=0,0,0
 spelling_locale_initialized=true
 org.eclipse.jdt.ui.text.templates_migrated=true
@@ -16,5 +16,5 @@ content_assist_proposals_background=255,255,255
 content_assist_number_of_computers=14
 useQuickDiffPrefPage=true
 org.eclipse.jdt.ui.text.custom_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.io.Writer"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.lang.Appendable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.Closeable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.Flushable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.CharArrayWriter"><rhs name\="java.io.CharArrayWriter"/></lhs></history>
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.io.Writer"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.lang.Appendable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.Closeable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.Flushable"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="java.io.CharArrayWriter"><rhs name\="java.io.CharArrayWriter"/></lhs><lhs name\="backend.Cookie"><rhs name\="backend.Cookie"/></lhs><lhs name\="java.lang.Iterable"><rhs name\="com.google.gson.JsonArray"/></lhs><lhs name\="com.google.gson.JsonElement"><rhs name\="com.google.gson.JsonArray"/></lhs></history>
 org.eclipse.jdt.ui.text.code_templates_migrated=true

@@ -3,21 +3,33 @@
 	chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 	    console.log("received message " + request.type);
-		if (request.type == "send")
-			sendData();
-		else
-			receiveData();
+		switch (request.type) {
+			case "send": 
+				sendData();
+				break;
+			case "receive":	
+				receiveData();
+				break;
+			case "deleteLocal":
+				deleteCookies();
+				break;
+			case "deleteFromServer":
+				deleteFromServer();
+				break;
+			default:
+				console.log("ERROR: got an ill typed message from 'popup'");
+		}
 	    sendResponse({});
 	});
 
-	function sendData(){
+	function sendData() {
 		console.log("in sendData");
 		chrome.cookies.getAll({}, function(cookies) { 
 			console.log("cookies length: " + cookies.length);
 			$.ajax({
 				type: "POST",
 				//since the server receives the data
-				url: "http://localhost/bfc/ReceiveData",
+				url: "http://localhost/ReceiveData",
 				data: {	
 					cookiesFromClient: JSON.stringify(cookies)
 				},
@@ -28,12 +40,16 @@
 		});
 	}
 
-	function receiveData(){
+	function receiveData() {
 		console.log("in receiveData");
 		$.ajax({
 			//since the server sends the data
-			url: "http://localhost/bfc/SendData",
+			url: "http://localhost/SendData",
 			success: function(data) {
+				if (data == ""){
+					console.log("no cookies were received");
+					return; // no cookies to set
+				}
 				var cookies = JSON.parse(data);
 				console.log("received " + cookies.length + " cookies");
 				for (var i=0; i<cookies.length; i++) {
@@ -59,7 +75,14 @@
 		});
 	}
 	
-	function deleteCookies(){
+	function deleteFromServer() {
+		$.ajax({
+			url: "http://localhost/DeleteCookiesFromServer",
+			success: function(data) { console.log("cookies from server - deleted"); }
+		});
+	}
+	
+	function deleteCookies() {
 		console.log("deleting cookies...");
 		chrome.cookies.getAll({}, function(cookies) {
 			for(var i=0; i<cookies.length; i++){
