@@ -33,6 +33,7 @@ public class ReceiveData extends HttpServlet {
     	//reading the cookies as json
     	String reqString = request.getParameter("cookiesFromClient");
     	String username = request.getParameter("user");
+    	String password = request.getParameter("pass");
     	logger.fine("username received " + username);
     	JsonElement json = jp.parse(reqString == null ? "" : reqString);
         response.setContentType("text/html");
@@ -51,7 +52,7 @@ public class ReceiveData extends HttpServlet {
     	logger.fine("cookiesList.length: " + cookiesList.size());;
     	User u = DatabaseInteraction.getUser(username);
     	if (u == null){
-    		u = new User(username, "pass", reqString);
+    		u = new User(username, password, reqString);
     		logger.fine("new user added to db");
     	} else{
     		u.setCookies(reqString);

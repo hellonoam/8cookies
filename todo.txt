@@ -1,27 +1,17 @@
-host cookies
-
-sql lite
-
-app engine -> database -> merge ->  syncing maybe every 10 min or check something else -> users -> profiles
-
-- check for paths  
-- problems with cookies with the same domain and different paths
-
-
-
 What's left:
 
 1 - fix db bug - done
-2 - users - add saving by username field
+2 - users - add password
 
-3 - saving locally cookies
+3 - saving cookies locally
 
 2 - open tabs
-
-
+1 - index database
+1 - save cookies separately 
 4 - automatic sync - server/client
-
 4 - unit tests - problem
+
+
 4 - encryption
 3 - history syncing
 3 - logging users

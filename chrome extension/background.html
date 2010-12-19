@@ -5,10 +5,10 @@
 	    console.log("received message " + request.type);
 		switch (request.type) {
 			case "send": 
-				sendData(request.username);
+				sendData();
 				break;
 			case "receive":	
-				receiveData(request.username);
+				receiveData();
 				break;
 			case "deleteLocal":
 				deleteCookies();
@@ -16,20 +16,59 @@
 			case "deleteFromServer":
 				deleteFromServer();
 				break;
+			case "login":				
+				sendResponse({ success: login(request.username, request.password) });
+				return; // return since the response is sent here
+			case "logout":
+				sendResponse({ success: logout() });
+				return; // return since the response is sent here
+			case "isLoggedIn":
+			    sendResponse({ result: isLoggedIn(), 
+							   username: localStorage.getItem("username") });
+				return; // return since the response is sent here
 			default:
 				console.log("ERROR: got an ill typed message from 'popup'");
 		}
 	    sendResponse({});
 	});
 
+	function isLoggedIn(){
+		return localStorage.getItem("username") != null &&
+			   localStorage.getItem("password") != null &&
+			   localStorage.getItem("username") != "" &&
+			   localStorage.getItem("password") != "";
+	}
+
+	function login(username, password) {
+		if (username == "" || password == "" ||
+			username == undefined || password == undefined) {
+			console.log("username or password not valid");
+			return false;
+		}
+		localStorage.setItem("username", username);
+		localStorage.setItem("password", password);		
+		console.log("user logged in");
+		return true;
+	}
 	
-	function errorFunction(request){
+	function logout() {
+		localStorage.setItem("username", "");
+		localStorage.setItem("password", "");
+		console.log("user logged out");
+		return true;
+	}
+	
+	function errorFunction(request) {
 		//TODO: maybe add more functionality to this
 		console.log(request.status + ": " + request.statusText);
 	}
 
-	function sendData(username) {
+	function sendData() {
 		console.log("in sendData");
+		if (!isLoggedIn()) {
+			console.log("user not logged in send data cancelled");
+			return;
+		}
 		chrome.cookies.getAll({}, function(cookies) { 
 			console.log("cookies length: " + cookies.length);
 			$.ajax({
@@ -37,7 +76,8 @@
 				//since the server receives the data
 				url: "http://localhost/ReceiveData",
 				data: {	
-					user: username,
+					user: localStorage.getItem("username"),
+					pass: localStorage.getItem("password"),
 					cookiesFromClient: JSON.stringify(cookies)
 				},
 				success: function(data) {
@@ -48,16 +88,21 @@
 		});
 	}
 	
-	function receiveData(username) {
+	function receiveData() {
 		console.log("in receiveData");
+		if (!isLoggedIn()) {
+			console.log("user not logged in receive data cancelled");
+			return;
+		}
 		$.ajax({
 			//since the server sends the data
 			url: "http://localhost/SendData",
 			data: {
-				user: username
+				user: localStorage.getItem("username"),
+				pass: localStorage.getItem("password"),
 			},
 			success: function(data) {
-				if (data == ""){
+				if (data == "") {
 					console.log("no cookies were received");
 					return; // no cookies to set
 				}
@@ -100,7 +145,7 @@
 	function deleteCookies() {
 		console.log("deleting cookies...");
 		chrome.cookies.getAll({}, function(cookies) {
-			for(var i=0; i<cookies.length; i++){
+			for(var i=0; i<cookies.length; i++) {
 				var current = cookies[i];
 				var cookies2Remove = new Object;
 				cookies2Remove.url = ((current.secure) ? 

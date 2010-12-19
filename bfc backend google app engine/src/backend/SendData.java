@@ -24,13 +24,19 @@ public class SendData extends HttpServlet {
     {
         response.setContentType("text/html");
         String username = request.getParameter("user");
+        String password = request.getParameter("pass");
         PrintWriter out = response.getWriter();
-        User u = DatabaseInteraction.getUser(username);
-       	if (u == null){
+        switch (DatabaseInteraction.authenticate(username, password)){
+        case 1:
        		response.sendError(HttpServletResponse.SC_NOT_FOUND, "User, " + username + ", not found");
-       		logger.warning("ERROR: received request for non-existing user " + username);
+       		logger.config("ERROR: received request for non-existing user " + username);
+       		return;
+        case 2:
+        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Wrong password for " + username);
+       		logger.config("ERROR: received incorrect password for user " + username);
        		return;
        	}
+        User u = DatabaseInteraction.getUser(username);
        	String cookiesString = u.getCookies();
        	if (cookiesString != null)
        		out.println(cookiesString);

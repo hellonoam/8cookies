@@ -31,6 +31,26 @@ public class DatabaseInteraction {
     }
     
     /**
+     * Checks if the user and password pair is valid
+     * @param username
+     * 	the user name
+     * @param password
+     * 	the password associated with the username
+     * @return
+     * 	0 if username password pair is valid
+     * 	1 is user doesn't exist
+     *  2 if password is incorrect
+     */
+    public static int authenticate(String username, String password){
+    	User u = getUser(username);
+    	if (u == null)
+    		return 1; //doesn't exist
+    	if (!u.getPassword().equals(password))
+    		return 2;//wrong password
+    	return 0; //correct password
+    }
+    
+    /**
      * Saves or updates the user in the database 
      * @param u
      * 	the user to be saved/updated
