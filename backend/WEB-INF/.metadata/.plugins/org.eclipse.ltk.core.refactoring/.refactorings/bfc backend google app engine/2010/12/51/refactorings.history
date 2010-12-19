@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename local variable &apos;s&apos; in &apos;backend.SendData.doGet(...)&apos; to &apos;cookieString&apos;&#x0A;- Original project: &apos;bfc backend google app engine&apos;&#x0A;- Original element: &apos;backend.SendData.doGet(HttpServletRequest, HttpServletResponse).s&apos;&#x0A;- Renamed element: &apos;s&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;s&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;backend{SendData.java[SendData~doGet~QHttpServletRequest;~QHttpServletResponse;@s!1042!1067!1049!1049!QString;" name="cookieString" references="true" stamp="1292697855235" version="1.0"/>
-</session>

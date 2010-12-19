@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename field &apos;name&apos; in &apos;backend.Cookie&apos; to &apos;jsonCookie&apos;&#x0A;- Original project: &apos;bfc backend google app engine&apos;&#x0A;- Original element: &apos;backend.Cookie.name&apos;&#x0A;- Renamed element: &apos;backend.Cookie.jsonCookie&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;name&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;backend{Cookie.java[Cookie^name" name="jsonCookie" references="true" setter="false" stamp="1290976968222" textual="false" version="1.0"/>
-</session>
