@@ -52,12 +52,13 @@
 			$(".logout").click(function() {
 				console.log("request to logout, sent to bg");
 				chrome.extension.sendRequest(
-					{ type: "logout" },
-					function(response) {
-						if (response.success)
-							userLoggedOut();
-					}
+					{ type: "logout" }
+					// function(response) {
+					// if (response.success)
+							// userLoggedOut();
+					// }
 				);
+				userLoggedOut();
 			});
  			$(".send").click(function() {
  				console.log("request to send cookies, sent to bg");

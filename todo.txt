@@ -1,18 +1,20 @@
 What's left:
 
 1 - fix db bug - done
-2 - users - add password
+2 - users - done
 
 3 - saving cookies locally
 
-2 - open tabs
+2 - open/close tabs
+
 1 - index database
 1 - save cookies separately 
 4 - automatic sync - server/client
+
 4 - unit tests - problem
 
+4 - encryption - fix authentication to use standard http auth
 
-4 - encryption
 3 - history syncing
 3 - logging users
 2 - out in the market

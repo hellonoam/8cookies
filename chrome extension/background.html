@@ -46,12 +46,26 @@
 			return false;
 		}
 		localStorage.setItem("username", username);
-		localStorage.setItem("password", password);		
+		localStorage.setItem("password", password);
 		console.log("user logged in");
+		chrome.cookies.getAll({}, function(cks) {
+			var oldSession = {};
+			oldSession.cookies = cks;
+			localStorage.setItem("oldSession", JSON.stringify(oldSession));
+			deleteCookies();
+			receiveData();
+		});
 		return true;
 	}
 	
 	function logout() {
+		var oldSession = JSON.parse(localStorage.getItem("oldSession"));
+		sendData(function() {
+			deleteCookies(function() {
+				if (oldSession != null)
+					setCookies(oldSession.cookies);
+			});
+		});
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");
 		console.log("user logged out");
@@ -63,10 +77,12 @@
 		console.log(request.status + ": " + request.statusText);
 	}
 
-	function sendData() {
+	function sendData(callback) {
 		console.log("in sendData");
 		if (!isLoggedIn()) {
 			console.log("user not logged in send data cancelled");
+			if (callback)
+				callback();
 			return;
 		}
 		chrome.cookies.getAll({}, function(cookies) { 
@@ -74,7 +90,7 @@
 			$.ajax({
 				type: "POST",
 				//since the server receives the data
-				url: "http://localhost/ReceiveData",
+				url: "http://cloudbrowsing.appspot.com/ReceiveData",
 				data: {	
 					user: localStorage.getItem("username"),
 					pass: localStorage.getItem("password"),
@@ -82,6 +98,10 @@
 				},
 				success: function(data) {
 					console.log("data from server: " + data);
+				},
+				complete: function() {
+					if (callback)
+						callback();
 				},
 				error: errorFunction
 			});
@@ -96,7 +116,7 @@
 		}
 		$.ajax({
 			//since the server sends the data
-			url: "http://localhost/SendData",
+			url: "http://cloudbrowsing.appspot.com/SendData",
 			data: {
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
@@ -106,35 +126,38 @@
 					console.log("no cookies were received");
 					return; // no cookies to set
 				}
-				var cookies = JSON.parse(data);
-				console.log("received " + cookies.length + " cookies");
-				for (var i=0; i<cookies.length; i++) {
-					//maybe move this mambo jambo to another function
-					var newCookie = new Object;
-					var current = cookies[i];
-					newCookie.url = ((current.secure) ? 
-						"https://" : "http://") + current.domain;
-					newCookie.name = current.name;
-					newCookie.value = current.value;
-					if (!current.hostOnly)
-						newCookie.domain = current.domain;
-					newCookie.path = current.path;
-					newCookie.secure = current.secure;
-					newCookie.httpOnly = current.httpOnly;
-					if (!current.session)
-						newCookie.expirationDate = current.expirationData;
-					newCookie.storeId = current.storeId;
-					chrome.cookies.set(newCookie);
-				}
+				setCookies(JSON.parse(data));
 				console.log("cookies were set successfully");
 			},
 			error: errorFunction
 		});
 	}
 	
+	function setCookies(cookies){
+		console.log("received " + cookies.length + " cookies");
+		for (var i=0; i<cookies.length; i++) {
+			//maybe move this mambo jambo to another function
+			var newCookie = new Object;
+			var current = cookies[i];
+			newCookie.url = ((current.secure) ? 
+				"https://" : "http://") + current.domain;
+			newCookie.name = current.name;
+			newCookie.value = current.value;
+			if (!current.hostOnly)
+				newCookie.domain = current.domain;
+			newCookie.path = current.path;
+			newCookie.secure = current.secure;
+			newCookie.httpOnly = current.httpOnly;
+			if (!current.session)
+				newCookie.expirationDate = current.expirationData;
+			newCookie.storeId = current.storeId;
+			chrome.cookies.set(newCookie);
+		}
+	}
+	
 	function deleteFromServer() {
 		$.ajax({
-			url: "http://localhost/DeleteCookiesFromServer",
+			url: "http://cloudbrowsing.appspot.com/DeleteCookiesFromServer",
 			success: function(data) { 
 				console.log(data); 	
 			},
@@ -142,7 +165,7 @@
 		});
 	}
 	
-	function deleteCookies() {
+	function deleteCookies(callback) {
 		console.log("deleting cookies...");
 		chrome.cookies.getAll({}, function(cookies) {
 			for(var i=0; i<cookies.length; i++) {
@@ -155,6 +178,14 @@
 				chrome.cookies.remove(cookies2Remove);
 			}
 			console.log(cookies.length + " cookies have been deleted");
+			if (callback)
+				callback();
+		});
+	}
+	
+	function howManyCookiesDoIHave(){
+		chrome.cookies.getAll({}, function(cookies) {
+			console.log("you have " + cookies.length + " cookies");
 		});
 	}
 </script>
