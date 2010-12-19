@@ -8,11 +8,15 @@
  			console.log("loaded");
  			$(".send").click(function() {
  				console.log("request to send cookies, sent to bg");
-				chrome.extension.sendRequest({ type: "send" });
+				chrome.extension.sendRequest({
+					type: "send", username: $(".username").val() 
+				});
  			});
 			$(".receive").click(function() {
 				console.log("request to receive cookies, sent to bg");
-				chrome.extension.sendRequest({ type: "receive" });
+				chrome.extension.sendRequest({
+					type: "receive", username: $(".username").val()
+				});
 			});
 			$(".deleteFromServer").click(function() {
 				console.log("request to delete from server, sent to bg");

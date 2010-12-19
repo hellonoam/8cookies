@@ -57,4 +57,9 @@ public class User {
     	return cookies.getValue();
     }
 
+	public void setCookies(String reqString) {
+		this.cookies = new Text(reqString);
+		
+	}
+
 }

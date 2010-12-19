@@ -1,6 +1,7 @@
 package backend;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -18,21 +19,19 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class DeleteCookiesFromServer extends HttpServlet {
-
+	private Logger logger = Logger.getLogger(DeleteCookiesFromServer.class.getName());
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
     {
         response.setContentType("text/html");
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        Query queryCookie = pm.newQuery("select from " + Cookie.class.getName());
-        Query queryUser = pm.newQuery("select from " + User.class.getName());
-        try{
-        	queryCookie.deletePersistentAll();
-        	queryUser.deletePersistentAll();
-        	ReceiveData.logger.severe("all cookies deleted");
-    	} finally {
-    		pm.close();
+        PrintWriter out = response.getWriter();
+        if (DatabaseInteraction.deleteAllUsersAndCookies()){
+        	logger.fine("all cookies and users deleted");
+        	out.println("cookies and users from server deleted");
+        } else {
+        	logger.severe("ERROR: failed to delete users and cookies");
+        	out.println("ERROR: failed to delete users and cookies");
         }
     }
 }

@@ -11,10 +11,16 @@ app engine -> database -> merge ->  syncing maybe every 10 min or check somethin
 
 What's left:
 
-1 - fix db bug
-2 - users
+1 - fix db bug - done
+2 - users - add saving by username field
+
+3 - saving locally cookies
+
 2 - open tabs
+
+
 4 - automatic sync - server/client
+
 4 - unit tests - problem
 4 - encryption
 3 - history syncing
@@ -29,7 +35,3 @@ evaluation:
 3 - extract valuable information from logs
 
 10 - writing dissertation
-
-
-
-DOS meeting: talk about progress exam

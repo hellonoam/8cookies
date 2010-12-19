@@ -5,10 +5,10 @@
 	    console.log("received message " + request.type);
 		switch (request.type) {
 			case "send": 
-				sendData();
+				sendData(request.username);
 				break;
 			case "receive":	
-				receiveData();
+				receiveData(request.username);
 				break;
 			case "deleteLocal":
 				deleteCookies();
@@ -22,7 +22,13 @@
 	    sendResponse({});
 	});
 
-	function sendData() {
+	
+	function errorFunction(request){
+		//TODO: maybe add more functionality to this
+		console.log(request.status + ": " + request.statusText);
+	}
+
+	function sendData(username) {
 		console.log("in sendData");
 		chrome.cookies.getAll({}, function(cookies) { 
 			console.log("cookies length: " + cookies.length);
@@ -31,20 +37,25 @@
 				//since the server receives the data
 				url: "http://localhost/ReceiveData",
 				data: {	
+					user: username,
 					cookiesFromClient: JSON.stringify(cookies)
 				},
 				success: function(data) {
 					console.log("data from server: " + data);
-				}
+				},
+				error: errorFunction
 			});
 		});
 	}
-
-	function receiveData() {
+	
+	function receiveData(username) {
 		console.log("in receiveData");
 		$.ajax({
 			//since the server sends the data
 			url: "http://localhost/SendData",
+			data: {
+				user: username
+			},
 			success: function(data) {
 				if (data == ""){
 					console.log("no cookies were received");
@@ -71,14 +82,18 @@
 					chrome.cookies.set(newCookie);
 				}
 				console.log("cookies were set successfully");
-			}
+			},
+			error: errorFunction
 		});
 	}
 	
 	function deleteFromServer() {
 		$.ajax({
 			url: "http://localhost/DeleteCookiesFromServer",
-			success: function(data) { console.log("cookies from server - deleted"); }
+			success: function(data) { 
+				console.log(data); 	
+			},
+			error: errorFunction
 		});
 	}
 	
