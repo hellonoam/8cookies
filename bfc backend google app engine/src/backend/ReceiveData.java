@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
@@ -31,20 +32,22 @@ public class ReceiveData extends HttpServlet {
     	logger.finest("inside do get");
     	JsonParser jp = new JsonParser();
     	//reading the cookies as json
-    	String reqString = request.getParameter("cookiesFromClient");
+    	String reqString = request.getParameter("dataFromClient");
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
     	logger.fine("username received " + username);
     	JsonElement json = jp.parse(reqString == null ? "" : reqString);
-        response.setContentType("text/html");
-    	if (!json.isJsonArray()) {
-    		logger.severe("json was not an array");
+    	if (!json.isJsonObject()) {
+    		logger.severe("json was not a json object");
     		response.sendError(HttpServletResponse.SC_BAD_REQUEST, 
     				"cookies were not received in correct format");
     		return;
     	}
+    	JsonObject jsonObj = json.getAsJsonObject();
+    	JsonArray ja = jsonObj.getAsJsonArray("cookies");
+        response.setContentType("text/html");
+        logger.severe(reqString);
     	logger.fine("cookies received successfully");
-    	JsonArray ja = json.getAsJsonArray();
     	List<Cookie> cookiesList = new LinkedList<Cookie>();
     	for (int i=0; i<ja.size(); i++){
     		cookiesList.add(new Cookie(ja.get(i).toString()));

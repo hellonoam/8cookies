@@ -1,191 +1,151 @@
 <script src="jQuery.js"></script>
+<script src="tools.js"></script>
+<script src="session.js"></script>
 <script type="text/javascript">
-	chrome.extension.onRequest.addListener(
-	function(request, sender, sendResponse) {
-	    console.log("received message " + request.type);
-		switch (request.type) {
-			case "send": 
-				sendData();
-				break;
-			case "receive":	
-				receiveData();
-				break;
-			case "deleteLocal":
-				deleteCookies();
-				break;
-			case "deleteFromServer":
-				deleteFromServer();
-				break;
-			case "login":				
-				sendResponse({ success: login(request.username, request.password) });
-				return; // return since the response is sent here
-			case "logout":
-				sendResponse({ success: logout() });
-				return; // return since the response is sent here
-			case "isLoggedIn":
-			    sendResponse({ result: isLoggedIn(), 
-							   username: localStorage.getItem("username") });
-				return; // return since the response is sent here
-			default:
-				console.log("ERROR: got an ill typed message from 'popup'");
-		}
-	    sendResponse({});
+
+// var server = "http://cloudbrowsing.appspot.com";
+var server = "http://localhost";
+
+var current = new session();
+
+chrome.extension.onRequest.addListener(
+function(request, sender, sendResponse) {
+	console.log("received message " + request.type);
+	switch (request.type) {
+		case "send": 
+			sendData();
+			break;
+		case "receive":	
+			receiveData();
+			break;
+		case "deleteLocal":
+			deleteCookies();
+			break;
+		case "deleteFromServer":
+			deleteFromServer();
+			break;
+		case "login":				
+			sendResponse({ success: login(request.username, request.password) });
+			return; // return since the response is sent here
+		case "logout":
+			sendResponse({ success: logout() });
+			return; // return since the response is sent here
+		case "isLoggedIn":
+		    sendResponse({ result: isLoggedIn(), 
+						   username: localStorage.getItem("username") });
+			return; // return since the response is sent here
+		default:
+			console.log("ERROR: got an ill typed message from 'popup'");
+	}
+    sendResponse({});
+});
+
+function login(username, password) {
+	if (username == "" || password == "" ||
+		username == undefined || password == undefined) { //TODO: change undefined
+		console.log("username or password not valid");
+		return false;
+	}
+	localStorage.setItem("username", username);
+	localStorage.setItem("password", password);
+	console.log("user logged in");
+
+	var s = new session();
+	s.updateAll(function() {
+		localStorage.setItem("oldSession", s.serialize());
+		deleteCookies();
+		current = new session()
+		receiveData();
 	});
 
-	function isLoggedIn(){
-		return localStorage.getItem("username") != null &&
-			   localStorage.getItem("password") != null &&
-			   localStorage.getItem("username") != "" &&
-			   localStorage.getItem("password") != "";
-	}
+	return true;
+}
 
-	function login(username, password) {
-		if (username == "" || password == "" ||
-			username == undefined || password == undefined) {
-			console.log("username or password not valid");
-			return false;
-		}
-		localStorage.setItem("username", username);
-		localStorage.setItem("password", password);
-		console.log("user logged in");
-		chrome.cookies.getAll({}, function(cks) {
-			var oldSession = {};
-			oldSession.cookies = cks;
-			localStorage.setItem("oldSession", JSON.stringify(oldSession));
-			deleteCookies();
-			receiveData();
-		});
-		return true;
-	}
-	
-	function logout() {
-		var oldSession = JSON.parse(localStorage.getItem("oldSession"));
-		sendData(function() {
-			deleteCookies(function() {
-				if (oldSession != null)
-					setCookies(oldSession.cookies);
-			});
-		});
-		localStorage.setItem("username", "");
-		localStorage.setItem("password", "");
-		console.log("user logged out");
-		return true;
-	}
-	
-	function errorFunction(request) {
-		//TODO: maybe add more functionality to this
-		console.log(request.status + ": " + request.statusText);
-	}
+function logout() {
+	var old = new session();
+	old.deSerialize(localStorage.getItem("oldSession"));
+	sendData(function() {
+		deleteCookies(function() {
+			old.applyAll();
+			current = old;
+			localStorage.setItem("username", "");
+			localStorage.setItem("password", "");
+		})
+	});
+	console.log("user logged out");
 
-	function sendData(callback) {
-		console.log("in sendData");
-		if (!isLoggedIn()) {
-			console.log("user not logged in send data cancelled");
-			if (callback)
-				callback();
-			return;
-		}
-		chrome.cookies.getAll({}, function(cookies) { 
-			console.log("cookies length: " + cookies.length);
-			$.ajax({
-				type: "POST",
-				//since the server receives the data
-				url: "http://cloudbrowsing.appspot.com/ReceiveData",
-				data: {	
-					user: localStorage.getItem("username"),
-					pass: localStorage.getItem("password"),
-					cookiesFromClient: JSON.stringify(cookies)
-				},
-				success: function(data) {
-					console.log("data from server: " + data);
-				},
-				complete: function() {
-					if (callback)
-						callback();
-				},
-				error: errorFunction
-			});
-		});
+	return true;
+}
+
+function errorFunction(request) {
+	//TODO: maybe add more functionality to this
+	console.log(request.status + ": " + request.statusText);
+}
+
+function sendData(callback) {
+	console.log("in sendData");
+	if (!isLoggedIn()) {
+		console.log("user not logged in send data cancelled");
+		if (callback)
+			callback();
+		return;
 	}
-	
-	function receiveData() {
-		console.log("in receiveData");
-		if (!isLoggedIn()) {
-			console.log("user not logged in receive data cancelled");
-			return;
-		}
+	current.updateAll(function() {
 		$.ajax({
-			//since the server sends the data
-			url: "http://cloudbrowsing.appspot.com/SendData",
-			data: {
+			type: "POST",
+			//since the server receives the data
+			url: server + "/ReceiveData",
+			data: {	
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
+				dataFromClient: current.serialize()
 			},
 			success: function(data) {
-				if (data == "") {
-					console.log("no cookies were received");
-					return; // no cookies to set
-				}
-				setCookies(JSON.parse(data));
-				console.log("cookies were set successfully");
+				console.log("data from server: " + data);
+			},
+			complete: function() {
+				if (callback)
+					callback();
 			},
 			error: errorFunction
 		});
+	});
+}
+
+function receiveData() {
+	console.log("in receiveData");
+	if (!isLoggedIn()) {
+		console.log("user not logged in receive data cancelled");
+		return;
 	}
-	
-	function setCookies(cookies){
-		console.log("received " + cookies.length + " cookies");
-		for (var i=0; i<cookies.length; i++) {
-			//maybe move this mambo jambo to another function
-			var newCookie = new Object;
-			var current = cookies[i];
-			newCookie.url = ((current.secure) ? 
-				"https://" : "http://") + current.domain;
-			newCookie.name = current.name;
-			newCookie.value = current.value;
-			if (!current.hostOnly)
-				newCookie.domain = current.domain;
-			newCookie.path = current.path;
-			newCookie.secure = current.secure;
-			newCookie.httpOnly = current.httpOnly;
-			if (!current.session)
-				newCookie.expirationDate = current.expirationData;
-			newCookie.storeId = current.storeId;
-			chrome.cookies.set(newCookie);
-		}
-	}
-	
-	function deleteFromServer() {
-		$.ajax({
-			url: "http://cloudbrowsing.appspot.com/DeleteCookiesFromServer",
-			success: function(data) { 
-				console.log(data); 	
-			},
-			error: errorFunction
-		});
-	}
-	
-	function deleteCookies(callback) {
-		console.log("deleting cookies...");
-		chrome.cookies.getAll({}, function(cookies) {
-			for(var i=0; i<cookies.length; i++) {
-				var current = cookies[i];
-				var cookies2Remove = new Object;
-				cookies2Remove.url = ((current.secure) ? 
-					"https://" : "http://") + current.domain;	
-				cookies2Remove.name = current.name;
-				cookies2Remove.storeId = current.storeId;
-				chrome.cookies.remove(cookies2Remove);
+	$.ajax({
+		//since the server sends the data
+		url: server + "/SendData",
+		data: {
+			user: localStorage.getItem("username"),
+			pass: localStorage.getItem("password"),
+		},
+		success: function(data) {
+			if (data == "") {
+				console.log("no data was received");
+				return; // no cookies to set
 			}
-			console.log(cookies.length + " cookies have been deleted");
-			if (callback)
-				callback();
-		});
-	}
-	
-	function howManyCookiesDoIHave(){
-		chrome.cookies.getAll({}, function(cookies) {
-			console.log("you have " + cookies.length + " cookies");
-		});
-	}
+			// setCookies(JSON.parse(data).cookies);
+			current.deSerialize(data);
+			current.applyAll();
+		},
+		error: errorFunction
+	});
+}
+
+function deleteFromServer() {
+	$.ajax({
+		url: server + "/DeleteCookiesFromServer",
+		success: function(data) { 
+			console.log(data); 	
+		},
+		error: errorFunction
+	});
+}
+
 </script>

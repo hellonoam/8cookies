@@ -854,3 +854,70 @@ Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpi
 
 !ENTRY com.google.appengine.eclipse.core 1 0 2010-12-19 23:12:13.504
 !MESSAGE bfc backend google app engine successfully deployed to Google App Engine
+!SESSION 2010-12-20 00:15:47.159 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_22
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2010-12-20 00:15:59.792
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 00:16:00.897
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 00:16:01.245
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+!SESSION 2010-12-20 00:17:19.530 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_22
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2010-12-20 00:17:31.107
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 00:17:32.151
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 00:17:32.487
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+!SESSION 2010-12-20 15:21:50.809 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_22
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2010-12-20 15:21:59.821
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 15:22:01.012
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 15:22:01.297
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+!SESSION 2010-12-20 15:27:48.937 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_22
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2010-12-20 15:28:12.453
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 15:28:16.486
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 15:28:17.297
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-20 15:28:17.557
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does

@@ -2,14 +2,14 @@ What's left:
 
 1 - fix db bug - done
 2 - users - done
-
-3 - saving cookies locally
+3 - saving cookies locally - done
 
 2 - open/close tabs
+signups
 
-1 - index database
-1 - save cookies separately 
 4 - automatic sync - server/client
+1 - save cookies separately 
+1 - index database
 
 4 - unit tests - problem
 

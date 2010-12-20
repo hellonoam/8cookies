@@ -1,0 +1,2 @@
+- user not logged is shown as logged in in popup.html
+- user that hasn't signed up is signed up automatically when trying to login
