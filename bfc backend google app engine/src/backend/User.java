@@ -21,10 +21,13 @@ public class User {
     private String username;
 
     @Persistent
-    private Text cookies;
+    private Text info;
     
     @Persistent
     private String password;
+    
+    @Persistent
+    private String email;
 
 //    public User(String username, String password, List<Cookie> cookies) {
 //        this.username = username;
@@ -35,10 +38,11 @@ public class User {
 //        }
 //    }
     
-    public User(String username, String password, String cookies) {
+    public User(String username, String password, String email, String info) {
       this.username = username;
       this.password = password;
-      this.cookies = new Text(cookies);
+      this.email = email;
+      this.info = new Text(info);
     }
 
     public Key getKey() {
@@ -53,12 +57,12 @@ public class User {
     	return password;
     }
     
-    public String getCookies(){
-    	return cookies.getValue();
+    public String getInfo(){
+    	return info.getValue();
     }
 
-	public void setCookies(String reqString) {
-		this.cookies = new Text(reqString);
+	public void setInfo(String reqString) {
+		this.info = new Text(reqString);
 		
 	}
 

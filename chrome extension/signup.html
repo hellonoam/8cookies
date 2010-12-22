@@ -1,0 +1,49 @@
+<html>
+<body>
+	<script src="jQuery.js"></script>
+	<script type="text/javascript">
+		// var server = "http://cloudbrowsing.appspot.com";
+		var server = "http://localhost";
+		
+		$(document).ready(function() { init(); });
+		
+		function init() {
+			$(".submit").click(function() {
+				console.log("submit was clicked");
+				$.getJSON(server + "/SignUp?callback=?",
+					{
+						user: $(".username").val(),
+						pass: $(".password").val()
+					},
+					function(json) {
+						console.log("data received: " + json);
+						if (json.response == "success") {
+							$(".signup").hide();
+							$(".result").text("signup was successful");
+							chrome.extension.sendRequest(
+								{
+									type: "login",
+									username: $(".username").val(),
+									password: $(".password").val()
+								}
+							);
+						} else
+							$(".result").text("username in use please try again");
+					}
+				);
+			});
+		}
+	</script>
+	<div class="signup">
+		<div>sign up</div>
+		<div>username: <input class="username" type="text"></div>
+		<div>password: <input class="password" type="password"></div>
+		<div>email: <input class="email" type="email"></div>
+		<!-- check if email is supported -->
+		<div>we promise not to spam you</div>
+		<div><input class="submit" type="submit" value="submit"></div>
+	</div>
+	<div class="result"></div>
+
+</body>
+</html>

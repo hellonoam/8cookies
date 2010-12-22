@@ -51,13 +51,7 @@
 			});
 			$(".logout").click(function() {
 				console.log("request to logout, sent to bg");
-				chrome.extension.sendRequest(
-					{ type: "logout" }
-					// function(response) {
-					// if (response.success)
-							// userLoggedOut();
-					// }
-				);
+				chrome.extension.sendRequest({ type: "logout" });
 				userLoggedOut();
 			});
  			$(".send").click(function() {
@@ -76,6 +70,9 @@
 				console.log("request to delete local, sent to bg");
 				chrome.extension.sendRequest({ type: "deleteLocal" });
 			});
+			$(".signup").click(function() {
+				chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
+			});
  		}
 	</script>
 	<p>Cloud Browsing</p>
@@ -88,5 +85,6 @@
 	<input type="button" class="send" value="Send Cookies"/>
 	<input type="button" class="deleteFromServer" value="delete cookies from server">
 	<input type="button" class="deleteLocal" value="delete local cookies">
+	<div class="signup">signup</div>
 </body>
 </html>

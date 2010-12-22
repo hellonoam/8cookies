@@ -1,3 +1,4 @@
+//sets the local cookies to to cookies
 function setCookies(cookies){
 	for (var i=0; i<cookies.length; i++) {
 		//maybe move this mambo jambo to another function
@@ -20,6 +21,9 @@ function setCookies(cookies){
 	console.log(cookies.length + " cookies were set");
 }
 
+
+//sets the current windows to be windows, and removes all open windows. Callback is called
+//after windows have been set.
 function setWindows(windows, callback) {
 	//closing open windows
 	chrome.windows.getAll({}, function(windows2Remove) {
@@ -73,6 +77,7 @@ function setWindows(windows, callback) {
 		callback();
 }
 
+//deletes local cookies
 function deleteCookies(callback) {
 	console.log("deleting cookies...");
 	chrome.cookies.getAll({}, function(cookies) {
@@ -91,12 +96,14 @@ function deleteCookies(callback) {
 	});
 }
 
+//prints how many cookies exist on the local machine
 function howManyCookiesDoIHave(){
 	chrome.cookies.getAll({}, function(cookies) {
 		console.log("you have " + cookies.length + " cookies");
 	});
 }
 
+//returns whether or not the user is logged in
 function isLoggedIn(){
 	return localStorage.getItem("username") != null &&
 		   localStorage.getItem("password") != null &&

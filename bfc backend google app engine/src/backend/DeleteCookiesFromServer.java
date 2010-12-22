@@ -27,7 +27,7 @@ public class DeleteCookiesFromServer extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         if (DatabaseInteraction.deleteAllUsersAndCookies()){
-        	logger.fine("all cookies and users deleted");
+        	logger.severe("all cookies and users deleted");
         	out.println("cookies and users from server deleted");
         } else {
         	logger.severe("ERROR: failed to delete users and cookies");

@@ -17,6 +17,8 @@
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="completion_proposal_size">
+		<item value="401" key="size.x"/>
+		<item value="235" key="size.y"/>
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>

@@ -6,8 +6,10 @@
 // var server = "http://cloudbrowsing.appspot.com";
 var server = "http://localhost";
 
+//saves the current session
 var current = new session();
 
+//listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 function(request, sender, sendResponse) {
 	console.log("received message " + request.type);
@@ -40,48 +42,52 @@ function(request, sender, sendResponse) {
     sendResponse({});
 });
 
+//this function authenticates the user. Once the user is authenticated it updates the
+//session to the one the user has on the server
 function login(username, password) {
 	if (username == "" || password == "" ||
 		username == undefined || password == undefined) { //TODO: change undefined
 		console.log("username or password not valid");
 		return false;
 	}
-	localStorage.setItem("username", username);
-	localStorage.setItem("password", password);
-	console.log("user logged in");
 
-	var s = new session();
-	s.updateAll(function() {
-		localStorage.setItem("oldSession", s.serialize());
-		deleteCookies();
-		current = new session()
-		receiveData();
-	});
+	receiveData(function() {
+		var s = new session();
+		s.updateAll(function() {
+			localStorage.setItem("oldSession", s.serialize());
+			current = new session();
+			localStorage.setItem("username", username);
+			localStorage.setItem("password", password);
+			console.log("user logged in");
+		});
+	}, false, username, password);
 
-	return true;
+	return isLoggedIn();
 }
 
+//logs out the user, but sends the session to the server before then
 function logout() {
 	var old = new session();
 	old.deSerialize(localStorage.getItem("oldSession"));
 	sendData(function() {
-		deleteCookies(function() {
-			old.applyAll();
-			current = old;
-			localStorage.setItem("username", "");
-			localStorage.setItem("password", "");
-		})
+		old.applyAll();
+		current = old;
+		localStorage.setItem("username", "");
+		localStorage.setItem("password", "");
 	});
 	console.log("user logged out");
 
 	return true;
 }
 
+//this function is called when an ajax request has resulted in an error
+//prints out error message
 function errorFunction(request) {
 	//TODO: maybe add more functionality to this
 	console.log(request.status + ": " + request.statusText);
 }
 
+//sends the data from the current session to the server
 function sendData(callback) {
 	console.log("in sendData");
 	if (!isLoggedIn()) {
@@ -95,6 +101,7 @@ function sendData(callback) {
 			type: "POST",
 			//since the server receives the data
 			url: server + "/ReceiveData",
+			cache: false,
 			data: {	
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
@@ -112,25 +119,24 @@ function sendData(callback) {
 	});
 }
 
-function receiveData() {
+//asks the server for the data for the specific user and then sets the data as the current
+//session. Username and password are sent again.
+function receiveData(successCallback, async, username, password) {
 	console.log("in receiveData");
-	if (!isLoggedIn()) {
-		console.log("user not logged in receive data cancelled");
-		return;
-	}
 	$.ajax({
 		//since the server sends the data
 		url: server + "/SendData",
+		async: async,
 		data: {
-			user: localStorage.getItem("username"),
-			pass: localStorage.getItem("password"),
+			user: username,
+			pass: password
 		},
 		success: function(data) {
 			if (data == "") {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
-			// setCookies(JSON.parse(data).cookies);
+			successCallback();
 			current.deSerialize(data);
 			current.applyAll();
 		},
@@ -138,9 +144,11 @@ function receiveData() {
 	});
 }
 
+//deletes all information from the server.
 function deleteFromServer() {
 	$.ajax({
 		url: server + "/DeleteCookiesFromServer",
+		cache: false,
 		success: function(data) { 
 			console.log(data); 	
 		},

@@ -46,21 +46,20 @@ public class ReceiveData extends HttpServlet {
     	JsonObject jsonObj = json.getAsJsonObject();
     	JsonArray ja = jsonObj.getAsJsonArray("cookies");
         response.setContentType("text/html");
-        logger.severe(reqString);
     	logger.fine("cookies received successfully");
     	List<Cookie> cookiesList = new LinkedList<Cookie>();
     	for (int i=0; i<ja.size(); i++){
     		cookiesList.add(new Cookie(ja.get(i).toString()));
     	}
     	logger.fine("cookiesList.length: " + cookiesList.size());;
-    	User u = DatabaseInteraction.getUser(username);
-    	if (u == null){
-    		u = new User(username, password, reqString);
-    		logger.fine("new user added to db");
-    	} else{
-    		u.setCookies(reqString);
-    		logger.fine("updated cookies of existing user");
+    	if (DatabaseInteraction.authenticate(username, password) != 0){
+        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
+       		logger.config("ERROR: received incorrect credentials");
+    		return;
     	}
+    	User u = DatabaseInteraction.getUser(username);
+    	u.setInfo(reqString);
+    	logger.fine("updated data of existing user");
     	if (DatabaseInteraction.updateOrSaveUser(u)){
             PrintWriter out = response.getWriter();
     		out.println("received!");

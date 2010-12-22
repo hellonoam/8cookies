@@ -37,9 +37,9 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
-       	String cookiesString = u.getCookies();
-       	if (cookiesString != null)
-       		out.println(cookiesString);
+       	String infoString = u.getInfo();
+       	if (infoString != null)
+       		out.println(infoString);
     	out.close();
     	logger.fine("cookies were sent successfully");
     }

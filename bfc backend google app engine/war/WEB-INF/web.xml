@@ -17,6 +17,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-class>backend.SendData</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>SignUp</servlet-name>
+		<servlet-class>backend.SignUp</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>DeleteCookiesFromServer</servlet-name>
 		<servlet-class>backend.DeleteCookiesFromServer</servlet-class>
 	</servlet>
@@ -32,6 +36,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>SendData</servlet-name>
 		<url-pattern>/SendData</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SignUp</servlet-name>
+		<url-pattern>/SignUp</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>DeleteCookiesFromServer</servlet-name>
 		<url-pattern>/DeleteCookiesFromServer</url-pattern>
