@@ -1,6 +1,6 @@
-<script src="jQuery.js"></script>
-<script src="tools.js"></script>
-<script src="session.js"></script>
+<script src="js/jQuery.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/session.js"></script>
 <script type="text/javascript">
 
 // var server = "http://cloudbrowsing.appspot.com";
@@ -26,7 +26,7 @@ function(request, sender, sendResponse) {
 		case "deleteFromServer":
 			deleteFromServer();
 			break;
-		case "login":				
+		case "login":
 			sendResponse({ success: login(request.username, request.password) });
 			return; // return since the response is sent here
 		case "logout":
@@ -119,6 +119,8 @@ function sendData(callback) {
 	});
 }
 
+var dataGlob;
+
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
 function receiveData(successCallback, async, username, password) {
@@ -132,11 +134,12 @@ function receiveData(successCallback, async, username, password) {
 			pass: password
 		},
 		success: function(data) {
+			successCallback();
 			if (data == "") {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
-			successCallback();
+			dataGlob = data;
 			current.deSerialize(data);
 			current.applyAll();
 		},

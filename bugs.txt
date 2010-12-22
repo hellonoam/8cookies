@@ -1,7 +1,3 @@
 
-- no info returned, gives a error - new user will return an error
-
-
-- separate js from html
 - add css
 - if a user is logged in two different computers -> new login doesn't update old login

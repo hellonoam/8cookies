@@ -70,7 +70,7 @@ function session(cookies, windows){
 
 	//updates the data of this session to json after de serializing it
 	this.deSerialize = function(json) {
-		if (json && json != "")
+		if (json)
 			this.info = JSON.parse(json);
 	}
 }

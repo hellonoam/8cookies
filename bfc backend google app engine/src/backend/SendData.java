@@ -25,7 +25,6 @@ public class SendData extends HttpServlet {
         response.setContentType("text/html");
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
-        PrintWriter out = response.getWriter();
         switch (DatabaseInteraction.authenticate(username, password)){
         case 1:
        		response.sendError(HttpServletResponse.SC_NOT_FOUND, "User, " + username + ", not found");
@@ -37,8 +36,9 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
+        PrintWriter out = response.getWriter();
        	String infoString = u.getInfo();
-       	if (infoString != null)
+       	if (infoString != null && !infoString.equals(""))
        		out.println(infoString);
     	out.close();
     	logger.fine("cookies were sent successfully");

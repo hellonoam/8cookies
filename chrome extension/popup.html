@@ -1,90 +1,14 @@
 <html>
 <body>
-	<script src="jQuery.js"></script>
-	<script type="text/javascript">
-   		$(document).ready(function() { init(); });
-
-		function userLoggedIn(username) {
-			$(".login").hide();
-			$(".username").hide();
-			$(".usernameDiv").hide();
-			$(".password").hide();
-			$(".passwordDiv").hide();
-			$(".logout").show();
-			$(".loggedInUser").text(username);
-		}
-		
-		function userLoggedOut() {
-			$(".login").show();
-			$(".username").show();
-			$(".usernameDiv").show();
-			$(".password").show();
-			$(".passwordDiv").show();
-			$(".logout").hide();
-			$(".loggedInUser").text("");
-		}
-
- 		function init() {
-			chrome.extension.sendRequest(
-				{ type: "isLoggedIn" }, 
-				function(response) {
-					if (response.result)
-						userLoggedIn(response.username);
-					else
-						userLoggedOut();
-				}
-			);
-			$(".login").click(function() {
-				console.log("request to login, sent to bg");
-				chrome.extension.sendRequest(
-					{
-						type: "login",
-						username: $(".username").val(),
-						password: $(".password").val()
-					},
-					function(response) {
-						console.log(response.success)
-						if (response.success)
-							userLoggedIn($(".username").val());
-					}
-				);
-			});
-			$(".logout").click(function() {
-				console.log("request to logout, sent to bg");
-				chrome.extension.sendRequest({ type: "logout" });
-				userLoggedOut();
-			});
- 			$(".send").click(function() {
- 				console.log("request to send cookies, sent to bg");
-				chrome.extension.sendRequest({ type: "send"	});
- 			});
-			$(".receive").click(function() {
-				console.log("request to receive cookies, sent to bg");
-				chrome.extension.sendRequest({ type: "receive" });
-			});
-			$(".deleteFromServer").click(function() {
-				console.log("request to delete from server, sent to bg");
-				chrome.extension.sendRequest({ type: "deleteFromServer" });
-			});
-			$(".deleteLocal").click(function() {
-				console.log("request to delete local, sent to bg");
-				chrome.extension.sendRequest({ type: "deleteLocal" });
-			});
-			$(".signup").click(function() {
-				chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
-			});
- 		}
-	</script>
+	<script src="js/jQuery.js"></script>
+	<script src="js/popup.js"></script>
 	<p>Cloud Browsing</p>
 	<div class="loggedInUser"></div>
 	<div class="usernameDiv">username: <input type="text" class="username"></div>
 	<div class="passwordDiv">password: <input type="password" class="password"></div>
 	<input type="button" class="login" value="login"/>
 	<input type="button" class="logout" value="logout"/>
-	<input type="button" class="receive" value="Receive Cookies"/>
-	<input type="button" class="send" value="Send Cookies"/>
-	<input type="button" class="deleteFromServer" value="delete cookies from server">
-	<input type="button" class="deleteLocal" value="delete local cookies">
 	<div class="signup">signup</div>
+	<input type="button" class="deleteFromServer" value="delete all data from server">
 </body>
 </html>
