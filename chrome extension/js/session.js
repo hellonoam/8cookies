@@ -41,24 +41,16 @@ function session(cookies, windows){
 
 	//sets the cookies of this session to be the cookies of the browser
 	this.applyCookies = function(callback) {
-		if (!this.info || !this.info.cookies) {
-			console.log("cookies have not been set");
-			return;
-		}
 		deleteCookies(function() {
-			setCookies(s.info.cookies);
+			if (s.info.cookies)
+				setCookies(s.info.cookies);
 			callback();
 		});
 	}
 
 	//sets the windows of this session to be the windows of the browser
 	this.applyWindows = function(callback) {
-		if (!this.info || !this.info.windows) {
-			console.log("windows have not been set");
-			return;
-		}
-			setWindows(this.info.windows, callback);
-			console.log("windows have been set");
+		setWindows(this.info.windows, callback);
 	}
 
 	//sets both windows and cookies of this session to be those of the browser
@@ -70,7 +62,10 @@ function session(cookies, windows){
 
 	//updates the data of this session to json after de serializing it
 	this.deSerialize = function(json) {
+		console.log("deserialize was called");
 		if (json)
 			this.info = JSON.parse(json);
+		else
+			this.info = "";
 	}
 }

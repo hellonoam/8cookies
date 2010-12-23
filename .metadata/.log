@@ -1093,3 +1093,127 @@ java.lang.StringIndexOutOfBoundsException: String index out of range: 51002
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:619)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:574)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1407)
+
+!ENTRY com.google.appengine.eclipse.core 4 0 2010-12-22 19:22:41.277
+!MESSAGE Unable to update app: Email "hellonoam@gmail.com" and password do not match.
+
+See the deployment console for more details
+!STACK 0
+com.google.appengine.tools.admin.AdminException: Unable to update app: Email "hellonoam@gmail.com" and password do not match.
+	at com.google.appengine.tools.admin.AppAdminImpl.update(AppAdminImpl.java:62)
+	at com.google.appengine.eclipse.core.proxy.AppEngineBridgeImpl.deploy(AppEngineBridgeImpl.java:271)
+	at com.google.appengine.eclipse.core.deploy.DeployProjectJob.runInWorkspace(DeployProjectJob.java:146)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: com.google.appengine.tools.admin.ServerConnection$ClientLoginException: Email "hellonoam@gmail.com" and password do not match.
+	at com.google.appengine.tools.admin.ServerConnection.getAuthToken(ServerConnection.java:271)
+	at com.google.appengine.tools.admin.ServerConnection.authenticate(ServerConnection.java:222)
+	at com.google.appengine.tools.admin.ServerConnection.send(ServerConnection.java:151)
+	at com.google.appengine.tools.admin.ServerConnection.post(ServerConnection.java:82)
+	at com.google.appengine.tools.admin.AppVersionUpload.send(AppVersionUpload.java:582)
+	at com.google.appengine.tools.admin.AppVersionUpload.beginTransaction(AppVersionUpload.java:400)
+	at com.google.appengine.tools.admin.AppVersionUpload.doUpload(AppVersionUpload.java:112)
+	at com.google.appengine.tools.admin.AppAdminImpl.update(AppAdminImpl.java:56)
+	... 4 more
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: https://www.google.com/accounts/ClientLogin
+	at sun.reflect.GeneratedConstructorAccessor56.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at sun.net.www.protocol.http.HttpURLConnection$6.run(HttpURLConnection.java:1496)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:1490)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1144)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:234)
+	at com.google.appengine.tools.admin.ServerConnection.connect(ServerConnection.java:346)
+	at com.google.appengine.tools.admin.ServerConnection.getAuthToken(ServerConnection.java:254)
+	... 11 more
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: https://www.google.com/accounts/ClientLogin
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderFieldKey(HttpURLConnection.java:2354)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getHeaderFieldKey(HttpsURLConnectionImpl.java:287)
+	at com.google.appengine.tools.util.ClientCookieManager.readCookies(ClientCookieManager.java:123)
+	at com.google.appengine.tools.admin.ServerConnection.connect(ServerConnection.java:344)
+	... 12 more
+
+!ENTRY com.google.appengine.eclipse.core 4 0 2010-12-22 19:22:55.478
+!MESSAGE Unable to update app: Email "hellonoam@gmail.com" and password do not match.
+
+See the deployment console for more details
+!STACK 0
+com.google.appengine.tools.admin.AdminException: Unable to update app: Email "hellonoam@gmail.com" and password do not match.
+	at com.google.appengine.tools.admin.AppAdminImpl.update(AppAdminImpl.java:62)
+	at com.google.appengine.eclipse.core.proxy.AppEngineBridgeImpl.deploy(AppEngineBridgeImpl.java:271)
+	at com.google.appengine.eclipse.core.deploy.DeployProjectJob.runInWorkspace(DeployProjectJob.java:146)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: com.google.appengine.tools.admin.ServerConnection$ClientLoginException: Email "hellonoam@gmail.com" and password do not match.
+	at com.google.appengine.tools.admin.ServerConnection.getAuthToken(ServerConnection.java:271)
+	at com.google.appengine.tools.admin.ServerConnection.authenticate(ServerConnection.java:222)
+	at com.google.appengine.tools.admin.ServerConnection.send(ServerConnection.java:151)
+	at com.google.appengine.tools.admin.ServerConnection.post(ServerConnection.java:82)
+	at com.google.appengine.tools.admin.AppVersionUpload.send(AppVersionUpload.java:582)
+	at com.google.appengine.tools.admin.AppVersionUpload.beginTransaction(AppVersionUpload.java:400)
+	at com.google.appengine.tools.admin.AppVersionUpload.doUpload(AppVersionUpload.java:112)
+	at com.google.appengine.tools.admin.AppAdminImpl.update(AppAdminImpl.java:56)
+	... 4 more
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: https://www.google.com/accounts/ClientLogin
+	at sun.reflect.GeneratedConstructorAccessor56.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at sun.net.www.protocol.http.HttpURLConnection$6.run(HttpURLConnection.java:1496)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:1490)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1144)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:234)
+	at com.google.appengine.tools.admin.ServerConnection.connect(ServerConnection.java:346)
+	at com.google.appengine.tools.admin.ServerConnection.getAuthToken(ServerConnection.java:254)
+	... 11 more
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: https://www.google.com/accounts/ClientLogin
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderFieldKey(HttpURLConnection.java:2354)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getHeaderFieldKey(HttpsURLConnectionImpl.java:287)
+	at com.google.appengine.tools.util.ClientCookieManager.readCookies(ClientCookieManager.java:123)
+	at com.google.appengine.tools.admin.ServerConnection.connect(ServerConnection.java:344)
+	... 12 more
+
+!ENTRY com.google.appengine.eclipse.core 1 0 2010-12-22 19:23:23.430
+!MESSAGE bfc backend google app engine successfully deployed to Google App Engine
+
+!ENTRY org.eclipse.equinox.p2.operations 2 0 2010-12-22 21:36:47.143
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2010-12-22 21:36:47.143
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10005 2010-12-22 21:36:47.143
+!MESSAGE "Google Plugin for Eclipse 3.6" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 2 0 2010-12-22 21:36:47.165
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2010-12-22 21:36:47.165
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10005 2010-12-22 21:36:47.165
+!MESSAGE "Google Plugin for Eclipse 3.6" will be ignored because it is already installed.
+!SESSION 2010-12-23 01:51:08.608 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_22
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/noamszpiro/.eclipse_keyring -showlocation
+
+!ENTRY com.google.gdt.eclipse.suite 1 0 2010-12-23 01:55:52.009
+!MESSAGE Registering: com.google.appengine.eclipse.sdkbundle.1.4.0_1.4.0.v201012021502
+
+!ENTRY com.google.gdt.eclipse.suite 1 0 2010-12-23 01:55:54.126
+!MESSAGE Registering: com.google.gwt.eclipse.sdkbundle.2.1.1_2.1.1.v201012170127
+
+!ENTRY org.eclipse.core.net 1 0 2010-12-23 01:55:56.971
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-23 01:55:57.937
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-23 01:55:58.175
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does
+
+!ENTRY com.google.gwt.eclipse.core 2 0 2010-12-23 01:55:58.382
+!MESSAGE Could not check whether the launch configuration "bfc backend google app engine" needs the -XstartOnFirstThread argument, assuming it does

@@ -1,5 +1,7 @@
 //sets the local cookies to to cookies
 function setCookies(cookies){
+	if (!cookies)
+		return;
 	for (var i=0; i<cookies.length; i++) {
 		//maybe move this mambo jambo to another function
 		var newCookie = new Object;
@@ -33,11 +35,11 @@ function setWindows(windows, callback) {
 		}
 	});
 
-	var index = 0;//the index is used for the hack of getting two 
+	var index = 0;//the index is used for the hack of getting the window id
 
 	//if there are no windows then a Google tab would be opened
 	if (!windows) {
-		windows = [];
+		windows = [new Object()];
 		windows[0].left = 20;
 		windows[0].top = 20;
 		windows[0].width = 600;
@@ -57,11 +59,15 @@ function setWindows(windows, callback) {
 			newWindow.height = windows[i].height;
 			newWindow.incognito = windows[i].incognito;
 			newWindow.type = windows[i].type;
-			newWindow.url = windows[i].tabs[0].url;
+			if (windows[i].tabs && windows[i].tabs[0])
+			//TODO: the second might do the same as the first - check this
+				newWindow.url = windows[i].tabs[0].url;
+			else
+				newWindow.url = windows[i].url;
 			chrome.windows.create(newWindow, function(createdWin) {
 				while (windows[index].type == "app")
 					index++;
-				for (var j=1; j<windows[index].tabs.length; j++) {
+				for (var j=1; windows[index].tabs && j<windows[index].tabs.length; j++) {
 					var options = new Object();
 					options.windowId = createdWin.id;
 					options.url = windows[index].tabs[j].url;
@@ -73,7 +79,7 @@ function setWindows(windows, callback) {
 			});
 		}
 	}
-	if (callback) //TODO: make sure this is correct
+	if (callback) //TODO: make sure there is no race condition
 		callback();
 }
 
@@ -85,7 +91,7 @@ function deleteCookies(callback) {
 			var current = cookies[i];
 			var cookies2Remove = new Object;
 			cookies2Remove.url = ((current.secure) ? 
-				"https://" : "http://") + current.domain;	
+				"https://" : "http://") + current.domain + current.path;	
 			cookies2Remove.name = current.name;
 			cookies2Remove.storeId = current.storeId;
 			chrome.cookies.remove(cookies2Remove);

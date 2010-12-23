@@ -3,8 +3,8 @@
 <script src="js/session.js"></script>
 <script type="text/javascript">
 
-// var server = "http://cloudbrowsing.appspot.com";
-var server = "http://localhost";
+//var server = "http://cloudbrowsing.appspot.com";
+ var server = "http://localhost";
 
 //saves the current session
 var current = new session();
@@ -27,7 +27,9 @@ function(request, sender, sendResponse) {
 			deleteFromServer();
 			break;
 		case "login":
-			sendResponse({ success: login(request.username, request.password) });
+			sendResponse({ success: login(request.username, 
+										  request.password,
+										  request.portSession) });
 			return; // return since the response is sent here
 		case "logout":
 			sendResponse({ success: logout() });
@@ -44,7 +46,7 @@ function(request, sender, sendResponse) {
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
-function login(username, password) {
+function login(username, password, portSession) {
 	if (username == "" || password == "" ||
 		username == undefined || password == undefined) { //TODO: change undefined
 		console.log("username or password not valid");
@@ -60,7 +62,7 @@ function login(username, password) {
 			localStorage.setItem("password", password);
 			console.log("user logged in");
 		});
-	}, false, username, password);
+	}, false, username, password, portSession);
 
 	return isLoggedIn();
 }
@@ -119,11 +121,9 @@ function sendData(callback) {
 	});
 }
 
-var dataGlob;
-
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
-function receiveData(successCallback, async, username, password) {
+function receiveData(successCallback, async, username, password, portSession) {
 	console.log("in receiveData");
 	$.ajax({
 		//since the server sends the data
@@ -135,11 +135,10 @@ function receiveData(successCallback, async, username, password) {
 		},
 		success: function(data) {
 			successCallback();
-			if (data == "") {
+			if (portSession && data == "") {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
-			dataGlob = data;
 			current.deSerialize(data);
 			current.applyAll();
 		},

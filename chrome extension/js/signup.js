@@ -1,4 +1,4 @@
-// var server = "http://cloudbrowsing.appspot.com";
+//var server = "http://cloudbrowsing.appspot.com";
 var server = "http://localhost";
 
 $(document).ready(function() { init(); });
@@ -20,7 +20,8 @@ function init() {
 						{
 							type: "login",
 							username: $(".username").val(),
-							password: $(".password").val()
+							password: $(".password").val(),
+							portSession: $(".portSession").attr("checked")
 						}
 					);
 				} else

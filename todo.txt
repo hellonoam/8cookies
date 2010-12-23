@@ -6,6 +6,8 @@ What's left:
 2 - open/close tabs
 2 - signups
 
+add checkbox in signup - "port current profile to cloud?"
+
 4 - automatic sync - server/client
 1 - save cookies separately 
 1 - index database

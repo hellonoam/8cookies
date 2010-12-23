@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="22" version="2.0">
 <workbenchAdvisor/>
-<window height="778" width="921" x="59" y="22">
+<window height="1028" width="1081" x="120" y="22">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -20,6 +20,7 @@
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="152" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.jdt.ui.PropertiesFileEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
@@ -38,9 +39,10 @@
 <views>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>&#x0A;<category IMemento.internal.id="Warnings (5 items)"/>
+<expanded>
+<category IMemento.internal.id="Warnings (12 items)"/>
 </expanded>
-<columnWidths org.eclipse.ui.ide.locationField="84" org.eclipse.ui.ide.markerType="114" org.eclipse.ui.ide.pathField="144" org.eclipse.ui.ide.resourceField="114" org.eclipse.ui.ide.severityAndDescriptionField="654"/>
+<columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -150,7 +152,7 @@
 <view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
 <view id="org.eclipse.jdt.ui.JavadocView" ratio="0.3"/>
 <view id="org.eclipse.jdt.ui.SourceView" ratio="0.3"/>
-<view id="org.eclipse.ui.console.ConsoleView" ratio="0.37662336"/>
+<view id="org.eclipse.ui.console.ConsoleView" ratio="0.2757158"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
@@ -208,36 +210,53 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
 <trimArea IMemento.internal.id="1024">
-<trimItem IMemento.internal.id="com.google.gdt.eclipse.suite.status.trim"/>
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
-<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
+<trimItem IMemento.internal.id="com.google.gdt.eclipse.suite.status.trim"/>
 <trimItem IMemento.internal.id="bottom"/>
-<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SendData.java" tooltip="bfc backend google app engine/src/backend/SendData.java">
-<persistable path="/bfc backend google app engine/src/backend/SendData.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="User.java" tooltip="bfc backend google app engine/src/backend/User.java">
+<persistable path="/bfc backend google app engine/src/backend/User.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Bfc_backend_google_app_engineServlet.java" tooltip="bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java">
-<persistable path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PMF.java" tooltip="bfc backend google app engine/src/backend/PMF.java">
+<persistable path="/bfc backend google app engine/src/backend/PMF.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServer.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServer.java">
 <persistable path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
 </file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DatabaseInteraction.java" tooltip="bfc backend google app engine/src/backend/DatabaseInteraction.java">
+<persistable path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Cookie.java" tooltip="bfc backend google app engine/src/backend/Cookie.java">
+<persistable path="/bfc backend google app engine/src/backend/Cookie.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Bfc_backend_google_app_engineServlet.java" tooltip="bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java">
+<persistable path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SendData.java" tooltip="bfc backend google app engine/src/backend/SendData.java">
+<persistable path="/bfc backend google app engine/src/backend/SendData.java"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReceiveData.java" tooltip="bfc backend google app engine/src/backend/ReceiveData.java">
 <persistable path="/bfc backend google app engine/src/backend/ReceiveData.java"/>
 </file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.PropertiesFileEditor" name="log4j.properties" tooltip="bfc backend google app engine/src/log4j.properties">
+<persistable path="/bfc backend google app engine/src/log4j.properties"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SignUp.java" tooltip="bfc backend google app engine/src/backend/SignUp.java">
+<persistable path="/bfc backend google app engine/src/backend/SignUp.java"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" name="datastore-indexes-auto.xml" tooltip="bfc backend google app engine/war/WEB-INF/appengine-generated/datastore-indexes-auto.xml">
 <persistable path="/bfc backend google app engine/war/WEB-INF/appengine-generated/datastore-indexes-auto.xml"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PMF.java" tooltip="bfc backend google app engine/src/backend/PMF.java">
-<persistable path="/bfc backend google app engine/src/backend/PMF.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Employee.java" tooltip="bfc backend google app engine/src/backend/Employee.java">
 <persistable path="/bfc backend google app engine/src/backend/Employee.java"/>
