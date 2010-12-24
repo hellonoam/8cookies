@@ -30,6 +30,27 @@ public class DatabaseInteraction {
     	return u;
     }
     
+    //TODO: get rid of code duplication here. The problem is that delete needs to happen with the same pm as find
+    public static boolean deleteUser(String username){
+    	boolean success = false;
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(User.class);
+		User u = null;
+    	try{
+        	query.setFilter("username == usernameParam");
+        	query.declareParameters("String usernameParam");
+        	List<User> answer = ((List<User>) query.execute(username));
+    		u = answer.size() > 0 ? answer.get(0) : null;
+    		if (u != null)
+    			pm.deletePersistent(u);
+    		success = true;
+    	} finally {
+    		query.closeAll();
+    		pm.close();
+    	}
+    	return success;
+    }
+    
     /**
      * Checks if the user and password pair is valid
      * @param username
@@ -76,15 +97,12 @@ public class DatabaseInteraction {
      */
 	public static boolean deleteAllUsersAndCookies() {
 		boolean success = false;
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-        Query queryCookie = pm.newQuery("select from " + Cookie.class.getName());
+		PersistenceManager pm = PMF.get().getPersistenceManager();      
         Query queryUser = pm.newQuery("select from " + User.class.getName());
         try{
-        	queryCookie.deletePersistentAll();
         	queryUser.deletePersistentAll();
         	success = true;
     	} finally {
-    		queryCookie.closeAll();
     		queryUser.closeAll();
     		pm.close();
         }

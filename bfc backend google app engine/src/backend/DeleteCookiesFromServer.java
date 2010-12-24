@@ -25,13 +25,25 @@ public class DeleteCookiesFromServer extends HttpServlet {
         throws IOException, ServletException
     {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        if (DatabaseInteraction.deleteAllUsersAndCookies()){
-        	logger.severe("all cookies and users deleted");
-        	out.println("cookies and users from server deleted");
-        } else {
-        	logger.severe("ERROR: failed to delete users and cookies");
-        	out.println("ERROR: failed to delete users and cookies");
+        String username = request.getParameter("user");
+        String password = request.getParameter("pass");
+
+        
+        if (username == null || username.equals("") || 
+        		DatabaseInteraction.authenticate(username, password) != 0){
+        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, 
+        			"username or password invalid");
+        	return;
         }
+        
+        PrintWriter out = response.getWriter();        
+        if (DatabaseInteraction.deleteUser(username)){
+        	logger.severe("info for " + username + " was deleted");
+        	out.println("info for " + username + " was deleted from server");
+        } else {
+        	logger.severe("ERROR: failed to delete " + username);
+        	out.println("ERROR: failed to delete " + username + " from server");
+        }
+        out.close();
     }
 }

@@ -75,7 +75,7 @@ function setWindows(windows, callback) {
 					options.selected = windows[index].tabs[j].selected;
 					chrome.tabs.create(options);
 				}
-				index++;
+					index++;
 			});
 		}
 	}

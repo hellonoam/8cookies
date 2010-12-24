@@ -1,21 +1,13 @@
 $(document).ready(function() { init(); });
 
 function userLoggedIn(username) {
-	$(".login").hide();
-	$(".username").hide();
-	$(".usernameDiv").hide();
-	$(".password").hide();
-	$(".passwordDiv").hide();
+	$(".whenNotLoggedIn").hide();
 	$(".logout").show();
 	$(".loggedInUser").text(username);
 }
 
 function userLoggedOut() {
-	$(".login").show();
-	$(".username").show();
-	$(".usernameDiv").show();
-	$(".password").show();
-	$(".passwordDiv").show();
+	$(".whenNotLoggedIn").show();;
 	$(".logout").hide();
 	$(".loggedInUser").text("");
 }
@@ -52,7 +44,11 @@ function init() {
 	});
 	$(".deleteFromServer").click(function() {
 		console.log("request to delete from server, sent to bg");
-		chrome.extension.sendRequest({ type: "deleteFromServer" });
+		chrome.extension.sendRequest({
+			type: "deleteFromServer",
+			username: $(".username").val(),
+			password: $(".password").val(),
+		});
 	});
 	$(".signup").click(function() {
 		chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
