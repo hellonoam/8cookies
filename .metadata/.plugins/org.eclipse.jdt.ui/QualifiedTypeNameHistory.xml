@@ -4,8 +4,8 @@
 <fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
 <fullyQualifiedTypeName name="javax.servlet.ServletException"/>
 <fullyQualifiedTypeName name="com.google.gson.JsonObject"/>
-<fullyQualifiedTypeName name="backend.DatabaseInteraction"/>
 <fullyQualifiedTypeName name="com.google.gson.JsonElement"/>
 <fullyQualifiedTypeName name="com.google.gson.JsonParser"/>
 <fullyQualifiedTypeName name="org.apache.tools.ant.util.StringUtils"/>
+<fullyQualifiedTypeName name="backend.DatabaseInteraction"/>
 </qualifiedTypeNameHistroy>

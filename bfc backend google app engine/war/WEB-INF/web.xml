@@ -24,6 +24,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>DeleteCookiesFromServer</servlet-name>
 		<servlet-class>backend.DeleteCookiesFromServer</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>AddInvite</servlet-name>
+		<servlet-class>backend.AddInvite</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Bfc_backend_google_app_engine</servlet-name>
 		<url-pattern>/bfc_backend_google_app_engine</url-pattern>
@@ -40,12 +44,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>SignUp</servlet-name>
 		<url-pattern>/SignUp</url-pattern>
 	</servlet-mapping>
-
 	<servlet-mapping>
 		<servlet-name>DeleteCookiesFromServer</servlet-name>
 		<url-pattern>/DeleteCookiesFromServer</url-pattern>
 	</servlet-mapping>
-	
+	<servlet-mapping>
+		<servlet-name>AddInvite</servlet-name>
+		<url-pattern>/AddInvite</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

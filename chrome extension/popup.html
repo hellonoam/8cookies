@@ -1,16 +1,29 @@
 <html>
 <body>
+	<link href="css/popup.css" rel="stylesheet" type="text/css">
 	<script src="js/jQuery.js"></script>
 	<script src="js/popup.js"></script>
-	<p>Cloud Browsing</p>
-	<div class="loggedInUser"></div>
-	<div class="whenNotLoggedIn">
-		<div class="usernameDiv">username: <input type="text" class="username"></div>
-		<div class="passwordDiv">password: <input type="password" class="password"></div>
-		<input type="button" class="login" value="login"/>
-		<div class="signup">signup</div>
-		<input type="button" class="deleteFromServer" value="delete your data from server">
+	<div class="title">Cloud Browsing</div>
+	<div class="loggedInUser">
+		<p class="inputText">hello noam</p>
+		<div class="deleteFromServer">
+			<input type="button" class="logout" value="logout">
+			delete your data from server
+		</div>
+		
 	</div>
-	<input type="button" class="logout" value="logout"/>
+	<div class="whenNotLoggedIn">
+		<div class="usernameDiv inputText">
+			username: <input type="text" class="username typeText">
+		</div>
+		<div class="passwordDiv inputText">
+			password: <input type="password" class="password typeText">
+		</div>
+		<div>
+			<input type="button" class="login" value="login">
+			<p class="signup">signup</p>
+		</div>
+		<div class="result"></div>
+	</div>
 </body>
 </html>

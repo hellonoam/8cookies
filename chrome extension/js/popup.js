@@ -2,14 +2,14 @@ $(document).ready(function() { init(); });
 
 function userLoggedIn(username) {
 	$(".whenNotLoggedIn").hide();
-	$(".logout").show();
-	$(".loggedInUser").text(username);
+	$(".loggedInUser").show();
+	$(".loggedInUser p").text("hello " + username);
 }
 
 function userLoggedOut() {
 	$(".whenNotLoggedIn").show();;
-	$(".logout").hide();
-	$(".loggedInUser").text("");
+	$(".loggedInUser").hide();
+	$(".loggedInUser p").text("");
 }
 
 function init() {
@@ -34,10 +34,13 @@ function init() {
 				console.log(response.success)
 				if (response.success)
 					userLoggedIn($(".username").val());
+				else
+					$(".result").text("wrong username or password");
 			}
 		);
 	});
-	$(".logout").click(function() {
+	$(".logout").click(function(event) {
+		event.stopPropagation(); //so delete won't be called
 		console.log("request to logout, sent to bg");
 		chrome.extension.sendRequest({ type: "logout" });
 		userLoggedOut();
@@ -45,9 +48,7 @@ function init() {
 	$(".deleteFromServer").click(function() {
 		console.log("request to delete from server, sent to bg");
 		chrome.extension.sendRequest({
-			type: "deleteFromServer",
-			username: $(".username").val(),
-			password: $(".password").val(),
+			type: "deleteFromServer"
 		});
 	});
 	$(".signup").click(function() {

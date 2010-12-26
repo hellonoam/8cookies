@@ -20,12 +20,20 @@ public class SignUp extends HttpServlet {
     	logger.finest("inside do get");
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
+    	String invitation = request.getParameter("invite");
     	String callback = sanitizeJsonpParam(request.getParameter("callback"));
     	String email = request.getParameter("email");
     	logger.fine("username received " + username);
     	User u = DatabaseInteraction.getUser(username);
         response.setContentType("application/x-javascript");
         PrintWriter out = response.getWriter();
+        if (!DatabaseInteraction.removeInvite(invitation)) {
+        	logger.fine("username exists");
+    		if (callback != null)
+    			out.println(callback + "({response: 'unknown-invitation'});");
+        	out.close();
+        	return;
+        }        
     	if (u != null){
     		//user in use
     		logger.fine("username exists");

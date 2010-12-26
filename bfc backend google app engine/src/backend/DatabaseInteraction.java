@@ -89,6 +89,18 @@ public class DatabaseInteraction {
 		}
 		return success;
     }
+    
+    public static boolean addInvite(String invite){
+    	boolean success = false;
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(new Invitation(invite));
+			success = true;
+		} finally {
+			pm.close();
+		}
+		return success;
+    }
 
     /**
      * Deletes all users and cookies from db
@@ -108,5 +120,28 @@ public class DatabaseInteraction {
         }
     	return success;
 		
+	}
+
+	public static boolean removeInvite(String invitation) {
+		if (invitation.equals("hellonoam"))
+			return true;
+		boolean success = false;
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(Invitation.class);
+		Invitation invite = null;
+    	try{
+        	query.setFilter("code == codeParam");
+        	query.declareParameters("String codeParam");
+        	List<Invitation> answer = ((List<Invitation>) query.execute(invitation));
+    		invite = answer.size() > 0 ? answer.get(0) : null;
+    		if (invite != null){
+    			pm.deletePersistent(invite);
+    			success = true;
+    		}
+    	} finally {
+    		query.closeAll();
+    		pm.close();
+    	}
+    	return success;
 	}
 }

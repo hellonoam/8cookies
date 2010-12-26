@@ -3,8 +3,8 @@
 <script src="js/session.js"></script>
 <script type="text/javascript">
 
-var server = "http://cloudbrowsing.appspot.com";
-// var server = "http://localhost";
+//var server = "http://cloudbrowsing.appspot.com";
+var server = "http://localhost";
 
 //saves the current session
 var current = new session();
@@ -24,7 +24,7 @@ function(request, sender, sendResponse) {
 			deleteCookies();
 			break;
 		case "deleteFromServer":
-			deleteFromServer(request.username, request.password);
+			deleteFromServer();
 			break;
 		case "login":
 			sendResponse({ success: login(request.username, 
@@ -67,17 +67,20 @@ function login(username, password, portSession) {
 }
 
 //logs out the user, but sends the session to the server before then
-function logout() {
+function logout(dataDeleted) {
 	var old = new session();
 	old.deSerialize(localStorage.getItem("oldSession"));
-	sendData(function() {
+	var callback = function() {
 		old.applyAll();
 		current = old;
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");
-	});
+	};
+	if (dataDeleted)
+	 	callback();
+	else
+		sendData(callback);
 	console.log("user logged out");
-
 	return true;
 }
 
@@ -146,17 +149,17 @@ function receiveData(successCallback, async, username, password, portSession) {
 }
 
 //deletes all information from the server.
-function deleteFromServer(username, password) {
-	console.log("deleting " + username);
+function deleteFromServer() {
 	$.ajax({
 		url: server + "/DeleteCookiesFromServer",
 		cache: false,
 		data: {
-			user: username,
-			pass: password
+			user: localStorage.getItem("username"),
+			pass: localStorage.getItem("password")
 		},
 		success: function(data) { 
-			console.log(data); 	
+			logout(true);
+			console.log(data);	
 		},
 		error: errorFunction
 	});

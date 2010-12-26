@@ -1,0 +1,64 @@
+body {
+	width: 230px;
+	height: 150px;
+	font-family: Helvetica, Arial, Verdana, sans-serif;
+	color: #563c12;
+	font-size: 90%;
+	padding:10px;
+}
+
+.title {
+	color:#115F9E;
+	font-size: 1.2em;
+	margin-left: 55px;
+	margin-right: auto;
+	padding-bottom: 20px;
+}
+
+whenNotLoggedIn input[type=button] {
+	margin-left: 15px;
+	margin-top: 15px;
+}
+
+.login{
+	margin: 12px;
+	float:left;
+}
+
+.result {
+	font-size: 75%;
+	color:#96324B;
+}
+
+.loggedInUser {
+	margin-left: 10px;
+}
+
+.signup {
+	margin:13px;
+	font-size: 75%;
+}
+
+.deleteFromServer {
+	font-size: 75%;
+}
+
+.whenNotLoggedIn {
+	position: relative;
+}
+
+.whenNotLoggedIn div {
+	padding: 3px;
+}
+
+.inputText input {
+	position: absolute;
+	right:0;
+	border-radius: 2px;
+	border: 1px solid #ccc;
+}
+
+.inputText {
+	font-weight: bold;
+	font-size: 1em;
+}

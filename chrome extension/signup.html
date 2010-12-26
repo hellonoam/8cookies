@@ -1,21 +1,31 @@
 <html>
 <body>
+	<link href="css/signup.css" rel="stylesheet" type="text/css">
 	<script src="js/jQuery.js"></script>
 	<script src="js/signup.js"></script>
+	<div class="title">Cloud Browsing</div>
 	<div class="signup">
-		<div>sign up</div>
-		<div>username: <input class="username" type="text"></div>
-		<div>password: <input class="password" type="password"></div>
-		<div>email: <input class="email" type="email"></div>
-		<!-- check if email is supported -->
-		<div>we promise not to spam you</div>
-		<div>
-			<input class="portSession" type="checkbox" checked=true>
-			port current profile to cloud?
+		<!-- <div>sign up</div> -->
+		<div class="inputText">
+			username: <input class="username" type="text">
 		</div>
-		<div><input class="submit" type="submit" value="submit"></div>
+		<div class="inputText">
+			password: <input class="password" type="password">
+		</div>
+		<div class="inputText">
+			invitation code: <input class="invitation" type="password">
+		</div>
+		<div class="inputText">
+			email*: <input class="email" type="email">
+		</div>
+		<!-- check if email is supported -->
+		<div class="promise">*we promise not to spam you</div>
+		<div class="inputText">
+			port current profile to cloud?
+			<input class="portSession" type="checkbox">
+		</div>
+		<div class="result"></div>
+		<div><input class="submit" type="submit" value="signup"></div>
 	</div>
-	<div class="result"></div>
-
 </body>
 </html>

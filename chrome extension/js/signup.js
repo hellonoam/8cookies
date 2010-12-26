@@ -1,5 +1,5 @@
-var server = "http://cloudbrowsing.appspot.com";
-// var server = "http://localhost";
+// var server = "http://cloudbrowsing.appspot.com";
+var server = "http://localhost";
 
 $(document).ready(function() { init(); });
 
@@ -9,12 +9,12 @@ function init() {
 		$.getJSON(server + "/SignUp?callback=?",
 			{
 				user: $(".username").val(),
-				pass: $(".password").val()
+				pass: $(".password").val(),
+				invite: $(".invitation").val()
 			},
 			function(json) {
 				console.log("data received: " + json);
 				if (json.response == "success") {
-					$(".signup").hide();
 					$(".result").text("signup was successful");
 					chrome.extension.sendRequest(
 						{
@@ -24,7 +24,9 @@ function init() {
 							portSession: $(".portSession").attr("checked")
 						}
 					);
-				} else
+				} else if (json.response == "unknown-invitation")
+					$(".result").text("sorry! wrong invitation code");
+				else
 					$(".result").text("username in use please try again");
 			}
 		);
