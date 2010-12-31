@@ -22,25 +22,21 @@ public class SendData extends HttpServlet {
                       HttpServletResponse response)
         throws IOException, ServletException
     {
-        response.setContentType("text/html");
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
-        switch (DatabaseInteraction.authenticate(username, password)){
-        case 1:
-       		response.sendError(HttpServletResponse.SC_NOT_FOUND, "User, " + username + ", not found");
-       		logger.config("ERROR: received request for non-existing user " + username);
-       		return;
-        case 2:
-        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Wrong password for " + username);
-       		logger.config("ERROR: received incorrect password for user " + username);
+        if (DatabaseInteraction.authenticate(username, password) != 0){
+        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
+       		logger.config("received incorrect credentials");
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
-        PrintWriter out = response.getWriter();
        	String infoString = u.getInfo();
-       	if (infoString != null && !infoString.equals(""))
+       	if (infoString != null && !infoString.equals("")){
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
        		out.println(infoString);
-    	out.close();
+        	out.close();
+       	}
     	logger.fine("cookies were sent successfully");
     }
 }

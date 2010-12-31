@@ -7,5 +7,8 @@
 <fullyQualifiedTypeName name="com.google.gson.JsonElement"/>
 <fullyQualifiedTypeName name="com.google.gson.JsonParser"/>
 <fullyQualifiedTypeName name="org.apache.tools.ant.util.StringUtils"/>
+<fullyQualifiedTypeName name="backend.Invitation"/>
 <fullyQualifiedTypeName name="backend.DatabaseInteraction"/>
+<fullyQualifiedTypeName name="org.junit.Assert"/>
+<fullyQualifiedTypeName name="org.junit.Test"/>
 </qualifiedTypeNameHistroy>

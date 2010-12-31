@@ -1,8 +1,5 @@
 package backend;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
@@ -28,15 +25,6 @@ public class User {
     
     @Persistent
     private String email;
-
-//    public User(String username, String password, List<Cookie> cookies) {
-//        this.username = username;
-//        this.password = password;
-//        this.cookies = new LinkedList<Cookie>();
-//        for (Cookie c: cookies){
-//        	this.cookies.add(c);
-//        }
-//    }
     
     public User(String username, String password, String email, String info) {
       this.username = username;
@@ -53,6 +41,10 @@ public class User {
         return username;
     } 
 
+    public String getEmail(){
+    	return email;
+    }
+    
     public String getPassword(){
     	return password;
     }

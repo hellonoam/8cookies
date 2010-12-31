@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="28" version="2.0">
+<workbench progressCount="31" version="2.0">
 <workbenchAdvisor/>
-<window height="715" width="1072" x="11" y="22">
+<window height="965" width="803" x="841" y="25">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -14,12 +14,13 @@
 <coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="100" y="22"/>
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="62" y="22"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="62" y="22"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="98" y="22"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="173" y="22"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="75" y="22"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="152" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.PropertiesFileEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
@@ -35,27 +36,35 @@
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
+<part id="3"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServer.java" partName="DeleteCookiesFromServer.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java" title="DeleteCookiesFromServer.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServer.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="523" selectionTopPixel="0"/>
-</editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DatabaseInteraction.java" partName="DatabaseInteraction.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/DatabaseInteraction.java" title="DatabaseInteraction.java" tooltip="bfc backend google app engine/src/backend/DatabaseInteraction.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1134" selectionTopPixel="90"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="66" selectionTopPixel="0"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SignUp.java" partName="SignUp.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/SignUp.java" title="SignUp.java" tooltip="bfc backend google app engine/src/backend/SignUp.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/SignUp.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="738" selectionTopPixel="36"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Bfc_backend_google_app_engineServlet.java" partName="Bfc_backend_google_app_engineServlet.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java" title="Bfc_backend_google_app_engineServlet.java" tooltip="bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="378" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServer.java" partName="DeleteCookiesFromServer.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java" title="DeleteCookiesFromServer.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
+<editorState selectionHorizontalPixel="27" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServerTest.java" partName="DeleteCookiesFromServerTest.java" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java" title="DeleteCookiesFromServerTest.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="185" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
+<view id="org.eclipse.jdt.junit.ResultView" partName="JUnit">
+<viewState failuresOnly="false" layout="1" orientation="2" ratio="500" scroll="false" time="true"/>
+</view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>&#x0A;<category IMemento.internal.id="Warnings (9 items)"/>
+<expanded>&#x0A;<category IMemento.internal.id="Warnings (12 items)"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -175,27 +184,29 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<view id="org.eclipse.jdt.junit.ResultView"/>
 <fastViewBars>
 <fastViewBar fastViewLocation="1024" id="bottom" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="0">
 <fastViews>
 <view id="org.eclipse.ui.views.ProblemView" ratio="0.3"/>
 <view id="org.eclipse.jdt.ui.JavadocView" ratio="0.3"/>
 <view id="org.eclipse.jdt.ui.SourceView" ratio="0.3"/>
-<view id="org.eclipse.ui.console.ConsoleView" ratio="0.275"/>
+<view id="org.eclipse.ui.console.ConsoleView" ratio="0.45571095"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
 <layout>
 <mainWindow>
 <info folder="true" part="left">
-<folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.jdt.junit.ResultView" appearance="2" expanded="2">
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.jdt.junit.ResultView" label="JUnit"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
-<page content="org.eclipse.jdt.junit.ResultView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
@@ -207,7 +218,7 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.21882641" ratioLeft="179" ratioRight="639" relationship="2" relative="left"/>
+<info part="org.eclipse.ui.editorss" ratio="0.37922078" ratioLeft="292" ratioRight="478" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.7132353" ratioLeft="485" ratioRight="195" relationship="4" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
@@ -323,124 +334,174 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/ReceiveData.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/SignUp.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/Invitation.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/AddInvite.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/Cookie.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" path="/bfc backend google app engine/war/list.jsp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/User.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" path="/bfc backend google app engine/war/index.html"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" path="/bfc backend google app engine/war/list.jsp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/AddInvite.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" path="/bfc backend google app engine/war/WEB-INF/web.xml"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.core.runtime.xml.source" path="/bfc backend google app engine/war/WEB-INF/web.xml"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" path="/bfc backend google app engine/war/list.jsp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/Invitation.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java"/>
 </editors>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="957" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServer.java" index="2">
+<position info="not_deleted" x="1167" y="39"/>
+</item>
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="659" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServer.java" index="2">
+<position info="not_deleted" x="1022" y="100"/>
+</item>
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="659" y="0"/>
+</item>
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="957" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServer.java" index="2">
+<position info="not_deleted" x="1195" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="2795" y="0"/>
+</item>
+<item historyLabel="AddInvite.java" index="3">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="660" y="52"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="2861" y="45"/>
+</item>
+<item historyLabel="Invitation.java" index="1">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="ReceiveData.java" index="1">
-<position/>
+<item historyLabel="DeleteCookiesFromServer.java" index="2">
+<position info="not_deleted" x="1195" y="0"/>
 </item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item historyLabel="ReceiveData.java" index="1">
-<position/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1247" y="11"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1267" y="0"/>
-</item>
-<item historyLabel="ReceiveData.java" index="1">
-<position/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
+<item historyLabel="Invitation.java" index="1">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="ReceiveData.java" index="1">
+<item historyLabel="Cookie.java" index="4">
+<position info="not_deleted" x="459" y="95"/>
+</item>
+<item historyLabel="Invitation.java" index="1">
+<position info="not_deleted" x="296" y="0"/>
+</item>
+<item historyLabel="AddInvite.java" index="3">
+<position info="not_deleted" x="660" y="52"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="2861" y="45"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
 <position/>
 </item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1267" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1010" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1214" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="1142" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1258" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
+<item historyLabel="DatabaseInteraction.java" index="0">
 <position/>
 </item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="3233" y="0"/>
 </item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="909" y="0"/>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="321" y="0"/>
 </item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1258" y="0"/>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="279" y="0"/>
 </item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="994" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1006" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="909" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1077" y="0"/>
-</item>
-<item historyLabel="ReceiveData.java" index="1">
-<position info="not_deleted" x="1389" y="19"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="1077" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="523" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="909" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="1520" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="1667" y="0"/>
-</item>
-<item historyLabel="DeleteCookiesFromServer.java" index="0">
-<position info="not_deleted" x="523" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position info="not_deleted" x="1667" y="0"/>
-</item>
-<item historyLabel="DatabaseInteraction.java" index="2">
-<position/>
-</item>
-<item active="true" historyLabel="SignUp.java" index="3">
+<item historyLabel="User.java" index="6">
 <position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="User.java" index="6">
+<position info="not_deleted" x="1341" y="0"/>
+</item>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="97" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="18" y="22"/>
+</item>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="133" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="0">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="147" y="0"/>
+</item>
+<item historyLabel="index.html" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="list.jsp" index="5">
+<position info="not_deleted" x="147" y="0"/>
+</item>
+<item historyLabel="index.html" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="list.jsp" index="8">
+<position info="not_deleted" x="147" y="0"/>
+</item>
+<item historyLabel="AddInvite.java" index="9">
+<position info="not_deleted" x="960" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="10">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="web.xml" index="11">
+<position info="not_deleted" x="971" y="0"/>
+</item>
+<item historyLabel="web.xml" index="12">
+<position info="not_deleted" x="1635" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="10">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="list.jsp" index="13">
+<position info="not_deleted" x="239" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="10">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="Invitation.java" index="14">
+<position info="not_deleted" x="296" y="0"/>
+</item>
+<item historyLabel="DatabaseInteraction.java" index="10">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="Bfc_backend_google_app_engineServlet.java" index="15">
+<position info="not_deleted" x="378" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServer.java" index="16">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServerTest.java" index="17">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServerTest.java" index="17">
+<position info="not_deleted" x="153" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServerTest.java" index="17">
+<position info="not_deleted" x="119" y="0"/>
+</item>
+<item historyLabel="DeleteCookiesFromServerTest.java" index="17">
+<position info="not_deleted" x="122" y="4"/>
+</item>
+<item active="true" historyLabel="DeleteCookiesFromServerTest.java" index="17">
+<position info="not_deleted" x="177" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -463,44 +524,50 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServerTest.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java">
+<persistable path="/bfc backend google app engine/src/backend/DeleteCookiesFromServerTest.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServer.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServer.java">
+<persistable path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Bfc_backend_google_app_engineServlet.java" tooltip="bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java">
+<persistable path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" name="web.xml" tooltip="bfc backend google app engine/war/WEB-INF/web.xml">
+<persistable path="/bfc backend google app engine/war/WEB-INF/web.xml"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="index.html" tooltip="bfc backend google app engine/war/index.html">
+<persistable path="/bfc backend google app engine/war/index.html"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="User.java" tooltip="bfc backend google app engine/src/backend/User.java">
+<persistable path="/bfc backend google app engine/src/backend/User.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="list.jsp" tooltip="bfc backend google app engine/war/list.jsp">
+<persistable path="/bfc backend google app engine/war/list.jsp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Cookie.java" tooltip="bfc backend google app engine/src/backend/Cookie.java">
+<persistable path="/bfc backend google app engine/src/backend/Cookie.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Invitation.java" tooltip="bfc backend google app engine/src/backend/Invitation.java">
+<persistable path="/bfc backend google app engine/src/backend/Invitation.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AddInvite.java" tooltip="bfc backend google app engine/src/backend/AddInvite.java">
+<persistable path="/bfc backend google app engine/src/backend/AddInvite.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DatabaseInteraction.java" tooltip="bfc backend google app engine/src/backend/DatabaseInteraction.java">
+<persistable path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SignUp.java" tooltip="bfc backend google app engine/src/backend/SignUp.java">
 <persistable path="/bfc backend google app engine/src/backend/SignUp.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReceiveData.java" tooltip="bfc backend google app engine/src/backend/ReceiveData.java">
 <persistable path="/bfc backend google app engine/src/backend/ReceiveData.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DatabaseInteraction.java" tooltip="bfc backend google app engine/src/backend/DatabaseInteraction.java">
-<persistable path="/bfc backend google app engine/src/backend/DatabaseInteraction.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DeleteCookiesFromServer.java" tooltip="bfc backend google app engine/src/backend/DeleteCookiesFromServer.java">
-<persistable path="/bfc backend google app engine/src/backend/DeleteCookiesFromServer.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="User.java" tooltip="bfc backend google app engine/src/backend/User.java">
-<persistable path="/bfc backend google app engine/src/backend/User.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PMF.java" tooltip="bfc backend google app engine/src/backend/PMF.java">
 <persistable path="/bfc backend google app engine/src/backend/PMF.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Cookie.java" tooltip="bfc backend google app engine/src/backend/Cookie.java">
-<persistable path="/bfc backend google app engine/src/backend/Cookie.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Bfc_backend_google_app_engineServlet.java" tooltip="bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java">
-<persistable path="/bfc backend google app engine/src/backend/Bfc_backend_google_app_engineServlet.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SendData.java" tooltip="bfc backend google app engine/src/backend/SendData.java">
 <persistable path="/bfc backend google app engine/src/backend/SendData.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.PropertiesFileEditor" name="log4j.properties" tooltip="bfc backend google app engine/src/log4j.properties">
-<persistable path="/bfc backend google app engine/src/log4j.properties"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" name="datastore-indexes-auto.xml" tooltip="bfc backend google app engine/war/WEB-INF/appengine-generated/datastore-indexes-auto.xml">
-<persistable path="/bfc backend google app engine/war/WEB-INF/appengine-generated/datastore-indexes-auto.xml"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Employee.java" tooltip="bfc backend google app engine/src/backend/Employee.java">
-<persistable path="/bfc backend google app engine/src/backend/Employee.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Hi.java" tooltip="backend/WEB-INF/classes/Hi.java">
-<persistable path="/backend/WEB-INF/classes/Hi.java"/>
 </file>
 </mruList>
 </workbench>

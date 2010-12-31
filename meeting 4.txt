@@ -1,0 +1,7 @@
+talk about:
+
+testing: mockito + powermock
+
+fix for when user logged in from two computers - serial
+
+encryption

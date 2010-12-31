@@ -6,12 +6,11 @@ What's left:
 2 - open/close tabs
 2 - signups
 
+4 - unit tests - problem
+
 4 - automatic sync - server/client
 1 - save cookies separately 
 1 - index database
-
-
-4 - unit tests - problem
 
 
 4 - encryption - fix authentication to use standard http auth

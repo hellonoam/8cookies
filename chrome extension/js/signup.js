@@ -10,6 +10,7 @@ function init() {
 			{
 				user: $(".username").val(),
 				pass: $(".password").val(),
+				email: $(".email").val(),
 				invite: $(".invitation").val()
 			},
 			function(json) {

@@ -3,7 +3,7 @@
 <script src="js/session.js"></script>
 <script type="text/javascript">
 
-//var server = "http://cloudbrowsing.appspot.com";
+// var server = "http://cloudbrowsing.appspot.com";
 var server = "http://localhost";
 
 //saves the current session
@@ -62,7 +62,7 @@ function login(username, password, portSession) {
 			console.log("user logged in");
 		});
 	}, false, username, password, portSession);
-
+	//TODO: some bug here
 	return isLoggedIn();
 }
 

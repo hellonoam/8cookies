@@ -27,13 +27,6 @@ public class SignUp extends HttpServlet {
     	User u = DatabaseInteraction.getUser(username);
         response.setContentType("application/x-javascript");
         PrintWriter out = response.getWriter();
-        if (!DatabaseInteraction.removeInvite(invitation)) {
-        	logger.fine("username exists");
-    		if (callback != null)
-    			out.println(callback + "({response: 'unknown-invitation'});");
-        	out.close();
-        	return;
-        }        
     	if (u != null){
     		//user in use
     		logger.fine("username exists");
@@ -42,6 +35,13 @@ public class SignUp extends HttpServlet {
         	out.close();
         	return;
     	}
+        if (!DatabaseInteraction.removeInvite(invitation)) {
+        	logger.fine("unknown invite");
+    		if (callback != null)
+    			out.println(callback + "({response: 'unknown-invitation'});");
+        	out.close();
+        	return;
+        }        
     	//checking if valid username and password
 		if (!validUsernameAndPassword(username, password)){
 			out.println("username and/or password were not acceptable");

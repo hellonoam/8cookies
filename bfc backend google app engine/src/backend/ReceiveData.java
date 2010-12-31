@@ -35,7 +35,8 @@ public class ReceiveData extends HttpServlet {
     	String reqString = request.getParameter("dataFromClient");
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
-    	logger.fine("username received " + username);
+    	//TODO: sanitize this string before parsing it
+    	//since it uses the eval function
     	JsonElement json = jp.parse(reqString == null ? "" : reqString);
     	if (!json.isJsonObject()) {
     		logger.severe("json was not a json object");
@@ -45,7 +46,6 @@ public class ReceiveData extends HttpServlet {
     	}
     	JsonObject jsonObj = json.getAsJsonObject();
     	JsonArray ja = jsonObj.getAsJsonArray("cookies");
-        response.setContentType("text/html");
     	logger.fine("cookies received successfully");
     	List<Cookie> cookiesList = new LinkedList<Cookie>();
     	for (int i=0; i<ja.size(); i++){
@@ -54,20 +54,21 @@ public class ReceiveData extends HttpServlet {
     	logger.fine("cookiesList.length: " + cookiesList.size());;
     	if (DatabaseInteraction.authenticate(username, password) != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
-       		logger.config("ERROR: received incorrect credentials");
+       		logger.config("received incorrect credentials");
     		return;
     	}
     	User u = DatabaseInteraction.getUser(username);
     	u.setInfo(reqString);
     	logger.fine("updated data of existing user");
     	if (DatabaseInteraction.updateOrSaveUser(u)){
+            response.setContentType("text/html");
             PrintWriter out = response.getWriter();
     		out.println("received!");
         	out.close();
     		logger.fine("data received successfully");
     	} else {
     		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "faild to update/save user");
-    		logger.severe("failed to update/save user");
+    		logger.severe("ERROR: failed to update/save user");
     	}
     }
     

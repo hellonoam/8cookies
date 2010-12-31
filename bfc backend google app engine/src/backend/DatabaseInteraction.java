@@ -28,7 +28,7 @@ public class DatabaseInteraction {
     		pm.close();
     	}
     	return u;
-    }
+    } 
     
     //TODO: get rid of code duplication here. The problem is that delete needs to happen with the same pm as find
     public static boolean deleteUser(String username){
@@ -79,6 +79,7 @@ public class DatabaseInteraction {
      * 	whether or not the update/save has succeeded
      */
     public static boolean updateOrSaveUser(User u){
+    	if (u == null) return false;
     	boolean success = false;
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -89,19 +90,19 @@ public class DatabaseInteraction {
 		}
 		return success;
     }
-    
-    public static boolean addInvite(String invite){
-    	boolean success = false;
-    	PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			pm.makePersistent(new Invitation(invite));
-			success = true;
-		} finally {
-			pm.close();
-		}
-		return success;
-    }
 
+    public static List<User> getAllUsers(){
+    	PersistenceManager pm = PMF.get().getPersistenceManager();      
+        Query queryUser = pm.newQuery("select from " + User.class.getName());
+        List<User> result = null;
+        try {
+        	result = (List<User>) queryUser.execute();
+        } finally {
+        	queryUser.closeAll();
+        }
+        return result;
+    }
+    
     /**
      * Deletes all users and cookies from db
      * @return
