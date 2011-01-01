@@ -1,0 +1,4 @@
+.metadata/*
+bfc backend google app engine/.metadata/*
+bfc backend google app engine/.settings/*
+chrome extension.pem
