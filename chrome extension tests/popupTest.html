@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="../chrome extension/js/jquery.js"></script>
+	<script src="../chrome extension/js/popup.js"></script>
+	<script src="js/qunit.js"></script>
+	<script src="js/qunit.mock.js"></script>
+	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
+
+	<script>
+	var server = "server";
+	$(document).ready(function(){
+
+		$(".testing").hide();
+		chrome.extension = new Object();
+		var data = ["user", "pass"];
+		$(".username").val(data[0]);
+		$(".password").val(data[1]);
+
+		test("testing init", function() {
+			stub(console, "log", function() {});
+			expect(7);
+			var username = "user1";
+			stub(chrome.extension, "sendRequest", function(data, callback) {
+				deepEqual({ type: "isLoggedIn" }, data,
+					"data passed to background page on pop");
+				callback({ result: true, username: username });
+				callback({ result: false });
+			});
+			stub(this, "userLoggedIn", function(usernameReceived) {
+				equal(usernameReceived, username,
+					"userLoggedIn called when logged in on pop")
+			});
+			stub(this, "userLoggedOut", function(){
+				ok(true, "userLoggedOut called when logged out on pop")
+			});
+			init();
+
+			//testing for login click
+			stub(this, "userLoggedIn", function(usernameReceived) {
+				equal($(".result").text(), "", "result is empty on good response")
+				equal(usernameReceived, data[0],
+					"good response from bg on login");
+			});
+			var realData = { type: "login", username: data[0], password: data[1] };
+			stub(chrome.extension, "sendRequest", function(data, callback) {
+				deepEqual(data, realData, "data passed to background page on login");
+				callback({ success: true });
+				callback({ success: false });
+				equal($(".result").text(), "wrong username or password",
+						"bad response from bg on login");
+			});
+			$(".login").click()
+		});
+	});
+  </script>
+</head>
+<body>
+	<h1 id="qunit-header">Popup Tests</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+	
+<!-- setup for testing -->
+	<div class="testing">
+		<div class="loggedInUser">
+			<p class="inputText"></p>
+			<div class="deleteFromServer">
+				<input type="button" class="logout" value="logout">
+			</div>
+		</div>
+		<div class="whenNotLoggedIn">
+			<input type="text" class="username">
+			<input type="password" class="password">
+			<input type="button" class="login" value="login">
+			<p class="signup"></p>
+			<div class="result"></div>
+		</div>
+	</div>
+
+</body>
+</html>

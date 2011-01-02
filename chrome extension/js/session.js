@@ -1,7 +1,7 @@
 //this represents a browsing session
 function session(cookies, windows){
-	if (!(this instanceof session))
-		return new session; //in case this was called as a function rather than a cons
+	if (!(this instanceof session)) //in case this was called as a function rather than a cons
+		return new session(cookies, windows);
 
 	this.info = new Object();
 	this.info.cookies = cookies;

@@ -1,7 +1,3 @@
-// var server = "http://cloudbrowsing.appspot.com";
-var server = "http://localhost";
-
-$(document).ready(function() { init(); });
 
 function init() {
 	$(".submit").click(function() {

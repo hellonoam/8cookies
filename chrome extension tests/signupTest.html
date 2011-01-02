@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="../chrome extension/js/jquery.js"></script>
+	<script src="../chrome extension/js/signup.js"></script>
+	
+	<script src="js/qunit.js"></script>
+	<script src="js/qunit.mock.js"></script>
+	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
+
+	<script>
+	var server = "server";
+	$(document).ready(function(){
+
+		$(".testing").hide();
+		var data = ["user", "pass", "email@gmail.com", "invite"];
+		$(data).each(function(index, value) {
+			$($(".testing input")[index]).val(value);
+		});
+		test("testing getJSON", function() {
+			stub(console, "log", function() {});
+			expect(6);
+			realJSONData = { user: data[0], pass: data[1],
+						 email: data[2], invite: data[3] };
+			realChromeData = { type: "login", username: data[0],
+						password: data[1], portSession: true };
+			stub($, "getJSON", function(address, data, callback) {
+				equal(address, server + "/SignUp?callback=?", "address of server");
+				deepEqual(realJSONData, data, "data passed to getJSON");
+				callback({ response: "unknown-invitation" });
+				equal("sorry! wrong invitation code", $(".result").text(),
+					"response when invite unknown");
+				callback({ response: "in-use" });
+				equal("username in use please try again", $(".result").text(),
+					"response when username in use");
+				callback({ response: "success" });
+				equal("signup was successful", $(".result").text(),
+					"response when all ok");
+			});
+			chrome.extension = new Object();
+			stub(chrome.extension, "sendRequest", function(data) {
+				deepEqual(realChromeData, data, "data passed to background page");
+			});
+			init();
+			$(".submit").click();
+		});
+	});
+  </script>
+</head>
+<body>
+	<h1 id="qunit-header">Signup Tests</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+	
+<!-- setup for testing -->
+	<div class="testing">
+		<input class="username" type="text">
+		<input class="password" type="password">
+		<input class="email" type="text">
+		<input class="invitation" type="text">
+		<input class="portSession" type="checkbox" checked>
+		<div class="submit"></div>
+		<div class="result"></div>
+	</div>
+</body>
+</html>

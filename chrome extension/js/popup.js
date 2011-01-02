@@ -1,4 +1,3 @@
-$(document).ready(function() { init(); });
 
 function userLoggedIn(username) {
 	$(".whenNotLoggedIn").hide();
@@ -31,7 +30,6 @@ function init() {
 				password: $(".password").val()
 			},
 			function(response) {
-				console.log(response.success)
 				if (response.success)
 					userLoggedIn($(".username").val());
 				else
