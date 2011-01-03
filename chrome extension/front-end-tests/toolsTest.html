@@ -6,6 +6,7 @@
 	<script src="../js/tools.js"></script>
 	<script src="js/qunit.js"></script>
 	<script src="js/qunit.mock.js"></script>
+	<script src="js/toolsForTests.js"></script>
 	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
 
 	<script>
@@ -40,23 +41,13 @@
 				numberOfWindows = wins.length;
 			});
 			//maybe move all this to the callback of previous function
-			var winToOpen = new Object();
-			winToOpen.left = 10;
-			winToOpen.top = 10;
-			winToOpen.type = "normal";
-			winToOpen.height = 400;
-			winToOpen.incognito = false;
-			winToOpen.width = 400;
-			var tab = new Object();
-			tab.url = "http://www.yahoo.com";
-			tab.selected = false;
-			winToOpen.tabs = [tab, tab, tab];
+			var winToOpen = getLocalhostWin();
 			var callback = function() {
 				chrome.windows.getAll({ populate: true }, function(wins) {
 					equal(wins.length, numberOfWindows + 1, "new window was opened");
-					equal(wins[wins.length-1].tabs[0].url, "http://www.yahoo.com/",
+					equal(wins[wins.length-1].tabs[0].url, "http://localhost/",
 								"url of two tabs in opened window");
-					equal(wins[wins.length-1].tabs[1].url, "http://www.yahoo.com/",
+					equal(wins[wins.length-1].tabs[1].url, "http://localhost/",
 								"url of two tabs in opened window");
 					chrome.windows.remove(wins[wins.length-1].id, start);
 				});

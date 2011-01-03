@@ -5,18 +5,17 @@ What's left:
 3 - saving cookies locally - done
 2 - open/close tabs
 2 - signups
-
 4 - unit tests - problem
 
 4 - automatic sync - server/client
-1 - save cookies separately 
+
 1 - index database
 
 
 4 - encryption - fix authentication to use standard http auth
 
-3 - history syncing
 3 - logging users
+3 - history syncing
 2 - out in the market
 4 - scripts to sync more things
 
