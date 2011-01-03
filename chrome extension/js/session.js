@@ -24,8 +24,17 @@ function session(cookies, windows){
 	}
 
 	//updates the windows variable to hold the up-to-date values
-	this.updateWindows = function(callback) {
+	this.updateWindows = function(callback, doNotInclude) {
 		chrome.windows.getAll({populate: true}, function(windows) {
+			if (doNotInclude){
+				var arr = [];
+				var i = 0;
+				$.each(windows, function(index, value) {
+					if (value.id != doNotInclude)
+						arr[i++] = value;
+				});
+				windows = arr;
+			}
 			s.info.windows = windows;
 			if (callback)
 				callback();
@@ -33,9 +42,9 @@ function session(cookies, windows){
 	}
 
 	//updates both windows and tabs
-	this.updateAll = function(callback) {
+	this.updateAll = function(callback, doNotInclude) {
 		this.updateCookies(function() {
-			s.updateWindows(callback)
+			s.updateWindows(callback, doNotInclude)
 		});
 	}
 
@@ -50,14 +59,14 @@ function session(cookies, windows){
 	}
 
 	//sets the windows of this session to be the windows of the browser
-	this.applyWindows = function(callback) {
-		setWindows(this.info.windows, callback);
+	this.applyWindows = function(callback, doNotInclude) {
+		setWindows(this.info.windows, callback, null, doNotInclude);
 	}
 
 	//sets both windows and cookies of this session to be those of the browser
-	this.applyAll = function(callback) {
+	this.applyAll = function(callback, doNotInclude) {
 		this.applyCookies(function() {
-			s.applyWindows(callback);
+			s.applyWindows(callback, doNotInclude);
 		});
 	}
 

@@ -12,33 +12,88 @@
 	<script>
 	var server = "http://localhost";
 	$(document).ready(function(){
-
-		test("signup process", 2, function() {
-			stop();
-			var current = new session();
-			current.updateAll();
-			chrome.extension.sendRequest({ type: "login",
-				username: "user1", password: "pass1", portSession: true},
-				function(data) {
-					var s = new session();
-					s.updateAll();
-					deepEqual(s.info, current.info, "logging in with porting" +
-						" session leaves all the same");
-					var winToOpen = getYahooWin();
-					var callback = function() {
-						chrome.extension.sendRequest({ type: "logout" }, function() {
-							s = new session();
-							s.updateAll();
-							deepEqual(s.info, current.info, "logging out restores to"
-							+ " original state");
-							start();
-						});
+		var yahoos = new session();
+		var doNotInclude;
+		var test1 = function() {
+			test("login with porting session", 1, function() {
+				stop();
+				var current = new session();
+				chrome.windows.getCurrent(function(currentWin) {
+					doNotInclude = currentWin.id;
+					current.updateAll(null, doNotInclude);
+					chrome.extension.sendRequest({ type: "login", username: "user1",
+							password: "pass1", portSession: true, doNotInclude: doNotInclude },
+						function() {
+							var s = new session();
+							s.updateAll(function() {
+								console.log("test1");
+								deepEqual(s.info, current.info, "logging in with porting" +
+									" session leaves all the same");
+								start();
+								test2();
+							}, doNotInclude);
+						}
+					);
+				});
+			});
+		};
+		var test2 = function() {
+			test("logout returns previous session", 1, function(){
+				stop();
+				var current = new session();
+				current.updateAll(function() {
+					var newWin = getYahooWin();
+					var afterLogout = function() {
+						var s = new session();
+						setTimeout(function() { 
+		//this is cheeky but it problematic to make afterLogout exactly after logout is complete
+							s.updateAll(function(){
+								console.log("test2");
+								deepEqual(s.info, current.info, "session before login is "
+								 	+ "same as  after logout")
+								start();
+								test3();
+							}, doNotInclude);
+						}, 1000);
+					};
+					var afterWinsSet = function() {
+						setTimeout(function() { //timeout so cookies will be set
+							yahoos.updateAll(function() {
+								chrome.extension.sendRequest({ type: "logout",
+									doNotInclude: doNotInclude, sync: true }, afterLogout);
+							}, doNotInclude);
+						}, 1000);
+					};
+					setWindows([newWin], afterWinsSet, true);
+				}, doNotInclude);
+			});
+		};
+		var test3 = function() {
+			test("login opens recent windows", 3, function() {
+				stop();
+				chrome.extension.sendRequest({ type: "login", username: "user1",
+						password: "pass1", doNotInclude: doNotInclude },
+					function() {
+						var s = new session();
+						setTimeout(function() { //timeout so cookies will be set
+							s.updateAll(function() {
+								console.log("test3");
+								equal(s.info.windows.length, yahoos.info.windows.length,
+									"opened same number of windows that were open on logout");
+								equal(s.info.windows[0].tabs[0].url, yahoos.info.windows[0].tabs[0].url,
+									"opened same url as on logout");
+								deepEqual(s.info.cookies, yahoos.info.cookies, "cookies are the same");
+								start();
+								chrome.extension.sendRequest({ type: "logout", doNotInclude: doNotInclude,
+									sync: true }, function() { session1.applyCookies(); });
+							}, doNotInclude);
+						}, 1000);
 					}
-					setWindows([winToOpen], callback, true);
-				}
-			);
-		});
-
+				);
+			});
+		}
+		var session1 = new session();
+		session1.updateCookies(deleteCookies(test1));
 	});
 
 	function getYahooWin() {
@@ -50,7 +105,7 @@
 		winToOpen.incognito = false;
 		winToOpen.width = 400;
 		var tab = new Object();
-		tab.url = "http://www.yahoo.com";
+		tab.url = "http://localhost";
 		tab.selected = false;
 		winToOpen.tabs = [tab, tab, tab];
 		return winToOpen;
@@ -58,7 +113,7 @@
   </script>
 </head>
 <body>
-	<h1 id="qunit-header">Background Tests</h1>
+	<h1 id="qunit-header">Overall Tests</h1>
 	<h2 id="qunit-banner"></h2>
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>

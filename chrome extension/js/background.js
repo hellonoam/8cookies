@@ -7,9 +7,9 @@ function(request, sender, sendResponse) {
 	console.log("received message " + request.type);
 	switch (request.type) {
 		case "send": 
-			sendData();
+			sendData();//TODO: take this out
 			break;
-		case "receive":	
+		case "receive":	//TODO: take this out
 			receiveData();
 			break;
 		case "deleteLocal":
@@ -21,10 +21,11 @@ function(request, sender, sendResponse) {
 		case "login":
 			sendResponse({ success: login(request.username,
 										  request.password,
-										  request.portSession) });
+										  request.portSession,
+										  request.doNotInclude) });
 			return; // return since the response is sent here
 		case "logout":
-			sendResponse({ success: logout(false, request.notApply) });
+			sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
 			return; // return since the response is sent here
 		case "isLoggedIn":
 		    sendResponse({ result: isLoggedIn(), 
@@ -33,7 +34,7 @@ function(request, sender, sendResponse) {
 		case "testing":
 		//converting the string function into a function and running it
 			var f = eval("(" + request.stringFunction + ")");
-			f()
+			f();
 			break;
 		default:
 			console.log("ERROR: got an ill typed message from 'popup'");
@@ -43,7 +44,7 @@ function(request, sender, sendResponse) {
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
-function login(username, password, portSession) {
+function login(username, password, portSession, doNotInclude) {
 	if (username == "" || password == "" || !username || !password) {
 		console.log("username or password not valid");
 		return false;
@@ -57,18 +58,18 @@ function login(username, password, portSession) {
 		s.updateAll(function() {
 			localStorage.setItem("oldSession", s.serialize());
 			current = new session();
-		});
-	}, false, username, password, portSession);
+		}, doNotInclude);
+	}, false, username, password, portSession, doNotInclude);
 	return isLoggedIn();
 }
 
 //logs out the user, but sends the session to the server before then
-function logout(dataDeleted, notApply) {
+function logout(dataDeleted, notApply, doNotInclude, sync) {
 	var old = new session();
 	old.deSerialize(localStorage.getItem("oldSession"));
 	var callback = function() {
 		if (!notApply)
-			old.applyAll();
+			old.applyAll(null, doNotInclude);
 		current = old;
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");
@@ -76,7 +77,7 @@ function logout(dataDeleted, notApply) {
 	if (dataDeleted)
 	 	callback();
 	else
-		sendData(callback);
+		sendData(callback, doNotInclude, sync);
 	console.log("user logged out");
 	return true;
 }
@@ -89,8 +90,8 @@ function errorFunction(request) {
 }
 
 //sends the data from the current session to the server
-function sendData(callback) {
-	console.log("in sendData");
+function sendData(callback, doNotInclude, sync) {
+	console.log("in sendData " + sync);
 	if (!isLoggedIn()) {
 		console.log("user not logged in send data cancelled");
 		if (callback)
@@ -103,6 +104,7 @@ function sendData(callback) {
 			//since the server receives the data
 			url: server + "/ReceiveData",
 			cache: false,
+			async: !sync,
 			data: {	
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
@@ -117,29 +119,29 @@ function sendData(callback) {
 			},
 			error: errorFunction
 		});
-	});
+	}, doNotInclude);
 }
 
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
-function receiveData(successCallback, async, username, password, portSession) {
+function receiveData(successCallback, async, username, password, portSession, doNotInclude) {
 	console.log("in receiveData");
 	$.ajax({
 		//since the server sends the data
 		url: server + "/SendData",
-		async: async,
+		async: async, //change this to always be false = sync
 		data: {
 			user: username,
 			pass: password
 		},
 		success: function(data) {
 			successCallback();
-			if (portSession && data == "") {
+			if (portSession) {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
 			current.deSerialize(data);
-			current.applyAll();
+			current.applyAll(null, doNotInclude);
 		},
 		error: errorFunction
 	});

@@ -1,2 +1,2 @@
-var server = "http://cloudbrowsing.appspot.com";
-// var server = "http://localhost";
+// var server = "http://cloudbrowsing.appspot.com";
+var server = "http://localhost";

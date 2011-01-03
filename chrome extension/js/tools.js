@@ -1,5 +1,6 @@
 //sets the local cookies to to cookies
 function setCookies(cookies){
+
 	if (!cookies)
 		return;
 	for (var i=0; i<cookies.length; i++) {
@@ -26,12 +27,13 @@ function setCookies(cookies){
 
 //sets the current windows to be windows, and removes all open windows. Callback is called
 //after windows have been set.
-function setWindows(windows, callback, leaveOpenWindows) {
+function setWindows(windows, callback, leaveOpenWindows, doNotInclude) {
+	console.log("setWindows was called");
 	//closing open windows
 	if (!leaveOpenWindows) {
 		chrome.windows.getAll({}, function(windows2Remove) {
 			for (var i=0; i<windows2Remove.length; i++) {
-				if (windows2Remove[i].type != "app")
+				if (windows2Remove[i].type != "app" && windows2Remove[i].id != doNotInclude)
 					chrome.windows.remove(windows2Remove[i].id)
 			}
 		});
@@ -78,16 +80,18 @@ function setWindows(windows, callback, leaveOpenWindows) {
 					chrome.tabs.create(options);
 				}
 				index++;
-				if ( (i + 1) >= windows.length && callback)
+				// console.log("i=" + i + " windows.length=" + windows.length);
+				if ( (i + 1) >= windows.length && callback) {
+					console.log("callback was called");
 					callback();
+					callback = undefined; //TODO: check this 
+				}
 			});
+		} else if ( (i+1) >= windows.length && callback) {
+			callback();
+			callback = undefined;
 		}
 	}
-	//There is a little bug here where if the tabs that are being created are only apps
-	//then callback would not be called. This is acceptable since it shouldn't happen
-
-	// if (callback) //TODO: make sure there is no race condition
-	// 	callback();
 }
 
 //deletes local cookies
