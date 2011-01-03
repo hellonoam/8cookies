@@ -13,14 +13,17 @@ function init() {
 				console.log("data received: " + json);
 				if (json.response == "success") {
 					$(".result").text("signup was successful");
-					chrome.extension.sendRequest(
-						{
-							type: "login",
-							username: $(".username").val(),
-							password: $(".password").val(),
-							portSession: $(".portSession").attr("checked")
-						}
-					);
+					chrome.tabs.getSelected(null, function(tab) {
+					    chrome.tabs.remove(tab.id);
+						chrome.extension.sendRequest(
+							{
+								type: "login",
+								username: $(".username").val(),
+								password: $(".password").val(),
+								portSession: $(".portSession").attr("checked")
+							}
+						);
+					  });
 				} else if (json.response == "unknown-invitation")
 					$(".result").text("sorry! wrong invitation code");
 				else

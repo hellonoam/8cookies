@@ -16,7 +16,7 @@ function(request, sender, sendResponse) {
 			deleteCookies();
 			break;
 		case "deleteFromServer":
-			deleteFromServer();
+			deleteFromServer(request.doNotInclude, request.sync);
 			break;
 		case "login":
 			sendResponse({ success: login(request.username,
@@ -148,16 +148,17 @@ function receiveData(successCallback, async, username, password, portSession, do
 }
 
 //deletes all information from the server.
-function deleteFromServer() {
+function deleteFromServer(doNotInclude, sync) {
 	$.ajax({
 		url: server + "/DeleteCookiesFromServer",
 		cache: false,
+		async: !sync,
 		data: {
 			user: localStorage.getItem("username"),
 			pass: localStorage.getItem("password")
 		},
 		success: function(data) { 
-			logout(true);
+			logout(true, null, doNotInclude);
 			console.log(data);	
 		},
 		error: errorFunction

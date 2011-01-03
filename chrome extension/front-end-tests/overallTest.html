@@ -12,8 +12,9 @@
 	<script>
 	var server = "http://localhost";
 	$(document).ready(function(){
-		var yahoos = new session();
+		var localhostIndex = new session();
 		var doNotInclude;
+		var session1 = new session();
 		var test1 = function() {
 			test("login with porting session", 1, function() {
 				stop();
@@ -37,6 +38,7 @@
 				});
 			});
 		};
+
 		var test2 = function() {
 			test("logout returns previous session", 1, function(){
 				stop();
@@ -58,7 +60,7 @@
 					};
 					var afterWinsSet = function() {
 						setTimeout(function() { //timeout so cookies will be set
-							yahoos.updateAll(function() {
+							localhostIndex.updateAll(function() {
 								chrome.extension.sendRequest({ type: "logout",
 									doNotInclude: doNotInclude, sync: true }, afterLogout);
 							}, doNotInclude);
@@ -68,6 +70,7 @@
 				}, doNotInclude);
 			});
 		};
+
 		var test3 = function() {
 			test("login opens recent windows", 3, function() {
 				stop();
@@ -78,22 +81,49 @@
 						setTimeout(function() { //timeout so cookies will be set
 							s.updateAll(function() {
 								console.log("test3");
-								equal(s.info.windows.length, yahoos.info.windows.length,
+								equal(s.info.windows.length, localhostIndex.info.windows.length,
 									"opened same number of windows that were open on logout");
-								equal(s.info.windows[0].tabs[0].url, yahoos.info.windows[0].tabs[0].url,
+								equal(s.info.windows[0].tabs[0].url, localhostIndex.info.windows[0].tabs[0].url,
 									"opened same url as on logout");
-								deepEqual(s.info.cookies, yahoos.info.cookies, "cookies are the same");
+								deepEqual(s.info.cookies, localhostIndex.info.cookies, "cookies are the same");
 								start();
-								chrome.extension.sendRequest({ type: "logout", doNotInclude: doNotInclude,
-									sync: true }, function() { session1.applyCookies(); });
+								chrome.extension.sendRequest({ type: "deleteFromServer", doNotInclude: doNotInclude,
+									sync: true }, function() { session1.applyCookies(test4); });
 							}, doNotInclude);
 						}, 1000);
 					}
 				);
 			});
 		}
-		var session1 = new session();
-		session1.updateCookies(deleteCookies(test1));
+
+		var test4 = function(){
+			test("delete from server", 1, function() {
+				stop();
+				chrome.extension.sendRequest({ type: "login", username: "user1",
+						password: "pass1", doNotInclude: doNotInclude },
+					function(response) {
+						console.log("test4");
+						ok(!response.success, "user was deleted");
+						start();
+					}
+				);
+			});
+		}
+
+		$.getJSON(server + "/SignUp?callback=?",
+			{
+				user: "user1",
+				pass: "pass1",
+				email: "email@gmail.com",
+				invite: "hellonoam"
+			},
+			function(json) {
+				test("signup", 1, function() {
+					equal(json.response, "success", "signup response from server was OK");
+				});
+				session1.updateCookies(deleteCookies(test1));
+			}
+		);
 	});
 
 	function getYahooWin() {
