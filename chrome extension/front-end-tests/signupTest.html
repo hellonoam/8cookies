@@ -2,9 +2,8 @@
                     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script src="../chrome extension/js/jquery.js"></script>
-	<script src="../chrome extension/js/signup.js"></script>
-	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/signup.js"></script>
 	<script src="js/qunit.js"></script>
 	<script src="js/qunit.mock.js"></script>
 	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
@@ -18,9 +17,8 @@
 		$(data).each(function(index, value) {
 			$($(".testing input")[index]).val(value);
 		});
-		test("testing getJSON", function() {
+		test("testing getJSON", 6, function() {
 			stub(console, "log", function() {});
-			expect(6);
 			realJSONData = { user: data[0], pass: data[1],
 						 email: data[2], invite: data[3] };
 			realChromeData = { type: "login", username: data[0],

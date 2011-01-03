@@ -1,7 +1,6 @@
 
 //saves the current session
 var current = new session();
-
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 function(request, sender, sendResponse) {
@@ -20,17 +19,22 @@ function(request, sender, sendResponse) {
 			deleteFromServer();
 			break;
 		case "login":
-			sendResponse({ success: login(request.username, 
+			sendResponse({ success: login(request.username,
 										  request.password,
 										  request.portSession) });
 			return; // return since the response is sent here
 		case "logout":
-			sendResponse({ success: logout() });
+			sendResponse({ success: logout(false, request.notApply) });
 			return; // return since the response is sent here
 		case "isLoggedIn":
 		    sendResponse({ result: isLoggedIn(), 
 						   username: localStorage.getItem("username") });
 			return; // return since the response is sent here
+		case "testing":
+		//converting the string function into a function and running it
+			var f = eval("(" + request.stringFunction + ")");
+			f()
+			break;
 		default:
 			console.log("ERROR: got an ill typed message from 'popup'");
 	}
@@ -47,24 +51,24 @@ function login(username, password, portSession) {
 
 	receiveData(function() {
 		var s = new session();
+		localStorage.setItem("username", username);
+		localStorage.setItem("password", password);
+		console.log("user logged in");
 		s.updateAll(function() {
 			localStorage.setItem("oldSession", s.serialize());
 			current = new session();
-			localStorage.setItem("username", username);
-			localStorage.setItem("password", password);
-			console.log("user logged in");
 		});
 	}, false, username, password, portSession);
-	//TODO: some bug here
 	return isLoggedIn();
 }
 
 //logs out the user, but sends the session to the server before then
-function logout(dataDeleted) {
+function logout(dataDeleted, notApply) {
 	var old = new session();
 	old.deSerialize(localStorage.getItem("oldSession"));
 	var callback = function() {
-		old.applyAll();
+		if (!notApply)
+			old.applyAll();
 		current = old;
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");

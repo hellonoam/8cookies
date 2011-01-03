@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="../js/jquery.js"></script>
+	<script src="js/qunit.js"></script>
+	<script src="js/qunit.mock.js"></script>
+	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
+
+	<script>
+	var server = "server";
+	$(document).ready(function(){
+
+		test("login", 1, function() {
+			stop();
+			chrome.extension.sendRequest( {
+				type: "testing",
+				stringFunction: "function() { stub(this, 'receiveData', function(callback) { console.log('in stub'); if (callback) callback(); }); }"
+			});
+			chrome.extension.sendRequest({ type: "login",
+				username: "user1", password: "pass1"}, function(data) {
+					ok(data.success, "user login");
+					start();
+				}
+			);
+		});
+
+		test("logout", 1, function() {
+			stop();
+			// reloadBG();
+			chrome.extension.sendRequest( {
+				type: "testing",
+				stringFunction: "function() { console.log('s'); stub(this, 'sendData', function(callback) { console.log('in stub'); if (callback) callback(); }); }"
+			});
+			chrome.extension.sendRequest({ type: "logout", notApply: true }, 
+				function(data) {
+					ok(data.success, "user logout");
+					start();
+
+					//reloading background page so stubing will go away
+					chrome.extension.sendRequest( {
+						type: "testing",
+						stringFunction: "function() { window.location.reload(); }"
+					});
+				}
+			);
+		});
+	});
+  </script>
+</head>
+<body>
+	<h1 id="qunit-header">Background Tests</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</body>
+</html>

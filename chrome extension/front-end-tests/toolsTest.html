@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/tools.js"></script>
+	<script src="js/qunit.js"></script>
+	<script src="js/qunit.mock.js"></script>
+	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
+
+	<script>
+	var server = "server";
+	$(document).ready(function(){
+
+		module("setWindows method");
+
+		test("with no windows", 2, function() {
+			stop();
+			stub(console, "log", function() {});
+			var numberOfWindows;
+			chrome.windows.getAll({}, function(wins) {
+				numberOfWindows = wins.length;
+			});
+			var callback = function() {
+				chrome.windows.getAll({ populate: true }, function(wins) {
+					equal(wins.length, numberOfWindows + 1, "new window was opened");
+					equal(wins[wins.length-1].tabs[0].url, "http://www.google.com/",
+								"url of opened window");
+					chrome.windows.remove(wins[wins.length-1].id, start);
+				});
+			};
+			setWindows(null, callback, true);
+		});
+
+		test("with one windows", 3, function() {
+			stop();
+			stub(console, "log", function() {});
+			var numberOfWindows;
+			chrome.windows.getAll({}, function(wins) {
+				numberOfWindows = wins.length;
+			});
+			//maybe move all this to the callback of previous function
+			var winToOpen = new Object();
+			winToOpen.left = 10;
+			winToOpen.top = 10;
+			winToOpen.type = "normal";
+			winToOpen.height = 400;
+			winToOpen.incognito = false;
+			winToOpen.width = 400;
+			var tab = new Object();
+			tab.url = "http://www.yahoo.com";
+			tab.selected = false;
+			winToOpen.tabs = [tab, tab, tab];
+			var callback = function() {
+				chrome.windows.getAll({ populate: true }, function(wins) {
+					equal(wins.length, numberOfWindows + 1, "new window was opened");
+					equal(wins[wins.length-1].tabs[0].url, "http://www.yahoo.com/",
+								"url of two tabs in opened window");
+					equal(wins[wins.length-1].tabs[1].url, "http://www.yahoo.com/",
+								"url of two tabs in opened window");
+					chrome.windows.remove(wins[wins.length-1].id, start);
+				});
+			};
+			setWindows([winToOpen], callback, true);
+		});
+		
+		module("setCookies")
+		
+		test("Setting a cookie and retrieving it", 1, function() {
+			stop();
+			stub(console, "log", function() {});
+			data = ["www.test.ing", "test", "ing"]
+			setCookies([{ domain: data[0],
+				name: data[1], value: data[2], secure: false }]);
+			chrome.cookies.get({ url: "http://www.test.ing", name: "test" },
+			function(cookie) {
+				equal(cookie.value, data[2], "cookies was set");
+				start();
+			});
+		});
+
+		module("deleteCookies");
+
+		test("Making sure all cookies have been deleted", 1, function() {
+			stop();
+			stub(console, "log", function() {});
+			chrome.cookies.getAll({}, function(cks) {
+				var cookies = cks;
+				deleteCookies(function() {
+					chrome.cookies.getAll({}, function(emptyCks) {
+						equal(emptyCks.length, 0, "no cookies are set");
+						start();
+						setCookies(cookies);
+					});
+				});
+			});
+		});
+
+	});
+  </script>
+</head>
+<body>
+	<h1 id="qunit-header">Tools Tests</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</body>
+</html>

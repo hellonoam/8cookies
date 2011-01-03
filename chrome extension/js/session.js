@@ -44,7 +44,8 @@ function session(cookies, windows){
 		deleteCookies(function() {
 			if (s.info.cookies)
 				setCookies(s.info.cookies);
-			callback();
+			if (callback)
+				callback();
 		});
 	}
 
