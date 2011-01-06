@@ -78,4 +78,9 @@ function session(cookies, windows){
 		else
 			this.info = "";
 	}
+
+	this.deSerializeAndUpdate = function(data, doNotInclude) {
+		current.deSerialize(data);
+		current.applyAll(null, doNotInclude);
+	}
 }

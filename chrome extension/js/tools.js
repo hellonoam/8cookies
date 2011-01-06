@@ -1,6 +1,5 @@
 //sets the local cookies to to cookies
 function setCookies(cookies){
-
 	if (!cookies)
 		return;
 	for (var i=0; i<cookies.length; i++) {
@@ -28,7 +27,6 @@ function setCookies(cookies){
 //sets the current windows to be windows, and removes all open windows. Callback is called
 //after windows have been set.
 function setWindows(windows, callback, leaveOpenWindows, doNotInclude) {
-	console.log("setWindows was called");
 	//closing open windows
 	if (!leaveOpenWindows) {
 		chrome.windows.getAll({}, function(windows2Remove) {

@@ -8,16 +8,14 @@ What's left:
 4 - unit tests - problem
 
 4 - automatic sync - server/client
-
-1 - index database
-
+2 - fix problem when users is logged in from two different computers
 
 4 - encryption - fix authentication to use standard http auth
 
+1 - index database
 3 - logging users
+2 - beta tester
 3 - history syncing
-2 - out in the market
-4 - scripts to sync more things
 
 evaluation:
 2 - write survey

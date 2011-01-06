@@ -11,7 +11,8 @@
 	"cookies",
 	"tabs",
 	"http://*/*",
-	"https://*/*"
+	"https://*/*",
+	"idle"
   ],
 
 	"icons": {"48": "icon48.png",

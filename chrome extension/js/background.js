@@ -1,46 +1,56 @@
 
 //saves the current session
 var current = new session();
+
+//value for setInteval of sending and receiving data every X seconds
+var sendDataIntervalId;
+var receiveDataIntervalId;
+
+//interval for sending and receiving data
+var sendInterval = 150000; //every 2.5 minutes
+var receiveInterval = 600000; //every 10 minutes
+
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
-function(request, sender, sendResponse) {
-	console.log("received message " + request.type);
-	switch (request.type) {
-		case "send": 
-			sendData();//TODO: take this out
-			break;
-		case "receive":	//TODO: take this out
-			receiveData();
-			break;
-		case "deleteLocal":
-			deleteCookies();
-			break;
-		case "deleteFromServer":
-			deleteFromServer(request.doNotInclude, request.sync);
-			break;
-		case "login":
-			sendResponse({ success: login(request.username,
-										  request.password,
-										  request.portSession,
-										  request.doNotInclude) });
-			return; // return since the response is sent here
-		case "logout":
-			sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
-			return; // return since the response is sent here
-		case "isLoggedIn":
-		    sendResponse({ result: isLoggedIn(), 
-						   username: localStorage.getItem("username") });
-			return; // return since the response is sent here
-		case "testing":
-		//converting the string function into a function and running it
-			var f = eval("(" + request.stringFunction + ")");
-			f();
-			break;
-		default:
-			console.log("ERROR: got an ill typed message from 'popup'");
+	function(request, sender, sendResponse) {
+		console.log("received message " + request.type);
+		switch (request.type) {
+			case "send": 
+				sendData();//TODO: take this out
+				break;
+			case "receive":	//TODO: take this out
+				receiveData();
+				break;
+			case "deleteLocal":
+				deleteCookies();
+				break;
+			case "deleteFromServer":
+				deleteFromServer(request.doNotInclude, request.sync);
+				break;
+			case "login":
+				sendResponse({ success: login(request.username,
+											  request.password,
+											  request.portSession,
+											  request.doNotInclude) });
+				return; // return since the response is sent here
+			case "logout":
+				sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
+				return; // return since the response is sent here
+			case "isLoggedIn":
+			    sendResponse({ result: isLoggedIn(), 
+							   username: localStorage.getItem("username") });
+				return; // return since the response is sent here
+			case "testing":
+			//converting the string function into a function and running it
+				var f = eval("(" + request.stringFunction + ")");
+				f();
+				break;
+			default:
+				console.log("ERROR: got an ill typed message from 'popup'");
+		}
+		sendResponse({});
 	}
-    sendResponse({});
-});
+);
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
@@ -60,12 +70,37 @@ function login(username, password, portSession, doNotInclude) {
 			current = new session();
 		}, doNotInclude);
 	}, false, username, password, portSession, doNotInclude);
+
+	//sending data to server every fixed number of minutes
+	sendDataIntervalId = setInterval(function() {
+		var s = new session();
+		chrome.idle.queryState(sendInterval/1000, function(state) {
+			if (state == "idle")
+				return;
+			s.updateAll(function() {
+				if ( JSON.stringify(s.info) != JSON.stringify(current.info) ) {
+					sendData();
+				}
+			});
+		});
+	}, sendInterval);
+
+	// receiveDataIntervalId = setInterval(function() {
+	// 	chrome.idle.queryState(receiveInterval/1000, function(state) {
+	// 		receiveDataIfNeeded();
+	// 	});
+	// }, receiveInterval);//every 10 minutes
+
 	return isLoggedIn();
 }
+
+
 
 //logs out the user, but sends the session to the server before then
 function logout(dataDeleted, notApply, doNotInclude, sync) {
 	var old = new session();
+	clearInterval(sendDataIntervalId);
+	// clearInterval(receiveDataIntervalId);
 	old.deSerialize(localStorage.getItem("oldSession"));
 	var callback = function() {
 		if (!notApply)
@@ -91,7 +126,7 @@ function errorFunction(request) {
 
 //sends the data from the current session to the server
 function sendData(callback, doNotInclude, sync) {
-	console.log("in sendData " + sync);
+	console.log("in sendData");
 	if (!isLoggedIn()) {
 		console.log("user not logged in send data cancelled");
 		if (callback)
@@ -124,8 +159,13 @@ function sendData(callback, doNotInclude, sync) {
 
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
-function receiveData(successCallback, async, username, password, portSession, doNotInclude) {
+function receiveData(successCallback, async, username, password, portSession,
+			doNotInclude, checkIfUpdateNeeded) {
 	console.log("in receiveData");
+	if (!username && !password){
+		username = localStorage.getItem("username");
+		password = localStorage.getItem("password");
+	}
 	$.ajax({
 		//since the server sends the data
 		url: server + "/SendData",
@@ -135,16 +175,28 @@ function receiveData(successCallback, async, username, password, portSession, do
 			pass: password
 		},
 		success: function(data) {
-			successCallback();
+			if (successCallback)
+				successCallback();
 			if (portSession) {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
-			current.deSerialize(data);
-			current.applyAll(null, doNotInclude);
+			if (checkIfUpdateNeeded){
+				current.updateAll(function(){
+					if (JSON.stringify(current.info) == JSON.stringify(JSON.parse(data)))
+						return;
+					current.deSerializeAndUpdate(data, doNotInclude);
+				});
+			} else {
+				current.deSerializeAndUpdate(data, doNotInclude);
+			}
 		},
 		error: errorFunction
 	});
+}
+
+function receiveDataIfNeeded() {
+	receiveData(null,null,null,null,null,null,true);
 }
 
 //deletes all information from the server.
