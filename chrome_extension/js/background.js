@@ -4,11 +4,14 @@ var current = new session();
 
 //value for setInteval of sending and receiving data every X seconds
 var sendDataIntervalId;
-var receiveDataIntervalId;
+
+//whether or not the current session is idle
+var idle = false;
 
 //interval for sending and receiving data
-var sendInterval = 150000; //every 2.5 minutes
-var receiveInterval = 600000; //every 10 minutes
+var sendInterval = 10000; //every 2 minutes
+var idleInterval = 30; //every 10 minutes
+
 
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
@@ -74,9 +77,16 @@ function login(username, password, portSession, doNotInclude) {
 	//sending data to server every fixed number of minutes
 	sendDataIntervalId = setInterval(function() {
 		var s = new session();
-		chrome.idle.queryState(sendInterval/1000, function(state) {
-			if (state == "idle")
+		chrome.idle.queryState(idleInterval, function(state) {
+			if (state == "idle") {
+				idle = true;
 				return;
+			}
+			//session is active
+			if (idle) { //TODO: doesn't work well, take this out
+				idle = false;
+				receiveDataIfNeeded();
+			}
 			s.updateAll(function() {
 				if ( JSON.stringify(s.info) != JSON.stringify(current.info) ) {
 					sendData();
@@ -84,12 +94,6 @@ function login(username, password, portSession, doNotInclude) {
 			});
 		});
 	}, sendInterval);
-
-	// receiveDataIntervalId = setInterval(function() {
-	// 	chrome.idle.queryState(receiveInterval/1000, function(state) {
-	// 		receiveDataIfNeeded();
-	// 	});
-	// }, receiveInterval);//every 10 minutes
 
 	return isLoggedIn();
 }

@@ -1,21 +1,19 @@
 What's left:
 
-1 - fix db bug - done
-2 - users - done
-3 - saving cookies locally - done
+1 - fix db bug
+2 - users
+3 - saving cookies locally
 2 - open/close tabs
 2 - signups
-4 - unit tests - problem
+4 - unit tests
+4 - automatic sync - client
 
-4 - automatic sync - server/client
-2 - fix problem when users is logged in from two different computers
-
+2 - add serial number to requests
 4 - encryption - fix authentication to use standard http auth
+3 - logging users
 
 1 - index database
-3 - logging users
-2 - beta tester
-3 - history syncing
+2 - beta testers
 
 evaluation:
 2 - write survey

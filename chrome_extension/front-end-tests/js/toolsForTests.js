@@ -7,7 +7,7 @@ function getLocalhostWin() {
 	winToOpen.incognito = false;
 	winToOpen.width = 400;
 	var tab = new Object();
-	tab.url = "http://localhost/";
+	tab.url = "http://localhost/test.html";
 	tab.selected = false;
 	winToOpen.tabs = [tab, tab, tab];
 	return winToOpen;

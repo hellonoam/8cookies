@@ -8,7 +8,7 @@ body {
 }
 
 .title {
-	color:#115F9E;
+	color:#5C9FC0;
 	font-size: 1.2em;
 	margin-left: 55px;
 	margin-right: auto;
@@ -21,6 +21,10 @@ whenNotLoggedIn input[type=button] {
 }
 
 .login{
+	border-radius: 4px;
+	border: 1px solid #5C9FC0;
+	background:#5C9FC0;
+	color:white;
 	margin: 12px;
 	float:left;
 }
