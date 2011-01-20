@@ -1,7 +1,5 @@
-
 //saves the current session
 var current = new session();
-
 //value for setInteval of sending and receiving data every X seconds
 var sendDataIntervalId;
 
@@ -9,21 +7,17 @@ var sendDataIntervalId;
 var idle = false;
 
 //interval for sending and receiving data
-var sendInterval = 10000; //every 2 minutes
+var sendInterval = 10000; //120000 every 2 minutes
 var idleInterval = 30; //every 10 minutes
 
+var serial; //serial for checking server-side if update is valid
+var serialLimit = 30000;
 
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		console.log("received message " + request.type);
 		switch (request.type) {
-			case "send": 
-				sendData();//TODO: take this out
-				break;
-			case "receive":	//TODO: take this out
-				receiveData();
-				break;
 			case "deleteLocal":
 				deleteCookies();
 				break;
@@ -40,9 +34,14 @@ chrome.extension.onRequest.addListener(
 				sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
 				return; // return since the response is sent here
 			case "isLoggedIn":
-			    sendResponse({ result: isLoggedIn(), 
+			    sendResponse({ result: isLoggedIn(),
 							   username: localStorage.getItem("username") });
 				return; // return since the response is sent here
+			case "failedToReproduce":
+				chrome.tabs.getSelected(null, function(tab) {
+		    		sendFailedToReproduceURL(tab.url);
+				});
+				break;
 			case "testing":
 			//converting the string function into a function and running it
 				var f = eval("(" + request.stringFunction + ")");
@@ -62,7 +61,6 @@ function login(username, password, portSession, doNotInclude) {
 		console.log("username or password not valid");
 		return false;
 	}
-
 	receiveData(function() {
 		var s = new session();
 		localStorage.setItem("username", username);
@@ -72,8 +70,10 @@ function login(username, password, portSession, doNotInclude) {
 			localStorage.setItem("oldSession", s.serialize());
 			current = new session();
 		}, doNotInclude);
-	}, false, username, password, portSession, doNotInclude);
+	}, true, username, password, portSession, doNotInclude);
 
+	if (!isLoggedIn())
+		return false;
 	//sending data to server every fixed number of minutes
 	sendDataIntervalId = setInterval(function() {
 		var s = new session();
@@ -95,13 +95,21 @@ function login(username, password, portSession, doNotInclude) {
 		});
 	}, sendInterval);
 
-	return isLoggedIn();
+	//logging urls once they are updated
+	chrome.tabs.onUpdated.addListener(urlSender);
+
+	return true;
 }
 
-
+//the listner for update events on urls
+function urlSender(tabId, changeInfo) {
+	if (changeInfo.url)
+		sendVisitedURL(changeInfo.url);
+}
 
 //logs out the user, but sends the session to the server before then
 function logout(dataDeleted, notApply, doNotInclude, sync) {
+	chrome.tabs.onUpdated.removeListener(urlSender);
 	var old = new session();
 	clearInterval(sendDataIntervalId);
 	// clearInterval(receiveDataIntervalId);
@@ -128,6 +136,24 @@ function errorFunction(request) {
 	console.log(request.status + ": " + request.statusText);
 }
 
+function sendURLToServer(url, servlet) {
+	console.log("sending url " + url + " to server " + servlet);
+	$.ajax({
+		url: server + servlet,
+		cache: false,
+		data: { url: url },
+		error: errorFunction
+	});
+}
+
+function sendVisitedURL(url) {
+	sendURLToServer(url, "/VisitedURL");
+}
+
+function sendFailedToReproduceURL(url) {
+	sendURLToServer(url, "/FailedToReproduceURL");
+}
+
 //sends the data from the current session to the server
 function sendData(callback, doNotInclude, sync) {
 	console.log("in sendData");
@@ -137,6 +163,9 @@ function sendData(callback, doNotInclude, sync) {
 			callback();
 		return;
 	}
+	if (serial == serialLimit)
+		serial = 1;
+	console.log("serial "+serial);
 	current.updateAll(function() {
 		$.ajax({
 			type: "POST",
@@ -144,26 +173,37 @@ function sendData(callback, doNotInclude, sync) {
 			url: server + "/ReceiveData",
 			cache: false,
 			async: !sync,
-			data: {	
+			data: {
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
+				serial: serial++,
 				dataFromClient: current.serialize()
 			},
 			success: function(data) {
-				console.log("data from server: " + data);
+				if ($.trim(data).toLowerCase() == "received")
+					console.log("data from server: " + data);
+				else { //means there was a conflict
+					console.log("conflict - update rejected");
+					serial = 1;
+					current.deSerializeAndApply(data);
+				}
 			},
 			complete: function() {
 				if (callback)
 					callback();
 			},
-			error: errorFunction
+			error: function(error) {
+				errorFunction(error);
+				if (error.status == 409)
+					receiveDataIfNeeded();
+			}
 		});
 	}, doNotInclude);
 }
 
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
-function receiveData(successCallback, async, username, password, portSession,
+function receiveData(successCallback, sync, username, password, portSession,
 			doNotInclude, checkIfUpdateNeeded) {
 	console.log("in receiveData");
 	if (!username && !password){
@@ -173,26 +213,27 @@ function receiveData(successCallback, async, username, password, portSession,
 	$.ajax({
 		//since the server sends the data
 		url: server + "/SendData",
-		async: async, //change this to always be false = sync
+		async: !sync,
 		data: {
 			user: username,
 			pass: password
 		},
 		success: function(data) {
+			serial = 1;
 			if (successCallback)
 				successCallback();
 			if (portSession) {
 				console.log("no data was received");
 				return; // no cookies to set
 			}
-			if (checkIfUpdateNeeded){
-				current.updateAll(function(){
+			if (checkIfUpdateNeeded) {
+				current.updateAll(function() {
 					if (JSON.stringify(current.info) == JSON.stringify(JSON.parse(data)))
 						return;
-					current.deSerializeAndUpdate(data, doNotInclude);
+					current.deSerializeAndApply(data, doNotInclude);
 				});
 			} else {
-				current.deSerializeAndUpdate(data, doNotInclude);
+				current.deSerializeAndApply(data, doNotInclude);
 			}
 		},
 		error: errorFunction

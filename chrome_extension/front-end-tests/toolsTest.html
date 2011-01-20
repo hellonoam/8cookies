@@ -45,9 +45,9 @@
 			var callback = function() {
 				chrome.windows.getAll({ populate: true }, function(wins) {
 					equal(wins.length, numberOfWindows + 1, "new window was opened");
-					equal(wins[wins.length-1].tabs[0].url, "http://localhost/",
+					equal(wins[wins.length-1].tabs[0].url, "http://localhost/test.html",
 								"url of two tabs in opened window");
-					equal(wins[wins.length-1].tabs[1].url, "http://localhost/",
+					equal(wins[wins.length-1].tabs[1].url, "http://localhost/test.html",
 								"url of two tabs in opened window");
 					chrome.windows.remove(wins[wins.length-1].id, start);
 				});

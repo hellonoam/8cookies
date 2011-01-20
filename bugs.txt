@@ -1,8 +1,13 @@
+tests for serial
+
+check valid email
+
+send data after signup sends signup page
+
+map enter to submit
+
 sending to server data that is not in a json format will cause an error (not null though)
 
-if server is down - receive data will still interpret it as a valid response!! 
-when network is down, this is not considered an error for jquery! weird! I know
-
-if a user is logged in two different computers -> new login doesn't update old login
+if server is down - receive data will still interpret it as a valid response!! when network is down, this is not considered an error for jquery! weird! I know
 
 session in gmail => login => logout => close browser => open => gmail session is gone

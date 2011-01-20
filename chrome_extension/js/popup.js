@@ -2,18 +2,18 @@
 function userLoggedIn(username) {
 	$(".whenNotLoggedIn").hide();
 	$(".loggedInUser").show();
-	$(".loggedInUser p").text("hello " + username);
+	$(".loggedInUser p:first").text("hello " + username);
 }
 
 function userLoggedOut() {
 	$(".whenNotLoggedIn").show();;
 	$(".loggedInUser").hide();
-	$(".loggedInUser p").text("");
+	$(".loggedInUser p:first").text("");
 }
 
 function init() {
 	chrome.extension.sendRequest(
-		{ type: "isLoggedIn" }, 
+		{ type: "isLoggedIn" },
 		function(response) {
 			if (response.result)
 				userLoggedIn(response.username);
@@ -43,12 +43,17 @@ function init() {
 		chrome.extension.sendRequest({ type: "logout" });
 		userLoggedOut();
 	});
-	$(".deleteFromServer").click(function() {
-		console.log("request to delete from server, sent to bg");
-		chrome.extension.sendRequest({
-			type: "deleteFromServer"
-		});
-	});
+	$(".fail").click(function() {
+		chrome.extension.sendRequest({ type: "failedToReproduce" });
+		$(".fail").hide();
+		$(".failText").text("thanks, we'll try to make it producible")
+	})
+	// $(".deleteFromServer").click(function() {
+	// 	console.log("request to delete from server, sent to bg");
+	// 	chrome.extension.sendRequest({
+	// 		type: "deleteFromServer"
+	// 	});
+	// });
 	$(".signup").click(function() {
 		chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
 	});

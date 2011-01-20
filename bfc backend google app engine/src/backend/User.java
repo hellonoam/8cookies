@@ -26,11 +26,31 @@ public class User {
     @Persistent
     private String email;
     
+    @Persistent
+    private int serial;
+    
     public User(String username, String password, String email, String info) {
-      this.username = username;
-      this.password = password;
-      this.email = email;
-      this.info = new Text(info);
+      this.username = username == null ? "" : username;
+      this.password = password == null ? "" : password;
+      this.email = email == null ? "" : email;
+      this.info = new Text(info == null ? "" : info);
+      this.serial = 0;
+    }
+    
+    public int getSerial(){
+    	return serial;
+    }
+    
+    public void incrementSerial(){
+    	serial++;
+    }
+    
+    public void setSerial(int serial){
+    	this.serial = serial;
+    }
+    
+    public void resetSerial(){
+    	serial = 0;
     }
 
     public Key getKey() {

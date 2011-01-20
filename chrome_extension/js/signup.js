@@ -21,12 +21,13 @@ function init() {
 							portSession: $(".portSession").attr("checked")
 						},
 						function() {
-							setTimeout(function() {
-								chrome.tabs.getSelected(null, function(tab) {
-							    	chrome.tabs.remove(tab.id);
-									// console.log(tab.id);
-								});
-							}, 1500);
+							if ($(".portSession").attr("checked")) {
+								setTimeout(function() {
+									chrome.tabs.getSelected(null, function(tab) {
+							    		chrome.tabs.remove(tab.id);
+									});
+								}, 1000);
+							}
 						}
 					);
 				} else if (json.response == "unknown-invitation")

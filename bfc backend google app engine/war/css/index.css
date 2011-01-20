@@ -1,8 +1,8 @@
 body {
 	border-top: 5px solid #5C9FC0;
 	background: #eee;
+/*	background: url(Image001.png) repeat-x;*/
 	margin: 0px;
-	padding: 0px;
 	font-family: Helvetica, Arial, Verdana, sans-serif;
 	color: #563c12;
 }
@@ -12,10 +12,10 @@ a {
 	color:#563c12;
 }
 
-footer {
+.footer {
 	font-size: 60%;
-	margin: 160px auto;
-	width: 880px;
+	margin: 80px auto 0px auto;
+	width: 500px;
 	border-top: 1px solid white;
 	-webkit-box-shadow: 0 -1px 0 #ddd;
 	-moz-box-shadow: 0 -1px 0 #ddd;
@@ -24,38 +24,55 @@ footer {
 	text-align: center;
 }
 
-footer span, a { margin: 0 10px 0 0; }
+.footer span, a { margin: 0 10px 0 0; }
+
+.title {
+	margin: 50px auto auto auto;
+	width: 500px;
+	height:150px;
+	font-size: 1.4em;
+	position:relative;
+}
+
+.title .name {
+	font-weight:bold;
+}
 
 .main {
 	background:white;
-	-webkit-box-shadow: #FFF 0px 1px 2px;
+	-webkit-box-shadow: #AAA 0px 0px 3px;
+	-moz-box-shadow: #AAA 0px 0px 3px;
 	height: 100px;
 	width: 300px;
 	border-radius: 15px;
-	margin-top:150px;
-	margin-left: auto;
-	margin-right: auto;
+	-moz-border-radius: 15px;
+	margin: 30px auto 0px auto;
 	font-size: 90%;
 	padding:10px;
 }
 
+.main p {
+	text-align:center;
+}
+
 .inside {
-	position: relative;
-	margin-left:40px;
+	width:200px;
+	margin:20px auto auto auto;
 }
 
 input[type="text"] {
-	margin-top:3px;
-	position: absolute;
 	border-radius: 2px;
+	-moz-border-radius: 2px;
 	border: 1px solid #ccc;
+	width:65%;
 }
 
 input[type="submit"] {
-	position: absolute;
 	border-radius: 2px;
+	-moz-border-radius: 2px;
 	border: 1px solid #5C9FC0;
 	background:#5C9FC0;
 	color:white;
-	margin-left:150px;
+	width:25%;
+	margin-left:8px;
 }

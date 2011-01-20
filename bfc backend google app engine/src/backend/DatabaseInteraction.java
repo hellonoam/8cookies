@@ -145,4 +145,13 @@ public class DatabaseInteraction {
     	}
     	return success;
 	}
+
+	public static void addBetaUser(String email) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(new Email(email));
+		} finally {
+			pm.close();
+		}
+	}
 }

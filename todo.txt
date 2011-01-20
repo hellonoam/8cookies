@@ -7,10 +7,12 @@ What's left:
 2 - signups
 4 - unit tests
 4 - automatic sync - client
-
 2 - add serial number to requests
-4 - encryption - fix authentication to use standard http auth
+
 3 - logging users
+(server side)
+
+4 - encryption - fix authentication to use standard http auth
 
 1 - index database
 2 - beta testers

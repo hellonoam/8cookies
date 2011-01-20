@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 /**
  * This servlet receives data from the user and stores it in the db 
@@ -25,6 +26,8 @@ import com.google.gson.JsonParser;
 public class ReceiveData extends HttpServlet {
 	private Logger logger = Logger.getLogger(ReceiveData.class.getName()); 
 
+	private final int serialLimit = 30000;
+
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
@@ -35,6 +38,15 @@ public class ReceiveData extends HttpServlet {
     	String reqString = request.getParameter("dataFromClient");
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
+    	int serial = -1;
+    	try {
+    		serial = Integer.parseInt(request.getParameter("serial"));
+    	} catch (NumberFormatException e){
+    		response.sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - update was rejected");
+			return;
+    	}
+    	
+    	
     	//TODO: sanitize this string before parsing it
     	//since it uses the eval function
     	JsonElement json = jp.parse(reqString == null ? "" : reqString);
@@ -44,26 +56,40 @@ public class ReceiveData extends HttpServlet {
     				"cookies were not received in correct format");
     		return;
     	}
+    	logger.severe("serial " + serial);
     	JsonObject jsonObj = json.getAsJsonObject();
-    	JsonArray ja = jsonObj.getAsJsonArray("cookies");
-    	logger.fine("cookies received successfully");
-    	List<Cookie> cookiesList = new LinkedList<Cookie>();
-    	for (int i=0; i<ja.size(); i++){
-    		cookiesList.add(new Cookie(ja.get(i).toString()));
-    	}
-    	logger.fine("cookiesList.length: " + cookiesList.size());;
+
     	if (DatabaseInteraction.authenticate(username, password) != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
        		logger.config("received incorrect credentials");
     		return;
     	}
     	User u = DatabaseInteraction.getUser(username);
+
+    	if (serial == 1)
+    		u.setSerial(1);
+    	else{
+    		if (serial != u.getSerial() + 1){
+    			String infoString = u.getInfo();
+    			if (infoString != null && !infoString.equals("")){
+    	            response.setContentType("text/html");
+    	            PrintWriter out = response.getWriter();
+    	       		out.println(infoString);
+    	        	out.close();
+    	       	}
+    			return;
+    		} else {
+    			u.incrementSerial();
+    			if (u.getSerial() == serialLimit)
+    				u.setSerial(1);
+    		}
+    	}
     	u.setInfo(reqString);
     	logger.fine("updated data of existing user");
     	if (DatabaseInteraction.updateOrSaveUser(u)){
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-    		out.println("received!");
+    		out.println("received");
         	out.close();
     		logger.fine("data received successfully");
     	} else {

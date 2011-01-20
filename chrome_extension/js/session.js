@@ -9,7 +9,7 @@ function session(cookies, windows){
 	var s = this;
 
 	//returns a JSON representation of session
-	this.serialize = function() {
+	this.serialize = function() {;
 		return JSON.stringify(this.info);
 	}
 
@@ -79,8 +79,8 @@ function session(cookies, windows){
 			this.info = "";
 	}
 
-	this.deSerializeAndUpdate = function(data, doNotInclude) {
-		current.deSerialize(data);
-		current.applyAll(null, doNotInclude);
+	this.deSerializeAndApply = function(data, doNotInclude) {
+		this.deSerialize(data);
+		this.applyAll(null, doNotInclude);
 	}
 }
