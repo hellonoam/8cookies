@@ -5,7 +5,7 @@ function init() {
 		$.getJSON(server + "/SignUp?callback=?",
 			{
 				user: $(".username").val(),
-				pass: $(".password").val(),
+				pass: tools.getLoginToken($(".password").val()).toString(),
 				email: $(".email").val(),
 				invite: $(".invitation").val()
 			},

@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
+
 /**
  * My test servlet
  *
@@ -30,13 +33,18 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
-       	String infoString = u.getInfo();
-       	if (infoString != null && !infoString.equals("")){
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-       		out.println(infoString);
-        	out.close();
-       	}
-    	logger.fine("cookies were sent successfully");
+        JSONObject json = new JSONObject();
+        try {
+			json.append("info", u.getInfo());
+			json.append("salt", u.getSalt());
+			response.setContentType("text/html");
+	        PrintWriter out = response.getWriter();
+	       	out.println(json);
+	        out.close();
+	    	logger.fine("info was sent successfully");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			logger.severe("failed to send info to client");
+		}
     }
 }

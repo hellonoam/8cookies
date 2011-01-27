@@ -48,12 +48,6 @@ function init() {
 		$(".fail").hide();
 		$(".failText").text("thanks, we'll try to make it producible")
 	})
-	// $(".deleteFromServer").click(function() {
-	// 	console.log("request to delete from server, sent to bg");
-	// 	chrome.extension.sendRequest({
-	// 		type: "deleteFromServer"
-	// 	});
-	// });
 	$(".signup").click(function() {
 		chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
 	});

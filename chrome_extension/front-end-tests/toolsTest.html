@@ -2,7 +2,8 @@
                     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script src="../js/jquery.js"></script>
+	<script type="text/javascript" 
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script src="../js/tools.js"></script>
 	<script src="js/qunit.js"></script>
 	<script src="js/qunit.mock.js"></script>
@@ -30,7 +31,7 @@
 					chrome.windows.remove(wins[wins.length-1].id, start);
 				});
 			};
-			setWindows(null, callback, true);
+			tools.setWindows(null, callback, true);
 		});
 
 		test("with one windows", 3, function() {
@@ -52,7 +53,7 @@
 					chrome.windows.remove(wins[wins.length-1].id, start);
 				});
 			};
-			setWindows([winToOpen], callback, true);
+			tools.setWindows([winToOpen], callback, true);
 		});
 		
 		module("setCookies")
@@ -61,7 +62,7 @@
 			stop();
 			stub(console, "log", function() {});
 			data = ["www.test.ing", "test", "ing"]
-			setCookies([{ domain: data[0],
+			tools.setCookies([{ domain: data[0],
 				name: data[1], value: data[2], secure: false }]);
 			chrome.cookies.get({ url: "http://www.test.ing", name: "test" },
 			function(cookie) {
@@ -77,11 +78,11 @@
 			stub(console, "log", function() {});
 			chrome.cookies.getAll({}, function(cks) {
 				var cookies = cks;
-				deleteCookies(function() {
+				tools.deleteCookies(function() {
 					chrome.cookies.getAll({}, function(emptyCks) {
 						equal(emptyCks.length, 0, "no cookies are set");
 						start();
-						setCookies(cookies);
+						tools.setCookies(cookies);
 					});
 				});
 			});

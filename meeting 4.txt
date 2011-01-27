@@ -3,3 +3,7 @@ testing: mockito + powermock
 fix for when user logged in from two computers - serial
 
 encryption
+
+
+why is 'login' or 'encryption' added
+why is there an app_random2 

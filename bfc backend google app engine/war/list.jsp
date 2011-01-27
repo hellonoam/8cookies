@@ -4,13 +4,15 @@
 
 <html>
 <body>
+	List of failed-to-reproduce urls <br/>
 	<% 
-		List<User> users = DatabaseInteraction.getAllUsers();
-		for (User u: users){
+		int i=0;
+		List<URL> urls = DatabaseInteraction.getAllFailedURLs();
+		for (URL u: urls){ 
 	%>
-			u.getUsername() + " " + u.getEmail()		
 			<br/>
-	<%	
+			<%= ++i + ") " + u.toString() %>
+	<%
 		}
 	%>
 </body>

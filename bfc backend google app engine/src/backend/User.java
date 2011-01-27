@@ -8,6 +8,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import java.security.SecureRandom;
+import BCrypt.BCrypt;;
+
 @PersistenceCapable
 public class User {
     @PrimaryKey
@@ -27,14 +30,35 @@ public class User {
     private String email;
     
     @Persistent
+    private String salt;
+    
+    @Persistent
     private int serial;
     
-    public User(String username, String password, String email, String info) {
+    private final int entropy = 8;
+    
+    public User(String username, String plainTextPass, String email, String info) {
       this.username = username == null ? "" : username;
-      this.password = password == null ? "" : password;
+      plainTextPass = plainTextPass == null ? "" : plainTextPass;
+      this.password = BCrypt.hashpw(plainTextPass, BCrypt.gensalt());
       this.email = email == null ? "" : email;
       this.info = new Text(info == null ? "" : info);
+      generateSalt();
       this.serial = 0;
+    }
+    
+    private void generateSalt(){
+    	byte randArr[] = new byte[entropy];
+        new SecureRandom().nextBytes(randArr);
+        this.salt = "";
+        for (int i=0; i<randArr.length; i++)
+      	  this.salt += (char) Math.abs(randArr[i]);
+    }
+    
+    public String getSalt(){
+    	if (salt == null)
+    		throw new IllegalArgumentException("no salt found associated with user"); 
+    	return salt;
     }
     
     public int getSerial(){
@@ -65,8 +89,8 @@ public class User {
     	return email;
     }
     
-    public String getPassword(){
-    	return password;
+    public boolean comparePassword(String plainTextPass){
+    	return BCrypt.checkpw(plainTextPass, password);
     }
     
     public String getInfo(){

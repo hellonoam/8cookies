@@ -1,8 +1,6 @@
 package backend;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -10,11 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 
 /**
  * This servlet receives data from the user and stores it in the db 
@@ -57,7 +52,6 @@ public class ReceiveData extends HttpServlet {
     		return;
     	}
     	logger.severe("serial " + serial);
-    	JsonObject jsonObj = json.getAsJsonObject();
 
     	if (DatabaseInteraction.authenticate(username, password) != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
@@ -101,8 +95,8 @@ public class ReceiveData extends HttpServlet {
     public void doPost(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
-        {
-    		logger.finest("inside do post");
-    		doGet(request, response);
-        }
+	{
+    	logger.finest("inside do post");
+    	doGet(request, response);
+	}
 }

@@ -8,11 +8,10 @@ What's left:
 4 - unit tests
 4 - automatic sync - client
 2 - add serial number to requests
-
 3 - logging users
-(server side)
+4 - encryption
 
-4 - encryption - fix authentication to use standard http auth
+show alert when trying to overwrite
 
 1 - index database
 2 - beta testers

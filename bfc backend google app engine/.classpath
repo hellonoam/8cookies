@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/mockito-all-1.8.5.jar"/>
 	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/objenesis-1.2.jar"/>
 	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/powermock-mockito-1.4.7-full.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/jBCrypt-0.3/BCrypt.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

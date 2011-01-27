@@ -19,7 +19,7 @@
 	          "128": "icon128.png" },
 	
 	"browser_action": {
-	  "popup": "popup.html",
+	  "default_popup": "popup.html",
 	  "default_icon": "icon48.png",
 	  "default_title": "Browse from the cloud"
 	},

@@ -3,24 +3,25 @@ var current = new session();
 //value for setInteval of sending and receiving data every X seconds
 var sendDataIntervalId;
 
-//whether or not the current session is idle
-var idle = false;
-
 //interval for sending and receiving data
 var sendInterval = 10000; //120000 every 2 minutes
-var idleInterval = 30; //every 10 minutes
+var idleInterval = 30; //600 every 10 minutes
 
 var serial; //serial for checking server-side if update is valid
 var serialLimit = 30000;
 
+var MDK;
+
+if (tools.isLoggedIn()) {
+	autoSendData();
+	serial = 1;
+	MDK = JSON.parse(localStorage.getItem("MDK"));
+}
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		console.log("received message " + request.type);
 		switch (request.type) {
-			case "deleteLocal":
-				deleteCookies();
-				break;
 			case "deleteFromServer":
 				deleteFromServer(request.doNotInclude, request.sync);
 				break;
@@ -34,7 +35,7 @@ chrome.extension.onRequest.addListener(
 				sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
 				return; // return since the response is sent here
 			case "isLoggedIn":
-			    sendResponse({ result: isLoggedIn(),
+			    sendResponse({ result: tools.isLoggedIn(),
 							   username: localStorage.getItem("username") });
 				return; // return since the response is sent here
 			case "failedToReproduce":
@@ -56,11 +57,13 @@ chrome.extension.onRequest.addListener(
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
-function login(username, password, portSession, doNotInclude) {
-	if (username == "" || password == "" || !username || !password) {
+function login(username, nakedPass, portSession, doNotInclude) {
+	if (username == "" || nakedPass == "" || !username || !nakedPass) {
 		console.log("username or password not valid");
 		return false;
 	}
+	var password = tools.getLoginToken(nakedPass).toString();
+
 	receiveData(function() {
 		var s = new session();
 		localStorage.setItem("username", username);
@@ -72,21 +75,23 @@ function login(username, password, portSession, doNotInclude) {
 		}, doNotInclude);
 	}, true, username, password, portSession, doNotInclude);
 
-	if (!isLoggedIn())
+	if (!tools.isLoggedIn())
 		return false;
-	//sending data to server every fixed number of minutes
+
+	autoSendData();
+	return true;
+}
+
+function autoSendData() {
+	// sending data to server every fixed number of minutes
 	sendDataIntervalId = setInterval(function() {
+		console.log("send-data-interval was called");
 		var s = new session();
 		chrome.idle.queryState(idleInterval, function(state) {
 			if (state == "idle") {
-				idle = true;
 				return;
 			}
 			//session is active
-			if (idle) { //TODO: doesn't work well, take this out
-				idle = false;
-				receiveDataIfNeeded();
-			}
 			s.updateAll(function() {
 				if ( JSON.stringify(s.info) != JSON.stringify(current.info) ) {
 					sendData();
@@ -97,8 +102,12 @@ function login(username, password, portSession, doNotInclude) {
 
 	//logging urls once they are updated
 	chrome.tabs.onUpdated.addListener(urlSender);
+	//sending data when the browser is no longer in the idle state
+	chrome.idle.onStateChanged.addListener(idleListener);
+}
 
-	return true;
+function idleListener() {
+	sendData();
 }
 
 //the listner for update events on urls
@@ -110,9 +119,9 @@ function urlSender(tabId, changeInfo) {
 //logs out the user, but sends the session to the server before then
 function logout(dataDeleted, notApply, doNotInclude, sync) {
 	chrome.tabs.onUpdated.removeListener(urlSender);
-	var old = new session();
+	chrome.idle.onStateChanged.removeListener(idleListener);
 	clearInterval(sendDataIntervalId);
-	// clearInterval(receiveDataIntervalId);
+	var old = new session();
 	old.deSerialize(localStorage.getItem("oldSession"));
 	var callback = function() {
 		if (!notApply)
@@ -120,6 +129,7 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		current = old;
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");
+		localStorage.setItem("MDK", "");
 	};
 	if (dataDeleted)
 	 	callback();
@@ -157,7 +167,7 @@ function sendFailedToReproduceURL(url) {
 //sends the data from the current session to the server
 function sendData(callback, doNotInclude, sync) {
 	console.log("in sendData");
-	if (!isLoggedIn()) {
+	if (!tools.isLoggedIn()) {
 		console.log("user not logged in send data cancelled");
 		if (callback)
 			callback();
@@ -168,43 +178,47 @@ function sendData(callback, doNotInclude, sync) {
 	console.log("serial "+serial);
 	current.updateAll(function() {
 		$.ajax({
-			type: "POST",
-			//since the server receives the data
-			url: server + "/ReceiveData",
-			cache: false,
-			async: !sync,
-			data: {
-				user: localStorage.getItem("username"),
-				pass: localStorage.getItem("password"),
-				serial: serial++,
-				dataFromClient: current.serialize()
-			},
-			success: function(data) {
-				if ($.trim(data).toLowerCase() == "received")
-					console.log("data from server: " + data);
-				else { //means there was a conflict
-					console.log("conflict - update rejected");
-					serial = 1;
-					current.deSerializeAndApply(data);
-				}
-			},
-			complete: function() {
-				if (callback)
-					callback();
-			},
-			error: function(error) {
-				errorFunction(error);
-				if (error.status == 409)
-					receiveDataIfNeeded();
+		type: "POST",
+		//since the server receives the data
+		url: server + "/ReceiveData",
+		cache: false,
+		async: !sync,
+		data: {
+			user: localStorage.getItem("username"),
+			pass: localStorage.getItem("password"),
+			serial: serial++,
+			dataFromClient: tools.encrypt(current.serialize(), MDK)
+		},
+		success: function(data) {
+			if ($.trim(data).toLowerCase() == "received")
+				console.log("data from server: " + data);
+			else if (data != "") { //means there was a conflict
+				console.log("conflict - update rejected");
+				serial = 1;
+				data = JSON.parse(data);
+				setMDK(localStorage.getItem("password"), data.salt)
+				current.deSerializeAndApply(tools.decrypt(data.info));
+			} else {
+				serial--;
+				current.deSerialize();//so update will happen even if nothing has changed
 			}
+		},
+		complete: function() {
+			if (callback)
+				callback();
+		},
+		error: function(error) {
+			errorFunction(error);
+			if (error.status == 409)
+				receiveDataIfNeeded();
+		}
 		});
 	}, doNotInclude);
 }
 
 //asks the server for the data for the specific user and then sets the data as the current
 //session. Username and password are sent again.
-function receiveData(successCallback, sync, username, password, portSession,
-			doNotInclude, checkIfUpdateNeeded) {
+function receiveData(successCallback, sync, username, password, portSession, doNotInclude, checkIfUpdateNeeded) {
 	console.log("in receiveData");
 	if (!username && !password){
 		username = localStorage.getItem("username");
@@ -219,25 +233,32 @@ function receiveData(successCallback, sync, username, password, portSession,
 			pass: password
 		},
 		success: function(data) {
+			data = JSON.parse(data);
 			serial = 1;
+			setMDK(password, data.salt)
+			console.log("MASTER DATA KEY: " + MDK);
+			data.info = tools.decrypt(data.info, MDK)
 			if (successCallback)
 				successCallback();
-			if (portSession) {
-				console.log("no data was received");
-				return; // no cookies to set
-			}
+			if (portSession)
+				return;
 			if (checkIfUpdateNeeded) {
 				current.updateAll(function() {
-					if (JSON.stringify(current.info) == JSON.stringify(JSON.parse(data)))
+					if (JSON.stringify(current.info) == JSON.stringify(JSON.parse(data.info)))
 						return;
-					current.deSerializeAndApply(data, doNotInclude);
+					current.deSerializeAndApply(data.info, doNotInclude);
 				});
 			} else {
-				current.deSerializeAndApply(data, doNotInclude);
+				current.deSerializeAndApply(data.info, doNotInclude);
 			}
 		},
 		error: errorFunction
 	});
+}
+
+function setMDK(password, salt){
+	MDK = tools.getMasterDataKey(password, salt);
+	localStorage.setItem("MDK", JSON.stringify(MDK));
 }
 
 function receiveDataIfNeeded() {

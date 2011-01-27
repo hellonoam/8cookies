@@ -1,5 +1,5 @@
 //this represents a browsing session
-function session(cookies, windows){
+session = function(cookies, windows){
 	if (!(this instanceof session)) //in case this was called as a function rather than a cons
 		return new session(cookies, windows);
 
@@ -50,9 +50,9 @@ function session(cookies, windows){
 
 	//sets the cookies of this session to be the cookies of the browser
 	this.applyCookies = function(callback) {
-		deleteCookies(function() {
+		tools.deleteCookies(function() {
 			if (s.info.cookies)
-				setCookies(s.info.cookies);
+				tools.setCookies(s.info.cookies);
 			if (callback)
 				callback();
 		});
@@ -60,7 +60,7 @@ function session(cookies, windows){
 
 	//sets the windows of this session to be the windows of the browser
 	this.applyWindows = function(callback, doNotInclude) {
-		setWindows(this.info.windows, callback, null, doNotInclude);
+		tools.setWindows(this.info.windows, callback, null, doNotInclude);
 	}
 
 	//sets both windows and cookies of this session to be those of the browser
@@ -76,7 +76,7 @@ function session(cookies, windows){
 		if (json)
 			this.info = JSON.parse(json);
 		else
-			this.info = "";
+			this.info = new Object();
 	}
 
 	this.deSerializeAndApply = function(data, doNotInclude) {

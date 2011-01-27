@@ -1,11 +1,14 @@
 package backend;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 public class DatabaseInteraction {
+	private static Logger logger = Logger.getLogger(DatabaseInteraction.class.getName());
+	
     /**
      * gets the user from db corresponding to username
      * @param username
@@ -66,7 +69,7 @@ public class DatabaseInteraction {
     	User u = getUser(username);
     	if (u == null)
     		return 1; //doesn't exist
-    	if (!u.getPassword().equals(password))
+    	if (!u.comparePassword(password))
     		return 2;//wrong password
     	return 0; //correct password
     }
@@ -91,37 +94,30 @@ public class DatabaseInteraction {
 		return success;
     }
 
-    public static List<User> getAllUsers(){
+    public static List<URL> getAllFailedURLs(){
     	PersistenceManager pm = PMF.get().getPersistenceManager();      
-        Query queryUser = pm.newQuery("select from " + User.class.getName());
-        List<User> result = null;
+        Query query = pm.newQuery("select from " + URL.class.getName());
+        query.setFilter("failed == true");
+        List<URL> result = null;
         try {
-        	result = (List<User>) queryUser.execute();
+        	result = (List<URL>) query.execute();
         } finally {
-        	queryUser.closeAll();
+        	query.closeAll();
         }
         return result;
     }
-    
-    /**
-     * Deletes all users and cookies from db
-     * @return
-     *  whether or not the operation has succeeded
-     */
-	public static boolean deleteAllUsersAndCookies() {
-		boolean success = false;
-		PersistenceManager pm = PMF.get().getPersistenceManager();      
-        Query queryUser = pm.newQuery("select from " + User.class.getName());
-        try{
-        	queryUser.deletePersistentAll();
-        	success = true;
-    	} finally {
-    		queryUser.closeAll();
-    		pm.close();
+
+    public static List<User> getAllUsers(){
+    	PersistenceManager pm = PMF.get().getPersistenceManager();      
+        Query query = pm.newQuery("select from " + User.class.getName());
+        List<User> result = null;
+        try {
+        	result = (List<User>) query.execute();
+        } finally {
+        	query.closeAll();
         }
-    	return success;
-		
-	}
+        return result;
+    }
 
 	public static boolean removeInvite(String invitation) {
 		if (invitation.equals("hellonoam"))
@@ -144,6 +140,24 @@ public class DatabaseInteraction {
     		pm.close();
     	}
     	return success;
+	}
+
+	public static void addFailedToReproduceURL(String URL){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(new URL(URL, true));
+		} finally {
+			pm.close();
+		}
+	}
+
+	public static void addVisitedURL(String URL){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(new URL(URL, false));
+		} finally {
+			pm.close();
+		}
 	}
 
 	public static void addBetaUser(String email) {

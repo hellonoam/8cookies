@@ -28,6 +28,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>BetaSignUp</servlet-name>
 		<servlet-class>backend.BetaSignUp</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>VisitedURL</servlet-name>
+		<servlet-class>backend.VisitedURL</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FailedToReproduceURL</servlet-name>
+		<servlet-class>backend.FailedToReproduceURL</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Bfc_backend_google_app_engine</servlet-name>
 		<url-pattern>/bfc_backend_google_app_engine</url-pattern>
@@ -51,6 +59,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-mapping>
 		<servlet-name>BetaSignUp</servlet-name>
 		<url-pattern>/BetaSignUp</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>VisitedURL</servlet-name>
+		<url-pattern>/VisitedURL</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FailedToReproduceURL</servlet-name>
+		<url-pattern>/FailedToReproduceURL</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
