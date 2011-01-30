@@ -4,7 +4,7 @@ Developed by Noam Szpiro
 
 Description
 -----------
-This is a chrome extension that lets users browse from the cloud. Visit 8cookies.com to request an invite
+This is a chrome extension that lets users browse from the cloud. Visit http://www.8cookies.com to request an invite
 
 Intructions
 -----------
