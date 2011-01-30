@@ -59,14 +59,14 @@ session = function(cookies, windows){
 	}
 
 	//sets the windows of this session to be the windows of the browser
-	this.applyWindows = function(callback, doNotInclude) {
-		tools.setWindows(this.info.windows, callback, null, doNotInclude);
+	this.applyWindows = function(callback, doNotInclude, merge) {
+		tools.setWindows(this.info.windows, callback, merge, doNotInclude);
 	}
 
 	//sets both windows and cookies of this session to be those of the browser
-	this.applyAll = function(callback, doNotInclude) {
+	this.applyAll = function(callback, doNotInclude, merge) {
 		this.applyCookies(function() {
-			s.applyWindows(callback, doNotInclude);
+			s.applyWindows(callback, doNotInclude, merge);
 		});
 	}
 
@@ -79,8 +79,8 @@ session = function(cookies, windows){
 			this.info = new Object();
 	}
 
-	this.deSerializeAndApply = function(data, doNotInclude) {
+	this.deSerializeAndApply = function(data, doNotInclude, merge) {
 		this.deSerialize(data);
-		this.applyAll(null, doNotInclude);
+		this.applyAll(null, doNotInclude, merge);
 	}
 }

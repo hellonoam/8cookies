@@ -163,9 +163,9 @@ tools = {
 	},
 	
 	decrypt: function(ciphertext, MDK) {
-		console.log("in decrypt");
+		console.log("in decrypt " + MDK);
 		if (ciphertext instanceof Array) ciphertext = ciphertext[0];
-		if (ciphertext == "") return "";
+		if (!ciphertext || ciphertext == "") return "";
 		var plaintext = sjcl.decrypt(MDK, ciphertext, {}, {})
 		return plaintext;
 	}

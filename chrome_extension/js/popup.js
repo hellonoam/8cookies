@@ -27,7 +27,8 @@ function init() {
 			{
 				type: "login",
 				username: $(".username").val(),
-				password: $(".password").val()
+				password: $(".password").val(),
+				merge: $(".checkbox").attr("checked")
 			},
 			function(response) {
 				if (response.success)

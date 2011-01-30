@@ -29,10 +29,12 @@ chrome.extension.onRequest.addListener(
 				sendResponse({ success: login(request.username,
 											  request.password,
 											  request.portSession,
-											  request.doNotInclude) });
+											  request.doNotInclude,
+											  request.merge) });
 				return; // return since the response is sent here
 			case "logout":
-				sendResponse({ success: logout(false, request.notApply, request.doNotInclude, request.sync) });
+				sendResponse({ success: logout(false, request.notApply,
+											   request.doNotInclude, request.sync) });
 				return; // return since the response is sent here
 			case "isLoggedIn":
 			    sendResponse({ result: tools.isLoggedIn(),
@@ -57,7 +59,7 @@ chrome.extension.onRequest.addListener(
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
-function login(username, nakedPass, portSession, doNotInclude) {
+function login(username, nakedPass, portSession, doNotInclude, merge) {
 	if (username == "" || nakedPass == "" || !username || !nakedPass) {
 		console.log("username or password not valid");
 		return false;
@@ -73,7 +75,7 @@ function login(username, nakedPass, portSession, doNotInclude) {
 			localStorage.setItem("oldSession", s.serialize());
 			current = new session();
 		}, doNotInclude);
-	}, true, username, password, portSession, doNotInclude);
+	}, true, username, password, portSession, doNotInclude, undefined, merge);
 
 	if (!tools.isLoggedIn())
 		return false;
@@ -178,47 +180,51 @@ function sendData(callback, doNotInclude, sync) {
 	console.log("serial "+serial);
 	current.updateAll(function() {
 		$.ajax({
-		type: "POST",
-		//since the server receives the data
-		url: server + "/ReceiveData",
-		cache: false,
-		async: !sync,
-		data: {
-			user: localStorage.getItem("username"),
-			pass: localStorage.getItem("password"),
-			serial: serial++,
-			dataFromClient: tools.encrypt(current.serialize(), MDK)
-		},
-		success: function(data) {
-			if ($.trim(data).toLowerCase() == "received")
-				console.log("data from server: " + data);
-			else if (data != "") { //means there was a conflict
-				console.log("conflict - update rejected");
-				serial = 1;
-				data = JSON.parse(data);
-				setMDK(localStorage.getItem("password"), data.salt)
-				current.deSerializeAndApply(tools.decrypt(data.info));
-			} else {
-				serial--;
-				current.deSerialize();//so update will happen even if nothing has changed
+			type: "POST",
+			//since the server receives the data
+			url: server + "/ReceiveData",
+			cache: false,
+			async: !sync,
+			data: {
+				user: localStorage.getItem("username"),
+				pass: localStorage.getItem("password"),
+				serial: serial++,
+				dataFromClient: tools.encrypt(current.serialize(), MDK)
+			},
+			success: function(data) {
+				if ($.trim(data).toLowerCase() == "received")
+					console.log("data from server: " + data);
+				else if (data != "") { //means there was a conflict
+					console.log("conflict - update rejected");
+					var answer = confirm("looks like the cloud has more up-to- date data." + 
+					" would you like to load the windows from the cloud?");
+					serial = 1;
+					if (answer)
+						current.deSerializeAndApply(
+							tools.decrypt(JSON.parse(data).info, MDK));
+				} else {//probably means the network is down
+					serial--;
+					current.deSerialize();
+					//so update will happen even if nothing has changed
+				}
+			},
+			complete: function() {
+				if (callback)
+					callback();
+			},
+			error: function(error) {
+				errorFunction(error);
+				if (error.status == 409)
+					receiveDataIfNeeded();
 			}
-		},
-		complete: function() {
-			if (callback)
-				callback();
-		},
-		error: function(error) {
-			errorFunction(error);
-			if (error.status == 409)
-				receiveDataIfNeeded();
-		}
 		});
 	}, doNotInclude);
 }
 
-//asks the server for the data for the specific user and then sets the data as the current
-//session. Username and password are sent again.
-function receiveData(successCallback, sync, username, password, portSession, doNotInclude, checkIfUpdateNeeded) {
+//asks the server for the data for the specific user and then 
+//sets the data as the current session. Username and password are sent again.
+function receiveData(successCallback, sync, username, password, portSession,
+	doNotInclude, checkIfUpdateNeeded, merge) {
 	console.log("in receiveData");
 	if (!username && !password){
 		username = localStorage.getItem("username");
@@ -244,12 +250,13 @@ function receiveData(successCallback, sync, username, password, portSession, doN
 				return;
 			if (checkIfUpdateNeeded) {
 				current.updateAll(function() {
-					if (JSON.stringify(current.info) == JSON.stringify(JSON.parse(data.info)))
+					if (JSON.stringify(current.info) == JSON.stringify(
+								JSON.parse(data.info)))
 						return;
-					current.deSerializeAndApply(data.info, doNotInclude);
+					current.deSerializeAndApply(data.info, doNotInclude, merge);
 				});
 			} else {
-				current.deSerializeAndApply(data.info, doNotInclude);
+				current.deSerializeAndApply(data.info, doNotInclude, merge);
 			}
 		},
 		error: errorFunction

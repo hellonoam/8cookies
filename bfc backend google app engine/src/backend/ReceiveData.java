@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -67,9 +69,18 @@ public class ReceiveData extends HttpServlet {
     			String infoString = u.getInfo();
     			if (infoString != null && !infoString.equals("")){
     	            response.setContentType("text/html");
-    	            PrintWriter out = response.getWriter();
-    	       		out.println(infoString);
-    	        	out.close();
+    	            JSONObject jsonResponse = new JSONObject();
+    	            try {
+    	            	jsonResponse.append("info", u.getInfo());
+    	            	jsonResponse.append("salt", u.getSalt());
+        				response.setContentType("text/html");
+        		        PrintWriter out = response.getWriter();
+        		       	out.println(jsonResponse);
+        		        out.close();
+    	            } catch (JSONException e) {
+    	            	e.printStackTrace();
+    	    			logger.severe("failed to send info to client after conflict");
+    	            }
     	       	}
     			return;
     		} else {
