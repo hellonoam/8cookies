@@ -11,8 +11,6 @@ What's left:
 3 - logging users
 4 - encryption
 
-show alert when trying to overwrite
-
 1 - index database
 2 - beta testers
 

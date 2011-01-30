@@ -1,5 +1,5 @@
 {
-	"name": "Browse from the cloud",
+	"name": "8cookies",
 
 	"version": "0.1.2",
 
@@ -22,7 +22,8 @@
 	  "default_popup": "popup.html",
 	  "default_icon": "icon48.png",
 	  "default_title": "Browse from the cloud"
-	},
-
-	"update_url": "http://cloudbrowsing.appspot.com/updateInfo.xml"
+	}
+	// ,
+	// 
+	// "update_url": "http://cloudbrowsing.appspot.com/updateInfo.xml"
 }
