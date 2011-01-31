@@ -16,6 +16,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
+
 import backend.DatabaseInteraction;
 import backend.SendData;
 import backend.User;
@@ -30,6 +33,7 @@ public class SendDataTest {
 	private String username;
 	private String password;
 	private User u;
+	private JSONObject json;
 	
 	@Before
 	public void setUp() throws IOException{
@@ -38,6 +42,7 @@ public class SendDataTest {
         response = mock(HttpServletResponse.class);
         out = mock(PrintWriter.class);
         u = mock(User.class);
+		json = mock(JSONObject.class);
         username = "user1";
         password = "pass1";
         
@@ -45,6 +50,7 @@ public class SendDataTest {
         when(request.getParameter("user")).thenReturn(username);
         when(request.getParameter("pass")).thenReturn(password);
         when(response.getWriter()).thenReturn(out);
+		when(DatabaseInteraction.newJSONInstance()).thenReturn(json);
 	}
 
 	@Test
@@ -62,34 +68,27 @@ public class SendDataTest {
 	}
 
 	@Test
-	public void testInvalidInfoFromUser() throws IOException, ServletException{
-		//expectations
-		when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
-		when(DatabaseInteraction.getUser(username)).thenReturn(u);
-		when(u.getInfo()).thenReturn("", (String)null);
-		
-		//execute
-		new SendData().doGet(request, response);
-		new SendData().doGet(request, response);
-		
-		//verifiers
-		verify(out, never()).println(anyString());
-	}
-
-	@Test
 	public void testValidResponse() throws IOException, ServletException{
 		//expectations
 		when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
 		when(DatabaseInteraction.getUser(username)).thenReturn(u);
-		String info = "{test}";
+		String info = "info";
+		String salt = "salt";
 		when(u.getInfo()).thenReturn(info);
+		when(u.getSalt()).thenReturn(salt);
 		
 		//execute
 		new SendData().doGet(request, response);
 		
 		//verifiers
+		try {
+			verify(json).append("info", info);
+			verify(json).append("salt", salt);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
 		verify(response).setContentType("text/html");
-		verify(out).println(info);
+		verify(out).println(json);
 		verify(out).close();
 	}
 }

@@ -6,9 +6,11 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.repackaged.org.json.JSONObject;
+
 public class DatabaseInteraction {
 	private static Logger logger = Logger.getLogger(DatabaseInteraction.class.getName());
-	
+
     /**
      * gets the user from db corresponding to username
      * @param username
@@ -167,5 +169,9 @@ public class DatabaseInteraction {
 		} finally {
 			pm.close();
 		}
+	}
+
+	public static JSONObject newJSONInstance(){
+		return new JSONObject();
 	}
 }

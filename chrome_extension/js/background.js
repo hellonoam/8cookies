@@ -64,7 +64,7 @@ function login(username, nakedPass, portSession, doNotInclude, merge) {
 		console.log("username or password not valid");
 		return false;
 	}
-	var password = tools.getLoginToken(nakedPass).toString();
+	var password = tools.getLoginToken(nakedPass, username).toString();
 
 	receiveData(function() {
 		var s = new session();

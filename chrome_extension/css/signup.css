@@ -42,8 +42,7 @@ footer span, a { margin: 0 10px 0 0; }
 .title {
 	color:#5C9FC0;
 	font-size: 2em;
-	margin-left: 55px;
-	margin-right: auto;
+	text-align: center;
 	padding-bottom: 30px;
 }
 

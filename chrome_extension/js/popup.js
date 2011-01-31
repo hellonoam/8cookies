@@ -21,6 +21,10 @@ function init() {
 				userLoggedOut();
 		}
 	);
+	$(".password").keypress(function(event) {
+		if (event.charCode == 13)
+			$(".login").click();
+	});
 	$(".login").click(function() {
 		console.log("request to login, sent to bg");
 		chrome.extension.sendRequest(

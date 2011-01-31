@@ -33,7 +33,7 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
-        JSONObject json = new JSONObject();
+        JSONObject json = DatabaseInteraction.newJSONInstance();
         try {
 			json.append("info", u.getInfo());
 			json.append("salt", u.getSalt());

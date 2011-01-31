@@ -9,7 +9,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import java.security.SecureRandom;
-import BCrypt.BCrypt;;
+import BCrypt.BCrypt;
 
 @PersistenceCapable
 public class User {

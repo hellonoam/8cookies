@@ -1,4 +1,8 @@
 function init() {
+	$(".email").keypress(function(event) {
+		if (event.charCode == 13)
+			$("input[type='submit']").click();
+	});
 	$("input[type='submit']").click(function() {
 		$(".main p").text("you'll know");
 		$(".inside").hide();

@@ -2,13 +2,14 @@
                     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script type="text/javascript" 
+	<script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-	<script src="../js/session.js"></script>
-	<script src="../js/tools.js"></script>
-	<script src="js/qunit.js"></script>
-	<script src="js/qunit.mock.js"></script>
-	<script src="js/toolsForTests.js"></script>
+	<script type="text/javascript" src="../js/session.js"></script>
+	<script type="text/javascript" src="../js/tools.js"></script>
+	<script type="text/javascript" src="../js/sjcl/sjcl.js"></script>
+	<script type="text/javascript" src="js/qunit.js"></script>
+	<script type="text/javascript" src="js/qunit.mock.js"></script>
+	<script type="text/javascript" src="js/toolsForTests.js"></script>
 	<link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
 
 	<script>
@@ -25,10 +26,13 @@
 					doNotInclude = currentWin.id;
 					current.updateAll(null, doNotInclude);
 					chrome.extension.sendRequest({ type: "login", username: "user1",
-							password: "pass1", portSession: true, doNotInclude: doNotInclude },
+							password: "pass1", portSession: true, doNotInclude: 
+							doNotInclude },
 						function() {
 							var s = new session();
 							s.updateAll(function() {
+								console.log("password = ")
+								console.log(localStorage.password);
 								console.log("test1");
 								deepEqual(s.info, current.info, "logging in with porting" +
 									" session leaves all the same");
@@ -42,6 +46,8 @@
 		};
 
 		var test2 = function() {
+			console.log("password = ")
+			console.log(localStorage.password);
 			test("logout returns previous session", 1, function(){
 				stop();
 				var current = new session();
@@ -50,7 +56,7 @@
 					var afterLogout = function() {
 						var s = new session();
 						setTimeout(function() { 
-		//this is cheeky but it problematic to make afterLogout exactly after logout is complete
+//this is cheeky but it problematic to make afterLogout exactly after logout is complete
 							s.updateAll(function(){
 								console.log("test2");
 								deepEqual(s.info, current.info, "session before login is "
@@ -64,11 +70,12 @@
 						setTimeout(function() { //timeout so cookies will be set
 							localhostIndex.updateAll(function() {
 								chrome.extension.sendRequest({ type: "logout",
-									doNotInclude: doNotInclude, sync: true }, afterLogout);
+									doNotInclude: doNotInclude, sync: true }, 
+										afterLogout);
 							}, doNotInclude);
 						}, 1000);
 					};
-					setWindows([newWin], afterWinsSet, true);
+					tools.setWindows([newWin], afterWinsSet, true);
 				}, doNotInclude);
 			});
 		};
@@ -83,14 +90,20 @@
 						setTimeout(function() { //timeout so cookies will be set
 							s.updateAll(function() {
 								console.log("test3");
-								equal(s.info.windows.length, localhostIndex.info.windows.length,
-									"opened same number of windows that were open on logout");
-								equal(s.info.windows[0].tabs[0].url, localhostIndex.info.windows[0].tabs[0].url,
+								equal(s.info.windows.length, 
+									localhostIndex.info.windows.length,
+									"opened same number of windows that were" +
+									" open on logout");
+								equal(s.info.windows[0].tabs[0].url, 
+									localhostIndex.info.windows[0].tabs[0].url,
 									"opened same url as on logout");
-								deepEqual(s.info.cookies, localhostIndex.info.cookies, "cookies are the same");
+								deepEqual(s.info.cookies, localhostIndex.info.cookies,
+									"cookies are the same");
 								start();
-								chrome.extension.sendRequest({ type: "deleteFromServer", doNotInclude: doNotInclude,
-									sync: true }, function() { session1.applyCookies(test4); });
+								chrome.extension.sendRequest({ type: "deleteFromServer",
+									doNotInclude: doNotInclude, sync: true },
+									function() { session1.applyCookies(test4);
+								});
 							}, doNotInclude);
 						}, 1000);
 					}
@@ -115,13 +128,14 @@
 		$.getJSON(server + "/SignUp?callback=?",
 			{
 				user: "user1",
-				pass: "pass1",
+				pass: tools.getLoginToken("pass1", "user1").toString(),
 				email: "email@gmail.com",
 				invite: "hellonoam"
 			},
 			function(json) {
 				test("signup", 1, function() {
-					equal(json.response, "success", "signup response from server was OK");
+					equal(json.response, "success", "signup response from server" +
+					" was OK");
 				});
 				session1.updateCookies(tools.deleteCookies(test1));
 			}

@@ -9,13 +9,12 @@
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.4.0_1.4.0.v201012021502/appengine-java-sdk-1.4.0/lib/impl/appengine-api-labs.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.4.0_1.4.0.v201012021502/appengine-java-sdk-1.4.0/lib/impl/appengine-api.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.4.0_1.4.0.v201012021502/appengine-java-sdk-1.4.0/lib/testing/appengine-testing.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/cglib-nodep-2.2.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/javassist-3.14.0-GA.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/junit-4.8.1.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/objenesis-1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/powermock-mockito-1.4.7-full.jar"/>
-	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/code/Browsing-from-the-cloud/bfc backend google app engine/war/WEB-INF/lib/jBCrypt-0.3/BCrypt.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/powermock-mockito-1.4.7-full.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/javassist-3.14.0-GA.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/junit-4.8.1.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/gson-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/powermock-mockito-junit-1.4.7/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="/Users/noamszpiro/Dropbox/Part II Project/8cookies/bfc backend google app engine/war/WEB-INF/lib/jBCrypt-0.3/BCrypt.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

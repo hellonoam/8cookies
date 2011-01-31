@@ -50,7 +50,7 @@ public class ReceiveData extends HttpServlet {
     	if (!json.isJsonObject()) {
     		logger.severe("json was not a json object");
     		response.sendError(HttpServletResponse.SC_BAD_REQUEST, 
-    				"cookies were not received in correct format");
+    				"data was not received in correct format");
     		return;
     	}
     	logger.severe("serial " + serial);
@@ -68,8 +68,7 @@ public class ReceiveData extends HttpServlet {
     		if (serial != u.getSerial() + 1){
     			String infoString = u.getInfo();
     			if (infoString != null && !infoString.equals("")){
-    	            response.setContentType("text/html");
-    	            JSONObject jsonResponse = new JSONObject();
+    	            JSONObject jsonResponse = DatabaseInteraction.newJSONInstance();
     	            try {
     	            	jsonResponse.append("info", u.getInfo());
     	            	jsonResponse.append("salt", u.getSalt());
