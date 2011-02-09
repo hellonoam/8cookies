@@ -20,6 +20,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
+import backend.AuthenticationResponse;
 import backend.DatabaseInteraction;
 import backend.ReceiveData;
 import backend.User;
@@ -77,7 +78,8 @@ public class ReceiveDataTest {
 	public void testInvalidUsernameOrPassword() throws IOException, ServletException{
 		//expectations
         when(request.getParameter("dataFromClient")).thenReturn(reqString);
-        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(1,2);
+        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+        		new AuthenticationResponse(1), new AuthenticationResponse(2));
         when(request.getParameter("serial")).thenReturn("1");
         
         //execute
@@ -94,7 +96,8 @@ public class ReceiveDataTest {
 	private void setUpForTestUpdate(boolean update) throws IOException, ServletException{
 		//expectations
         when(request.getParameter("dataFromClient")).thenReturn(reqString);
-        when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
+        when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+        		new AuthenticationResponse(0));
         when(DatabaseInteraction.getUser(username)).thenReturn(u);
         when(DatabaseInteraction.updateOrSaveUser(u)).thenReturn(update);
         when(request.getParameter("serial")).thenReturn("1");
@@ -131,7 +134,8 @@ public class ReceiveDataTest {
 		when(request.getParameter("serial")).thenReturn("5");
 		when(request.getParameter("dataFromClient")).thenReturn(reqString);
 		when(DatabaseInteraction.getUser(username)).thenReturn(u);
-		when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
+		when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+				new AuthenticationResponse(0));
 		when(DatabaseInteraction.newJSONInstance()).thenReturn(json);
 		String info = "info";
 		String salt = "salt";

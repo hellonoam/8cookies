@@ -79,7 +79,8 @@ public class SignUp extends HttpServlet {
      * 	s otherwise
      */
     public String sanitizeJsonpParam(String s) {
-    	if ( s.isEmpty() ||
+    	if ( s == null ||
+    		 s.isEmpty() ||
     	    !s.toLowerCase().startsWith("jsonp") ||
     	     s.length() > 128 ||
     	    !s.matches("^jsonp\\d+$")) {

@@ -19,6 +19,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
+import backend.AuthenticationResponse;
 import backend.DatabaseInteraction;
 import backend.SendData;
 import backend.User;
@@ -56,7 +57,8 @@ public class SendDataTest {
 	@Test
 	public void testInvalidUsernameOrPassword() throws IOException, ServletException{
 		//expectations
-		when(DatabaseInteraction.authenticate(username, password)).thenReturn(1,2);
+		when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+				new AuthenticationResponse(1), new AuthenticationResponse(2));
 		 
 		//execute
 	    new SendData().doGet(request, response);
@@ -70,7 +72,8 @@ public class SendDataTest {
 	@Test
 	public void testValidResponse() throws IOException, ServletException{
 		//expectations
-		when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
+		when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+				new AuthenticationResponse(0));
 		when(DatabaseInteraction.getUser(username)).thenReturn(u);
 		String info = "info";
 		String salt = "salt";

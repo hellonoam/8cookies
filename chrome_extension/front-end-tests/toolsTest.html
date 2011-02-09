@@ -5,6 +5,7 @@
 	<script type="text/javascript" 
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script src="../js/tools.js"></script>
+	<script src="../js/sjcl/sjcl.js"></script>
 	<script src="js/qunit.js"></script>
 	<script src="js/qunit.mock.js"></script>
 	<script src="js/toolsForTests.js"></script>
@@ -86,6 +87,13 @@
 					});
 				});
 			});
+		});
+
+		test("testing encryption and decryption methods", 1, function() {
+			var MDK = tools.getMasterDataKey("pass1", "salt");
+			var plaintext = "hello there, this is a test";
+			var ct = tools.encrypt(plaintext, MDK);
+			equal(tools.decrypt(ct, MDK), plaintext);
 		});
 
 	});

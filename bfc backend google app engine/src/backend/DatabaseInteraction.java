@@ -66,14 +66,31 @@ public class DatabaseInteraction {
      * 	0 if username password pair is valid
      * 	1 is user doesn't exist
      *  2 if password is incorrect
+     *  3 if exceeds limit for tries
      */
-    public static int authenticate(String username, String password){
+    public static AuthenticationResponse authenticate(String username, String password){
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
     	User u = getUser(username);
-    	if (u == null)
-    		return 1; //doesn't exist
-    	if (!u.comparePassword(password))
-    		return 2;//wrong password
-    	return 0; //correct password
+    	if (u == null){
+    		return new AuthenticationResponse(1); //doesn't exist
+    	}
+    	if (!u.canTryPasswordNow()){
+			return new AuthenticationResponse(3, u.getWaitTime());
+    	}
+    	if (!u.comparePassword(password)){
+        	u.incrementLoginTriesAndUpdateTime();
+        	if (u.loginTriesOverLimit()){
+        		u.blockTry();
+        		pm.makePersistent(u);
+        		return new AuthenticationResponse(3, u.getWaitTime());
+        	}
+    		pm.makePersistent(u);
+    		return new AuthenticationResponse(2);//wrong password
+    	}
+    	u.resetLoginTries();
+    	u.updateSuccessLoginTime();
+    	pm.makePersistent(u);
+    	return new AuthenticationResponse(0); //correct password
     }
     
     /**
@@ -122,6 +139,8 @@ public class DatabaseInteraction {
     }
 
 	public static boolean removeInvite(String invitation) {
+		if (invitation == null) 
+			return false;
 		if (invitation.equals("hellonoam"))
 			return true;
 		boolean success = false;

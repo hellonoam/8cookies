@@ -1,9 +1,9 @@
 {
 	"name": "8cookies",
 
-	"version": "0.1.2",
+	"version": "0.2",
 
-	"description": "Saves the browser information in the cloud, which allows users to browse from any computer",
+	"description": "saves your cookies and open windows in the cloud, so you can start your session on one computer and continue it from another",
 
 	"background_page": "background.html",
 	
@@ -21,9 +21,6 @@
 	"browser_action": {
 	  "default_popup": "popup.html",
 	  "default_icon": "icon48.png",
-	  "default_title": "Browse from the cloud"
+	  "default_title": "8cookies"
 	}
-	// ,
-	// 
-	// "update_url": "http://cloudbrowsing.appspot.com/updateInfo.xml"
 }

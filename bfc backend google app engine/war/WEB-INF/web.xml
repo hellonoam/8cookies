@@ -5,10 +5,6 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
-		<servlet-name>Bfc_backend_google_app_engine</servlet-name>
-		<servlet-class>backend.Bfc_backend_google_app_engineServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>ReceiveData</servlet-name>
 		<servlet-class>backend.ReceiveData</servlet-class>
 	</servlet>
@@ -36,10 +32,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>FailedToReproduceURL</servlet-name>
 		<servlet-class>backend.FailedToReproduceURL</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>Bfc_backend_google_app_engine</servlet-name>
-		<url-pattern>/bfc_backend_google_app_engine</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ReceiveData</servlet-name>
 		<url-pattern>/ReceiveData</url-pattern>

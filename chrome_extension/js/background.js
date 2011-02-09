@@ -11,12 +11,13 @@ var serial; //serial for checking server-side if update is valid
 var serialLimit = 30000;
 
 var MDK;
-
+//for cases when the browser is re-opened and user is still logged in
 if (tools.isLoggedIn()) {
 	autoSendData();
 	serial = 1;
 	MDK = JSON.parse(localStorage.getItem("MDK"));
 }
+
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
@@ -84,6 +85,7 @@ function login(username, nakedPass, portSession, doNotInclude, merge) {
 	return true;
 }
 
+//setting up automatic data sending
 function autoSendData() {
 	// sending data to server every fixed number of minutes
 	sendDataIntervalId = setInterval(function() {
@@ -108,6 +110,7 @@ function autoSendData() {
 	chrome.idle.onStateChanged.addListener(idleListener);
 }
 
+//used to add and remove listeners
 function idleListener() {
 	sendData();
 }
@@ -158,10 +161,12 @@ function sendURLToServer(url, servlet) {
 	});
 }
 
+//sends the url to server as a visited url
 function sendVisitedURL(url) {
 	sendURLToServer(url, "/VisitedURL");
 }
 
+//sends the url to server as a failed to reproduce url
 function sendFailedToReproduceURL(url) {
 	sendURLToServer(url, "/FailedToReproduceURL");
 }
@@ -258,16 +263,29 @@ function receiveData(successCallback, sync, username, password, portSession,
 			} else {
 				current.deSerializeAndApply(data.info, doNotInclude, merge);
 			}
+			localStorage.setItem("tooManyTries", "false");
 		},
-		error: errorFunction
+		error: function(error) {
+			localStorage.setItem("tooManyTries", "false");
+			errorFunction(error);
+			if (error.status == 403) {
+				time = error.statusText.substr(error.statusText.indexOf(':') + 1);
+				localStorage.setItem("tooManyTries", "true");
+				localStorage.setItem("waitTime", time)
+			}
+		}
 	});
 }
 
+//generates the master data key and stores it in localstorage
 function setMDK(password, salt){
 	MDK = tools.getMasterDataKey(password, salt);
 	localStorage.setItem("MDK", JSON.stringify(MDK));
 }
 
+//receives data from server only if it is needed, i.e., something was changed.
+//In practice this fail because of network latency, by the time the response
+//comes back, the state has almost certainly changed.
 function receiveDataIfNeeded() {
 	receiveData(null,null,null,null,null,null,true);
 }

@@ -17,6 +17,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import backend.AuthenticationResponse;
 import backend.DatabaseInteraction;
 import backend.DeleteCookiesFromServer;
 
@@ -48,7 +49,8 @@ public class DeleteCookiesFromServerTest {
 	@Test 
     public void testInvalidPasswordOrUsername() throws IOException, ServletException {
         // expectations
-        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(1,2);
+        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+        		new AuthenticationResponse(1),new AuthenticationResponse(2));
         
         // execute
         new DeleteCookiesFromServer().doGet(request, response);
@@ -63,7 +65,8 @@ public class DeleteCookiesFromServerTest {
 	private void testDeletionOfUser(boolean deleted, String outString) 
 			throws IOException, ServletException{
 		// expectations
-        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(0);
+        Mockito.when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+        		new AuthenticationResponse(0));
         Mockito.when(DatabaseInteraction.deleteUser(username)).thenReturn(deleted);
         
         // execute

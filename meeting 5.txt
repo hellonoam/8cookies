@@ -1,0 +1,3 @@
+- show encryption methods
+- on the sever database as well
+- using amazon turks to get passwords/usernames and sign-in pages, then using automated tools

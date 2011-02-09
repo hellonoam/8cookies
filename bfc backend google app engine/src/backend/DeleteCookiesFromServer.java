@@ -25,9 +25,14 @@ public class DeleteCookiesFromServer extends HttpServlet {
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
 
-        
-        if (username == null || username.equals("") || 
-        		DatabaseInteraction.authenticate(username, password) != 0){
+        AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
+    	if (auth.getResponseType() == 3){
+    		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
+    				+ auth.getWaitTime());
+       		logger.config("wrong passwrod too many times");
+    		return;
+    	}
+    	if (auth.getResponseType() != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
         	return;
         }

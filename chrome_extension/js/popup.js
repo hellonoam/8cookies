@@ -1,10 +1,11 @@
-
+//hides and shows the appropriate things when a user is logged in
 function userLoggedIn(username) {
 	$(".whenNotLoggedIn").hide();
 	$(".loggedInUser").show();
 	$(".loggedInUser p:first").text("hello " + username);
 }
 
+//hides and shows the appropriate things when a user is logged out
 function userLoggedOut() {
 	$(".whenNotLoggedIn").show();;
 	$(".loggedInUser").hide();
@@ -21,11 +22,15 @@ function init() {
 				userLoggedOut();
 		}
 	);
-	$(".password").keypress(function(event) {
+	//maps enter to submit
+	$(".enter").keypress(function(event) {
 		if (event.charCode == 13)
 			$(".login").click();
 	});
+
+	//sends the a login request to the background page
 	$(".login").click(function() {
+		$(".result").text("verifying");
 		console.log("request to login, sent to bg");
 		chrome.extension.sendRequest(
 			{
@@ -37,8 +42,13 @@ function init() {
 			function(response) {
 				if (response.success)
 					userLoggedIn($(".username").val());
-				else
-					$(".result").text("wrong username or password");
+				else {
+					if (localStorage.tooManyTries == "true")
+						$(".result").text("too many attemps, please wait "
+						  + parseInt(localStorage.waitTime)/60 + " minutes");
+					else
+						$(".result").text("wrong username or password");
+				}
 			}
 		);
 	});

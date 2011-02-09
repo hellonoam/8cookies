@@ -1,10 +1,11 @@
 function init() {
-	$("input").keypress(function(event) {
+	$(".inputText").keypress(function(event) {
 		if (event.charCode == 13)
 			$(".submit").click();
 	});
 	$(".submit").click(function() {
 		console.log("submit was clicked");
+		$(".result").text("verifying");
 		$.getJSON(server + "/SignUp?callback=?",
 			{
 				user: $(".username").val(),

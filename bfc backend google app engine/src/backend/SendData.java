@@ -13,7 +13,7 @@ import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
  * My test servlet
- *
+ * 
  * @author Noam Szpiro
  */
 
@@ -25,13 +25,23 @@ public class SendData extends HttpServlet {
                       HttpServletResponse response)
         throws IOException, ServletException
     {
+    	logger.severe("got get");
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
-        if (DatabaseInteraction.authenticate(username, password) != 0){
+        logger.severe("username " + username + " password " + password);
+    	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
+    	if (auth.getResponseType() == 3){
+    		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
+    				+ auth.getWaitTime());
+       		logger.config("wrong passwrod too many times");
+    		return;
+    	}
+    	if (auth.getResponseType() != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
        		logger.config("received incorrect credentials");
        		return;
        	}
+    	logger.severe("after loggings");
         User u = DatabaseInteraction.getUser(username);
         JSONObject json = DatabaseInteraction.newJSONInstance();
         try {

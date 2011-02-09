@@ -102,7 +102,7 @@ tools = {
 				var current = cookies[i];
 				var cookies2Remove = new Object;
 				cookies2Remove.url = ((current.secure) ? 
-					"https://" : "http://") + current.domain + current.path;	
+					"https://" : "http://") + current.domain + current.path;
 				cookies2Remove.name = current.name;
 				cookies2Remove.storeId = current.storeId;
 				chrome.cookies.remove(cookies2Remove);
@@ -128,7 +128,9 @@ tools = {
 			   localStorage.getItem("password") != "";
 	},
 
-	_appRandId: "BKX:I5//p",
+	//app random id
+	_appRandIdLoginToken: "BKX:I5//p",
+	_appRandIdMDK: "BKX:I5//p",
 
 	makePBKDF2: function(PBKDF2) {
 		for (i=0; i<1000; i++) {
@@ -138,32 +140,36 @@ tools = {
 	},
 
 	getLoginToken: function(nakedPass, username) {
-		return tools.makePBKDF2(nakedPass + "login" + username + tools._appRandId);
+		return tools.makePBKDF2(nakedPass + "login" + username
+			+ tools._appRandIdLoginToken);
 	},
 
 	getMasterDataKey: function(password, userRandomSalt) {
-		return tools.makePBKDF2(password + "encryption" + userRandomSalt + tools._appRandId);
+		return tools.makePBKDF2(password + "encryption"
+			+ userRandomSalt + tools._appRandIdMDK);
 	},
-	
+
+	//ecrypts the plaintext with the master data key
 	encrypt: function(plaintext, MDK) {
-		console.log("in encrypt");
+		// console.log("in encrypt");
 		var p = new Object();
 		p.adata = "";
 		p.iter = 1000;
 		p.ks = 128;
 		p.mode = "ccm";
 		p.ts = 64;
-		console.log("p");
-		console.log(p);
+		// console.log("p");
+		// console.log(p);
 		var rp = new Object();
 		var ciphertext = sjcl.encrypt(MDK, plaintext, p,rp);
-		console.log("rp");
-		console.log(rp);
+		// console.log("rp");
+		// console.log(rp);
 		return ciphertext;
 	},
-	
+
+	//decrypts the ciphertext with the master data key
 	decrypt: function(ciphertext, MDK) {
-		console.log("in decrypt " + MDK);
+		// console.log("in decrypt");
 		if (ciphertext instanceof Array) ciphertext = ciphertext[0];
 		if (!ciphertext || ciphertext == "") return "";
 		var plaintext = sjcl.decrypt(MDK, ciphertext, {}, {})
