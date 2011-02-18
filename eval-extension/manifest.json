@@ -1,0 +1,31 @@
+{
+	"name": "auto-login",
+
+	"version": "0.1",
+
+	"description": "let's you login automatically to website. Opens the website you want and sends a form request with given credentials",
+
+	"background_page": "background.html",
+
+	"permissions": [
+	  "cookies",
+	  "tabs",
+	  "http://*/*",
+	  "https://*/*"
+	],
+
+	"content_scripts": [
+	{
+		"matches": ["http://*/*"],
+		"js": ["js/jquery.js", "js/content_script.js"]
+    },
+	{
+		"matches": ["https://*/*"],
+		"js": ["js/jquery.js", "js/content_script.js"]
+    }
+	],
+
+	"browser_action": {
+	  "default_title": "auto-login"
+	}
+}
