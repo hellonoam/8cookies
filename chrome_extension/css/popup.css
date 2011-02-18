@@ -27,6 +27,7 @@ body {
 	color:white;
 	margin: 12px;
 	float:left;
+	cursor: pointer;
 }
 
 .fail {
@@ -59,6 +60,7 @@ body {
 	margin:15px;
 	font-size: 75%;
 	float:left;
+	cursor: pointer;
 }
 
 .merge {

@@ -1,6 +1,6 @@
 body {
 	border-top: 5px solid #5C9FC0;
-	background: #eee;
+	background: #eeeeed;
 /*	background: url(Image001.png) repeat-x;*/
 	margin: 0px;
 	font-family: Helvetica, Arial, Verdana, sans-serif;
@@ -70,6 +70,7 @@ input[type="text"] {
 }
 
 input[type="submit"] {
+	cursor: pointer;
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	border: 1px solid #5C9FC0;
