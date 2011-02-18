@@ -18,6 +18,8 @@
 	"icons": {"48": "icon48.png",
 	          "128": "icon128.png" },
 	
+	"options_page": "options.html",
+	
 	"browser_action": {
 	  "default_popup": "popup.html",
 	  "default_icon": "icon48.png",

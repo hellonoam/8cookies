@@ -53,7 +53,7 @@ function init() {
 		);
 	});
 	$(".logout").click(function(event) {
-		event.stopPropagation(); //so delete won't be called
+		event.stopPropagation(); //so delete won't be called // probably not needed anymore
 		console.log("request to logout, sent to bg");
 		chrome.extension.sendRequest({ type: "logout" });
 		userLoggedOut();
@@ -62,7 +62,14 @@ function init() {
 		chrome.extension.sendRequest({ type: "failedToReproduce" });
 		$(".fail").hide();
 		$(".failText").text("thanks, we'll try to make it producible")
-	})
+	});
+	$(".showStates").click(function() {
+		chrome.tabs.create({url:chrome.extension.getURL('states.html')});
+	});
+	$(".saveState").click(function() {
+		chrome.extension.sendRequest({ type: "saveNewWindowsSet" });
+		$(".saveState").val("saved!");
+	});
 	$(".signup").click(function() {
 		chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
 	});

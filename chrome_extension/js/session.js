@@ -5,11 +5,13 @@ session = function(cookies, windows){
 
 	this.info = new Object();
 	this.info.cookies = cookies;
+	if (!windows || windows == "")
+		windows == [""];
 	this.info.windows = windows;
 	var s = this;
 
 	//returns a JSON representation of session
-	this.serialize = function() {;
+	this.serialize = function() {
 		return JSON.stringify(this.info);
 	}
 
@@ -23,7 +25,8 @@ session = function(cookies, windows){
 		});
 	}
 
-	//updates the windows variable to hold the up-to-date values
+	//updates the windows[0] variable to hold the up-to-date values
+	//the rest of the windows array stays the same
 	this.updateWindows = function(callback, doNotInclude) {
 		chrome.windows.getAll({populate: true}, function(windows) {
 			if (doNotInclude){
@@ -35,7 +38,11 @@ session = function(cookies, windows){
 				});
 				windows = arr;
 			}
-			s.info.windows = windows;
+			if (localStorage.windows && localStorage.windows != "undefined")
+				s.info.windows = JSON.parse(localStorage.windows);
+			else
+				s.info.windows = [];
+			s.info.windows[0] = windows;
 			if (callback)
 				callback();
 		});
@@ -46,6 +53,30 @@ session = function(cookies, windows){
 		this.updateCookies(function() {
 			s.updateWindows(callback, doNotInclude)
 		});
+	}
+
+	this.saveNewWindowsSet = function() {
+		this.updateWindows(function() {
+			var length = s.info.windows.length;
+			s.info.windows[length] = s.info.windows[0];
+			localStorage.setItem("windows", JSON.stringify(s.info.windows));
+		});
+	}
+
+	this.deleteWindowsSet = function(index) {
+		this.info.windows.splice(index,1);
+		localStorage.setItem("windows", JSON.stringify(this.info.windows));
+	}
+
+	this.applyWindowsSet = function(index) {
+		if (index >= this.info.windows.length)
+			return;
+		this.info.windows[0] = this.info.windows[index];
+		this.applyWindows(undefined, undefined, true);
+	}
+
+	this.getWindowsSets = function() {
+		return JSON.stringify(this.info.windows);
 	}
 
 	//sets the cookies of this session to be the cookies of the browser
@@ -60,7 +91,7 @@ session = function(cookies, windows){
 
 	//sets the windows of this session to be the windows of the browser
 	this.applyWindows = function(callback, doNotInclude, merge) {
-		tools.setWindows(this.info.windows, callback, merge, doNotInclude);
+		tools.setWindows(this.info.windows[0], callback, merge, doNotInclude);
 	}
 
 	//sets both windows and cookies of this session to be those of the browser
@@ -77,10 +108,18 @@ session = function(cookies, windows){
 			this.info = JSON.parse(json);
 		else
 			this.info = new Object();
+		if (!this.info.windows)
+			this.info.windows = [];
+		else
+			localStorage.setItem("windows", JSON.stringify(s.info.windows));
 	}
 
 	this.deSerializeAndApply = function(data, doNotInclude, merge) {
-		this.deSerialize(data);
-		this.applyAll(null, doNotInclude, merge);
+		try {
+			this.deSerialize(data);
+			this.applyAll(null, doNotInclude, merge);
+		} catch (err) {
+			console.log("failed to deSerialize data");
+		}
 	}
 }

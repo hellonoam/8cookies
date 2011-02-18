@@ -16,6 +16,11 @@ if (tools.isLoggedIn()) {
 	autoSendData();
 	serial = 1;
 	MDK = JSON.parse(localStorage.getItem("MDK"));
+	current.updateAll();
+}
+
+if (!localStorage.restore){
+	createRestorePoint();
 }
 
 //listens for requsts from popup then runs the appropriate function
@@ -23,8 +28,27 @@ chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		console.log("received message " + request.type);
 		switch (request.type) {
+			case "saveNewWindowsSet":
+				saveNewWindowsSet();
+				break;
+			case "deleteWindowsSet":
+				deleteWindowsSet(request.index);
+				break;
+			case "applyWindowsSet":
+				applyWindowsSet(request.index);
+				break;
+			case "getWindowsSets":
+				sendResponse({ result: getWindowsSets() });
+				return;
 			case "deleteFromServer":
-				deleteFromServer(request.doNotInclude, request.sync);
+				sendResponse({ result:
+					deleteFromServer(request.doNotInclude, request.sync) });
+				return;
+			case "createRestore":
+				createRestorePoint();
+				break;
+			case "doRestore":
+				doRestore();
 				break;
 			case "login":
 				sendResponse({ success: login(request.username,
@@ -52,11 +76,24 @@ chrome.extension.onRequest.addListener(
 				f();
 				break;
 			default:
-				console.log("ERROR: got an ill typed message from 'popup'");
+				console.log("ERROR: got an ill typed message");
 		}
 		sendResponse({});
 	}
 );
+
+function createRestorePoint() {
+	var restoreSession = new session();
+	restoreSession.updateAll(function() {
+		localStorage.setItem("restore", restoreSession.serialize());
+		console.log("restore point was created");
+	});
+}
+
+function doRestore(){
+	var s = new session();
+	s.deSerializeAndApply(localStorage.restore);
+}
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
@@ -74,7 +111,6 @@ function login(username, nakedPass, portSession, doNotInclude, merge) {
 		console.log("user logged in");
 		s.updateAll(function() {
 			localStorage.setItem("oldSession", s.serialize());
-			current = new session();
 		}, doNotInclude);
 	}, true, username, password, portSession, doNotInclude, undefined, merge);
 
@@ -126,15 +162,16 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 	chrome.tabs.onUpdated.removeListener(urlSender);
 	chrome.idle.onStateChanged.removeListener(idleListener);
 	clearInterval(sendDataIntervalId);
-	var old = new session();
-	old.deSerialize(localStorage.getItem("oldSession"));
 	var callback = function() {
+		var old = new session();
+		old.deSerialize(localStorage.getItem("oldSession"));
+		current = old;
 		if (!notApply)
 			old.applyAll(null, doNotInclude);
-		current = old;
 		localStorage.setItem("username", "");
 		localStorage.setItem("password", "");
 		localStorage.setItem("MDK", "");
+		localStorage.setItem("windows", "");
 	};
 	if (dataDeleted)
 	 	callback();
@@ -184,6 +221,9 @@ function sendData(callback, doNotInclude, sync) {
 		serial = 1;
 	console.log("serial "+serial);
 	current.updateAll(function() {
+		console.log("sending sets #### " + current.info.windows.length);
+		var dataToSend = current.serialize();
+		console.log("encrypted data length = " + tools.encrypt(dataToSend, MDK).length);
 		$.ajax({
 			type: "POST",
 			//since the server receives the data
@@ -194,19 +234,25 @@ function sendData(callback, doNotInclude, sync) {
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
 				serial: serial++,
-				dataFromClient: tools.encrypt(current.serialize(), MDK)
+				dataFromClient: tools.encrypt(dataToSend, MDK)
 			},
 			success: function(data) {
 				if ($.trim(data).toLowerCase() == "received")
 					console.log("data from server: " + data);
-				else if (data != "") { //means there was a conflict
+				else if (data != "" && data.charAt(0) == '{') { //means there was a conflict
+					console.log("data:" + data + "|");
 					console.log("conflict - update rejected");
 					var answer = confirm("looks like the cloud has more up-to- date data." + 
 					" would you like to load the windows from the cloud?");
 					serial = 1;
-					if (answer)
-						current.deSerializeAndApply(
-							tools.decrypt(JSON.parse(data).info, MDK));
+					if (answer) {
+						try {
+							current.deSerializeAndApply(
+								tools.decrypt(JSON.parse(data).info, MDK));
+						} catch (err) {
+							console.log("wasn't a JSON");
+						}
+					}
 				} else {//probably means the network is down
 					serial--;
 					current.deSerialize();
@@ -244,7 +290,12 @@ function receiveData(successCallback, sync, username, password, portSession,
 			pass: password
 		},
 		success: function(data) {
-			data = JSON.parse(data);
+			try {
+				data = JSON.parse(data);
+			} catch (err) {
+				console.log("wasn't a JSON");
+				return;
+			}
 			serial = 1;
 			setMDK(password, data.salt)
 			console.log("MASTER DATA KEY: " + MDK);
@@ -262,6 +313,7 @@ function receiveData(successCallback, sync, username, password, portSession,
 				});
 			} else {
 				current.deSerializeAndApply(data.info, doNotInclude, merge);
+				console.log("length in receivedata ****** " + current.info.windows.length);
 			}
 			localStorage.setItem("tooManyTries", "false");
 		},
@@ -292,6 +344,8 @@ function receiveDataIfNeeded() {
 
 //deletes all information from the server.
 function deleteFromServer(doNotInclude, sync) {
+	if (localStorage.getItem("username") == "")
+		return false;
 	$.ajax({
 		url: server + "/DeleteCookiesFromServer",
 		cache: false,
@@ -302,8 +356,27 @@ function deleteFromServer(doNotInclude, sync) {
 		},
 		success: function(data) { 
 			logout(true, null, doNotInclude);
-			console.log(data);	
+			console.log(data);
 		},
 		error: errorFunction
 	});
+	return true;
+}
+
+function saveNewWindowsSet() {
+	current.saveNewWindowsSet();
+	sendData();
+	console.log("new state was saved!!!");
+}
+
+function applyWindowsSet(index) {
+	current.applyWindowsSet(index);
+}
+
+function getWindowsSets() {
+	return current.getWindowsSets();
+}
+
+function deleteWindowsSet(index) {
+	current.deleteWindowsSet(index);
 }

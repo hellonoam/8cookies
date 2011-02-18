@@ -46,8 +46,8 @@ tools = {
 			windows = [new Object()];
 			windows[0].left = 20;
 			windows[0].top = 20;
-			windows[0].width = 600;
-			windows[0].height = 600;
+			windows[0].width = 800;
+			windows[0].height = 800;
 			windows[0].type = "normal";
 			windows[0].incognito = false;
 			windows[0].url = "http://www.google.com";
@@ -128,8 +128,9 @@ tools = {
 			   localStorage.getItem("password") != "";
 	},
 
-	//app random id
-	_appRandIdLoginToken: "BKX:I5//p",
+	//app random login id
+	_appRandIdLoginToken: "@V(#AK$*",
+	//app random MDK id
 	_appRandIdMDK: "BKX:I5//p",
 
 	makePBKDF2: function(PBKDF2) {
