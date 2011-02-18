@@ -25,10 +25,9 @@ public class SendData extends HttpServlet {
                       HttpServletResponse response)
         throws IOException, ServletException
     {
-    	logger.severe("got get");
+    	logger.fine("got get");
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
-        logger.severe("username " + username + " password " + password);
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
     	if (auth.getResponseType() == 3){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
@@ -41,7 +40,6 @@ public class SendData extends HttpServlet {
        		logger.config("received incorrect credentials");
        		return;
        	}
-    	logger.severe("after loggings");
         User u = DatabaseInteraction.getUser(username);
         JSONObject json = DatabaseInteraction.newJSONInstance();
         try {
