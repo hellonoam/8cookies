@@ -14,6 +14,7 @@
 
 	<script>
 	var server = "http://localhost";
+	localStorage.oldSession = "";
 	$(document).ready(function(){
 		var localhostIndex = new session();
 		var doNotInclude;
@@ -90,12 +91,12 @@
 						setTimeout(function() { //timeout so cookies will be set
 							s.updateAll(function() {
 								console.log("test3");
-								equal(s.info.windows.length, 
-									localhostIndex.info.windows.length,
+								equal(s.info.windows[0].length,
+									localhostIndex.info.windows[0].length,
 									"opened same number of windows that were" +
 									" open on logout");
-								equal(s.info.windows[0].tabs[0].url, 
-									localhostIndex.info.windows[0].tabs[0].url,
+								equal(s.info.windows[0][0].tabs[0].url,
+									localhostIndex.info.windows[0][0].tabs[0].url,
 									"opened same url as on logout");
 								deepEqual(s.info.cookies, localhostIndex.info.cookies,
 									"cookies are the same");
