@@ -1,6 +1,6 @@
 body {
 	width: 230px;
-	height: 150px;
+	height: 200px;
 	font-family: Helvetica, Arial, Verdana, sans-serif;
 	color: #563c12;
 	font-size: 90%;
@@ -20,17 +20,21 @@ body {
 	margin-top: 13px;
 }
 
-.login, .logout, .fail {
+.login, .logout, .fail, .saveState, .showStates {
 	border-radius: 4px;
 	border: 1px solid #5C9FC0;
 	background:#5C9FC0;
 	color:white;
 	margin: 12px;
-	float:left;
 	cursor: pointer;
 }
 
+.saveState, .showStates {
+
+}
+
 .fail {
+	float:right;
 	margin-top:0px;
 	border: 1px solid #872020;
 	background: #872020;
@@ -47,7 +51,7 @@ body {
 	margin-left:30px;
 }
 
-.loggedInUser input {
+.logout {
 	float:right;
 	margin-right:30px;
 }

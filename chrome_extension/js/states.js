@@ -3,17 +3,21 @@ function init() {
 		sets = JSON.parse(response.result);
 		if (sets.length == 1)
 			$("table").append("no states were found");
-		$(sets).each(function (index, value){
+		$(sets).each(function(index, value){
 			//since 0 is the current sets
 			if (index > 0) {
-				temp = value;
+				var s = "";
+				$(value).each(function(index2, value2) {
+					s += "for window " + (index2+1) + " there are " +
+						  value2.tabs.length + " tabs <br/>";
+				});
 				$("table").append(
-				"<tr id='tr" + index + "'><td>" +
-					index + ") number of windows: " + value.length +
-					" number of tabs for the first window: " + value[0].tabs.length +
-					"<input type='button' class='open' id='" + index + "' value='open'>" +
-					"<input type='button' class='delete' id='" + index + "' value='delete'>" +
-				"</td></tr>");
+					"<tr id='tr" + index + "'><td>" +
+						index + ") " + value.length + " windows <br/>" + s +
+						"<input type='button' class='open' id='" + index + "' value='open'>" +
+						"<input type='button' class='delete' id='" + index + "' value='delete'>" +
+					"</td></tr>"
+				);
 			}
 		});
 		$(".open").click(function(event) {
@@ -30,5 +34,3 @@ function init() {
 		});
 	});
 }
-
-var temp;
