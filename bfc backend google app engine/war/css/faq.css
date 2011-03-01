@@ -1,0 +1,15 @@
+.main {
+	background:white;
+	-webkit-box-shadow: #AAA 0px 0px 3px;
+	-moz-box-shadow: #AAA 0px 0px 3px;
+	width: 500px;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	margin: 30px auto 0px auto;
+	font-size: 90%;
+	padding:20px;
+}
+
+.main p, li {
+	text-align: left;
+}

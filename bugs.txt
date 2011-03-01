@@ -1,12 +1,7 @@
-fix overall test
+visited url needs to be stored as text not string or deal with < 500 chars
 
-tests for serial, crypto
 
 check valid email
-
-send data after signup sends signup page
-
-map enter to submit
 
 sending to server data that is not in a json format will cause an error (not null though)
 

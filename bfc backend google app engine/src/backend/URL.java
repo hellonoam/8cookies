@@ -21,6 +21,8 @@ public class URL {
     private boolean failed;
     
     public URL(String URL, boolean failed){
+    	if (URL.length() > 500)
+    		URL = URL.substring(0, 499);
     	this.URL = URL;
     	this.failed = failed;
     } 

@@ -56,6 +56,12 @@ table {
 	border: 1px solid #ccc;
 }
 
+input[type=text] {
+	margin-left:10px;
+	border-radius: 2px;
+	border: 1px solid #ccc;
+}
+
 input[type=button] {
 	cursor: pointer;
 	margin:5px;

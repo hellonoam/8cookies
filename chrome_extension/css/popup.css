@@ -1,3 +1,8 @@
+html {
+	width: 266px;
+	height: 236px;
+}
+
 body {
 	width: 230px;
 	height: 200px;
@@ -29,8 +34,15 @@ body {
 	cursor: pointer;
 }
 
-.saveState, .showStates {
+.states {
+	width: 150px;
+	float: left;
+	margin-top: 10px;
+	margin-left: 18px;
+}
 
+.options {
+	margin-top: 10px;
 }
 
 .fail {

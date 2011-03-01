@@ -59,8 +59,14 @@ session = function(cookies, windows){
 		this.updateWindows(function() {
 			var length = s.info.windows.length;
 			s.info.windows[length] = s.info.windows[0];
+			s.info.windows[length][0].savedSetDate = new Date().toDateString();
 			localStorage.setItem("windows", JSON.stringify(s.info.windows));
 		});
+	}
+	
+	this.nameSet = function(index, name) {
+		this.info.windows[index][0].setName = name;
+		localStorage.setItem("windows", JSON.stringify(this.info.windows));
 	}
 
 	this.deleteWindowsSet = function(index) {

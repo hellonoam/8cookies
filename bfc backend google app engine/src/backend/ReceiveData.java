@@ -42,32 +42,23 @@ public class ReceiveData extends HttpServlet {
     		response.sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - update was rejected");
 			return;
     	}
-    	
-    	
-    	//TODO: sanitize this string before parsing it
-    	//since it uses the eval function
-    	JsonElement json = jp.parse(reqString == null ? "" : reqString);
-    	if (!json.isJsonObject()) {
-    		logger.severe("json was not a json object");
-    		response.sendError(HttpServletResponse.SC_BAD_REQUEST, 
-    				"data was not received in correct format");
-    		return;
-    	}
-    	logger.severe("serial " + serial);
+
+    	logger.fine("serial " + serial);
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
     	if (auth.getResponseType() == 3){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
     				+ auth.getWaitTime());
-       		logger.config("wrong passwrod too many times");
+       		logger.fine("wrong passwrod too many times");
     		return;
     	}
     	if (auth.getResponseType() != 0){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
-       		logger.config("received incorrect credentials");
+       		logger.fine("received incorrect credentials");
     		return;
     	}
+   	
     	User u = DatabaseInteraction.getUser(username);
-
+    	
     	if (serial == 1)
     		u.setSerial(1);
     	else{
