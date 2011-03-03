@@ -3,9 +3,10 @@ body {
 	background: #eeeeed;
 /*	background: url(Image001.png) repeat-x;*/
 	margin: 0px;
-	font-family: Helvetica, Arial, Verdana, sans-serif;
+	font-family: 'Reenie Beanie', serif;
 	color: #563c12;
 	text-align:center;
+	font-size: 1.2em;
 }
 
 a {
@@ -14,7 +15,7 @@ a {
 }
 
 .footer {
-	font-size: 60%;
+	font-size: 70%;
 	margin: 80px auto 0px auto;
 	width: 500px;
 	border-top: 1px solid white;
@@ -28,11 +29,12 @@ a {
 .footer span, a { margin: 0 10px 0 0; }
 
 .title {
+	line-height: 1;
 	text-align:left;
 	margin: 50px auto auto auto;
 	width: 500px;
 	height:150px;
-	font-size: 1.4em;
+	font-size: 150%;
 	position:relative;
 }
 

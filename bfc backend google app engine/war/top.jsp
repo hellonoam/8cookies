@@ -1,5 +1,6 @@
 <title>8cookies</title>
 <link href="css/gen.css" rel="stylesheet" type="text/css">
+<link  href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular" rel="stylesheet" type="text/css" >
 <script type="text/javascript" src="js/voiceAndAnalytics.js"></script>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
