@@ -17,6 +17,9 @@ public class Email {
     @Persistent
     private String email;
     
+    @Persistent
+    private boolean invited = false;
+    
     public Email(String email){
     	this.email = email;
     }
