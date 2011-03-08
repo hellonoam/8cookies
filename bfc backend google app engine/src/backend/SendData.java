@@ -28,6 +28,23 @@ public class SendData extends HttpServlet {
     	logger.fine("got get");
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
+        double version = 0;
+        try {
+        	String versionString = request.getParameter("version");
+        	if (versionString != null)
+        		version = Double.parseDouble(versionString);
+        } catch (NumberFormatException e) {
+        	logger.severe("version was missing");
+        }
+        
+        int serial = -1;
+    	try {
+    		if (version != 0)
+    			serial = Integer.parseInt(request.getParameter("serial"));
+    	} catch (NumberFormatException e){
+    		response.sendError(HttpServletResponse.SC_CONFLICT, "invalid serial");
+			return;
+    	}
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
     	if (auth.getResponseType() == 3){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
@@ -41,6 +58,12 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
+        if (version != 0){
+        	u.setSerial(serial);
+        	boolean succ = DatabaseInteraction.updateOrSaveUser(u);
+        	if (!succ)
+        		logger.severe("failed to update serial of user");
+        }
         JSONObject json = DatabaseInteraction.newJSONInstance();
         try {
 			json.append("info", u.getInfo());
