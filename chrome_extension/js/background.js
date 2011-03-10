@@ -17,9 +17,19 @@ var MDK;
 if (tools.isLoggedIn()) {
 	autoSendData();
 	if (!localStorage.serial)
-		localStorage.serial = 1;
+		localStorage.serial = getRandomSerial();
 	MDK = JSON.parse(localStorage.getItem("MDK"));
 	current.updateAll();
+}
+
+localStorage.version = getVersion();
+
+function getVersion() {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+	xhr.send(null);
+	var manifest = JSON.parse(xhr.responseText);
+	return manifest.version;
 }
 
 if (!localStorage.restore){
@@ -177,6 +187,7 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		localStorage.setItem("password", "");
 		localStorage.setItem("MDK", "");
 		localStorage.setItem("windows", "");
+		localStorage.setItem("serial", "");
 	};
 	if (dataDeleted)
 	 	callback();
@@ -222,8 +233,6 @@ function sendData(callback, doNotInclude, sync) {
 			callback();
 		return;
 	}
-	if (localStorage.serial == serialLimit)
-		localStorage.serial = 1;
 	console.log("serial "+localStorage.serial);
 	current.updateAll(function() {
 		console.log("sending sets #### " + current.info.windows.length);
@@ -240,8 +249,8 @@ function sendData(callback, doNotInclude, sync) {
 			data: {
 				user: localStorage.getItem("username"),
 				pass: localStorage.getItem("password"),
-				serial: localStorage.serial++, // is here for cases when a few requests 
-				//are sent before a response is sent
+				serial: localStorage.serial,
+				version: localStorage.version,
 				dataFromClient: encryptedData
 			},
 			success: function(data) {
@@ -249,16 +258,6 @@ function sendData(callback, doNotInclude, sync) {
 					console.log("data from server: " + data);
 					networkDown = false;
 				} else if (data != "" && data.charAt(0) == '{') { //means there was a conflict
-					console.log("got conflict")
-					if (networkDown) {
-						networkDown = false;
-						//try again with serial +1 (done automatically)
-						//since it may not be a conflict if maybe the last request went through
-						console.log("trying again with serial + 1");
-						sendData();
-						return;
-					}
-					localStorage.serial = 1;
 					console.log("conflict - update rejected");
 					var answer = confirm("looks like the cloud has more up-to-date data." +
 					" would you like to load the windows from the cloud?");
@@ -272,9 +271,6 @@ function sendData(callback, doNotInclude, sync) {
 					}
 				} else {//probably means the network is down
 					console.log("probably network down");
-					console.log(data);
-					networkDown = true;
-					localStorage.serial--;
 					current.deSerialize();
 					//so update will happen even if nothing has changed
 				}
@@ -285,11 +281,12 @@ function sendData(callback, doNotInclude, sync) {
 			},
 			error: function(error) {
 				errorFunction(error);
-				localStorage.serial--;
 			}
 		});
 	}, doNotInclude);
 }
+
+function getRandomSerial() { return Math.floor(Math.random()*100000); }
 
 //asks the server for the data for the specific user and then 
 //sets the data as the current session. Username and password are sent again.
@@ -300,13 +297,17 @@ function receiveData(successCallback, sync, username, password, portSession,
 		username = localStorage.getItem("username");
 		password = localStorage.getItem("password");
 	}
+	if (!localStorage.serial)
+		localStorage.serial = getRandomSerial();
 	$.ajax({
 		//since the server sends the data
 		url: server + "/SendData",
 		async: !sync,
 		data: {
 			user: username,
-			pass: password
+			pass: password,
+			version: localStorage.version,
+			serial: localStorage.serial
 		},
 		success: function(data) {
 			try {
@@ -315,7 +316,6 @@ function receiveData(successCallback, sync, username, password, portSession,
 				console.log("wasn't a JSON");
 				return;
 			}
-			localStorage.serial = 1;
 			setMDK(password, data.salt)
 			console.log("MASTER DATA KEY: " + MDK);
 			data.info = tools.decrypt(data.info, MDK)
