@@ -1,4 +1,5 @@
 package backend;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Logger;
@@ -25,7 +26,7 @@ public class ReceiveData extends HttpServlet {
                       HttpServletResponse response)
         throws IOException, ServletException
     {
-    	logger.finest("inside do get");
+    	logger.severe("inside do get");
     	//reading the cookies as json
     	String reqString = request.getParameter("dataFromClient");
     	String username = request.getParameter("user");
@@ -42,7 +43,8 @@ public class ReceiveData extends HttpServlet {
     	try {
     		serial = Integer.parseInt(request.getParameter("serial"));
     	} catch (NumberFormatException e){
-    		response.sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - serial missing - update was rejected");
+    		response.sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - serial missing" +
+    				" - update was rejected");
 			return;
     	}
 
@@ -60,7 +62,11 @@ public class ReceiveData extends HttpServlet {
     		return;
     	}
     	User u = DatabaseInteraction.getUser(username);
-    	if (version != 0 && serial != u.getSerial()){
+    	if (version == 0)
+    		u.setSerial(-1);
+    	else if (u.getSerial() == -1)
+    		u.setSerial(serial);
+    	else if (serial != u.getSerial()){
 			u.setSerial(serial);
 			boolean succ = DatabaseInteraction.updateOrSaveUser(u);
 			if (!succ)

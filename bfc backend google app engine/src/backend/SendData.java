@@ -58,12 +58,13 @@ public class SendData extends HttpServlet {
        		return;
        	}
         User u = DatabaseInteraction.getUser(username);
-        if (version != 0){
+        if (version != 0)
         	u.setSerial(serial);
-        	boolean succ = DatabaseInteraction.updateOrSaveUser(u);
-        	if (!succ)
-        		logger.severe("failed to update serial of user");
-        }
+        else
+        	u.setSerial(-1);
+    	boolean succ = DatabaseInteraction.updateOrSaveUser(u);
+    	if (!succ)
+    		logger.severe("failed to update serial of user");
         JSONObject json = DatabaseInteraction.newJSONInstance();
         try {
 			json.append("info", u.getInfo());
