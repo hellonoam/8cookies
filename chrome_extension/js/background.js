@@ -24,6 +24,10 @@ if (tools.isLoggedIn()) {
 
 localStorage.version = getVersion();
 
+if (parseFloat(localStorage.version) < 0.61) {
+	localStorage.serial = getRandomSerial();
+}
+
 function getVersion() {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
