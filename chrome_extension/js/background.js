@@ -22,11 +22,11 @@ if (tools.isLoggedIn()) {
 	current.updateAll();
 }
 
-localStorage.version = getVersion();
-
-if (parseFloat(localStorage.version) < 0.61) {
+if (!localStorage.version || parseFloat(localStorage.version) < 0.76) {
 	localStorage.serial = getRandomSerial();
 }
+
+localStorage.version = getVersion();
 
 function getVersion() {
 	var xhr = new XMLHttpRequest();
