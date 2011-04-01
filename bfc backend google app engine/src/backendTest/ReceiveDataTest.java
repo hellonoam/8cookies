@@ -51,27 +51,10 @@ public class ReceiveDataTest {
         reqString = "{'cookies':[{'domain':'.google.com'}]}";
         
         //expectations
+        when(request.getParameter("version")).thenReturn("0.8");
         when(request.getParameter("user")).thenReturn(username);
         when(request.getParameter("pass")).thenReturn(password);
         when(response.getWriter()).thenReturn(out);
-	}
-
-	@Test
-	public void testBadData() throws IOException, ServletException{
-		//expectations
-        when(request.getParameter("dataFromClient")).thenReturn(null, "");
-        when(request.getParameter("serial")).thenReturn("1");
-        //TODO: check when string is definitely not a json
-
-        //execute
-        new ReceiveData().doPost(request, response);
-        new ReceiveData().doPost(request, response);
-
-        //verifiers
-        verify(response, times(2)).sendError(HttpServletResponse.SC_BAD_REQUEST, 
-		"data was not received in correct format");
-        PowerMockito.verifyStatic(never());
-        DatabaseInteraction.getUser(anyString());
 	}
 
 	@Test
@@ -97,10 +80,11 @@ public class ReceiveDataTest {
 		//expectations
         when(request.getParameter("dataFromClient")).thenReturn(reqString);
         when(DatabaseInteraction.authenticate(username, password)).thenReturn(
-        		new AuthenticationResponse(0));
+        		new AuthenticationResponse(AuthenticationResponse.VALID));
         when(DatabaseInteraction.getUser(username)).thenReturn(u);
+        when(u.getSerial()).thenReturn(10);
         when(DatabaseInteraction.updateOrSaveUser(u)).thenReturn(update);
-        when(request.getParameter("serial")).thenReturn("1");
+        when(request.getParameter("serial")).thenReturn("10");
 
         //execute
         new ReceiveData().doPost(request, response);
@@ -130,12 +114,12 @@ public class ReceiveDataTest {
 	}
 
 	@Test
-	public void testSerial() throws IOException, ServletException{
+	public void testSerialConflict() throws IOException, ServletException{
 		when(request.getParameter("serial")).thenReturn("5");
 		when(request.getParameter("dataFromClient")).thenReturn(reqString);
 		when(DatabaseInteraction.getUser(username)).thenReturn(u);
 		when(DatabaseInteraction.authenticate(username, password)).thenReturn(
-				new AuthenticationResponse(0));
+				new AuthenticationResponse(AuthenticationResponse.VALID));
 		when(DatabaseInteraction.newJSONInstance()).thenReturn(json);
 		String info = "info";
 		String salt = "salt";
@@ -159,12 +143,32 @@ public class ReceiveDataTest {
 	}
 
 	@Test
+	public void testSerialNoConflict() throws IOException, ServletException{
+		when(request.getParameter("serial")).thenReturn("5");
+		when(request.getParameter("dataFromClient")).thenReturn(reqString);
+		when(DatabaseInteraction.getUser(username)).thenReturn(u);
+		when(DatabaseInteraction.updateOrSaveUser(u)).thenReturn(true);
+		when(DatabaseInteraction.authenticate(username, password)).thenReturn(
+				new AuthenticationResponse(AuthenticationResponse.VALID));
+		when(DatabaseInteraction.newJSONInstance()).thenReturn(json);
+		when(u.getSerial()).thenReturn(5);
+		
+		//execute
+        new ReceiveData().doPost(request, response);
+        
+        //verifiers
+		verify(response).setContentType("text/html");
+		verify(out).println("received");
+		verify(out).close();
+	}
+
+	@Test
 	public void testNoSerialReceived() throws IOException, ServletException{
 		
 		//execute
         new ReceiveData().doPost(request, response);
         
         //verifiers
-        verify(response).sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - update was rejected");
+        verify(response).sendError(HttpServletResponse.SC_CONFLICT, "serial conflict - serial missing - update was rejected");
 	}
 }

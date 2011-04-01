@@ -62,7 +62,7 @@ public class SignUp extends HttpServlet {
     }
     
     private boolean validUsernameAndPassword(String username, String password) {
-		return username.length() > 4;	
+		return username.length() > 4 && password.length() > 4;
 	}
     
     /**

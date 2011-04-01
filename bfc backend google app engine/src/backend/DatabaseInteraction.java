@@ -72,25 +72,25 @@ public class DatabaseInteraction {
     	PersistenceManager pm = PMF.get().getPersistenceManager();
     	User u = getUser(username);
     	if (u == null){
-    		return new AuthenticationResponse(1); //doesn't exist
+    		return new AuthenticationResponse(AuthenticationResponse.DOESNOTEXIST); //doesn't exist
     	}
     	if (!u.canTryPasswordNow()){
-			return new AuthenticationResponse(3, u.getWaitTime());
+			return new AuthenticationResponse(AuthenticationResponse.BLOCKED, u.getWaitTime());
     	}
     	if (!u.comparePassword(password)){
         	u.incrementLoginTriesAndUpdateTime();
         	if (u.loginTriesOverLimit()){
         		u.blockTry();
         		pm.makePersistent(u);
-        		return new AuthenticationResponse(3, u.getWaitTime());
+        		return new AuthenticationResponse(AuthenticationResponse.BLOCKED, u.getWaitTime());
         	}
     		pm.makePersistent(u);
-    		return new AuthenticationResponse(2);//wrong password
+    		return new AuthenticationResponse(AuthenticationResponse.WRONGPASS);//wrong password
     	}
     	u.resetLoginTries();
     	u.updateSuccessLoginTime();
     	pm.makePersistent(u);
-    	return new AuthenticationResponse(0); //correct password
+    	return new AuthenticationResponse(AuthenticationResponse.VALID); //correct password
     }
     
     /**

@@ -50,13 +50,13 @@ public class ReceiveData extends HttpServlet {
 
     	logger.fine("serial " + serial);
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
-    	if (auth.getResponseType() == 3){
+    	if (auth.getResponseType() == AuthenticationResponse.BLOCKED){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
     				+ auth.getWaitTime());
        		logger.fine("wrong passwrod too many times");
     		return;
     	}
-    	if (auth.getResponseType() != 0){
+    	if (auth.getResponseType() != AuthenticationResponse.VALID){
         	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "received incorrect credentials");
        		logger.fine("received incorrect credentials");
     		return;

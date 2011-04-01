@@ -32,6 +32,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>FailedToReproduceURL</servlet-name>
 		<servlet-class>backend.FailedToReproduceURL</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>StrippedURLs</servlet-name>
+		<servlet-class>backend.StrippedURLs</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>ReceiveData</servlet-name>
 		<url-pattern>/ReceiveData</url-pattern>
@@ -59,6 +63,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-mapping>
 		<servlet-name>FailedToReproduceURL</servlet-name>
 		<url-pattern>/FailedToReproduceURL</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>StrippedURLs</servlet-name>
+		<url-pattern>/StrippedURLs</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
