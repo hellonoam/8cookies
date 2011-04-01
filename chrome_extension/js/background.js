@@ -9,16 +9,14 @@ var idleInterval = 600; //600 every 10 minutes
 
 var serialLimit = 30000;
 
-//bit of a hack
-var networkDown = false;
-
 var MDK;
 //for cases when the browser is re-opened and user is still logged in
 if (tools.isLoggedIn()) {
 	autoSendData();
 	if (!localStorage.serial)
 		localStorage.serial = getRandomSerial();
-	MDK = JSON.parse(localStorage.getItem("MDK"));
+	if (localStorage.MDK)
+		MDK = JSON.parse(localStorage.MDK);
 	current.updateAll();
 }
 
@@ -260,7 +258,6 @@ function sendData(callback, doNotInclude, sync) {
 			success: function(data) {
 				if ($.trim(data).toLowerCase() == "received") {
 					console.log("data from server: " + data);
-					networkDown = false;
 				} else if (data != "" && data.charAt(0) == '{') { //means there was a conflict
 					console.log("conflict - update rejected");
 					var answer = confirm("looks like the cloud has more up-to-date data." +
@@ -276,7 +273,7 @@ function sendData(callback, doNotInclude, sync) {
 				} else {//probably means the network is down
 					console.log("probably network down");
 					current.deSerialize();
-					//so update will happen even if nothing has changed
+					//so update will happen next time even if nothing has changed
 				}
 			},
 			complete: function(xhr, status) {
@@ -298,7 +295,7 @@ function receiveData(successCallback, sync, username, password, portSession,
 	doNotInclude, checkIfUpdateNeeded, merge) {
 	console.log("in receiveData");
 	if (!username && !password){
-		username = localStorage.getItem("username");
+		username = localStorage.getItem("username"); //TODO: change this to username ||= local....
 		password = localStorage.getItem("password");
 	}
 	if (!localStorage.serial)
@@ -320,7 +317,8 @@ function receiveData(successCallback, sync, username, password, portSession,
 				console.log("wasn't a JSON");
 				return;
 			}
-			setMDK(password, data.salt)
+			if (!MDK) //check this
+				setMDK(password, data.salt)
 			console.log("MASTER DATA KEY: " + MDK);
 			data.info = tools.decrypt(data.info, MDK)
 			if (successCallback)
