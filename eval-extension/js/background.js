@@ -1,6 +1,6 @@
 var inputArr;
 
-function autoLogin() {
+function autoLogin(start) {
 	tools.deleteCookies();
 	if (!input) {
 		throw "input wasn't not detected";
@@ -9,9 +9,10 @@ function autoLogin() {
 	inputArr = input.split('\n');
 	$(inputArr).each(function(index, value) {
 		inputArr[index] = value.split("	");
-		if (index < 20 && index >= 10) {
+		start = parseInt(start);
+		if (index < start+10 && index >= start) {
 			loginToArray(index);
-			sleep(5000);
+			// sleep(5000); //doesn't help
 		}
 	});
 }
@@ -25,6 +26,7 @@ function open(index) {
 }
 
 function loginTo(url, username, password) {
+	console.log(url);
 	chrome.tabs.create({ url: url }, function(tab) {
 		inject(tab.id, "doLogin('" + username + "', '" + password + "')");
 		console.log("tab id " + tab.id);
