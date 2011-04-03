@@ -18,7 +18,7 @@ tools = {
 			newCookie.secure = current.secure;
 			newCookie.httpOnly = current.httpOnly;
 			if (!current.session)
-				newCookie.expirationDate = current.expirationData;
+				newCookie.expirationDate = current.expirationDate;
 			newCookie.storeId = current.storeId;
 			chrome.cookies.set(newCookie);
 		}
