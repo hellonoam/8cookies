@@ -7,9 +7,20 @@ var sendDataIntervalId;
 var sendInterval = 120000; //120000 every 2 minutes
 var idleInterval = 600; //600 every 10 minutes
 
-var serialLimit = 30000;
-
 var MDK;
+
+var dd;
+// (function open(from) {
+// 	if (from > 75000) return;
+// 	chrome.tabs.create(
+// 		{url: "http://www.8cookies.com/StrippedURLs?start=" + from + "&end=" + (from + 1000) },
+// 		function() {
+// 			open(from+1000);
+// 		}
+// 	);
+// })(61000);
+
+
 //for cases when the browser is re-opened and user is still logged in
 if (tools.isLoggedIn()) {
 	autoSendData();
@@ -190,6 +201,7 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		localStorage.setItem("MDK", "");
 		localStorage.setItem("windows", "");
 		localStorage.setItem("serial", "");
+		MDK = [];
 	};
 	if (dataDeleted)
 	 	callback();
@@ -239,7 +251,16 @@ function sendData(callback, doNotInclude, sync) {
 	current.updateAll(function() {
 		console.log("sending sets #### " + current.info.windows.length);
 		var dataToSend = current.serialize();
-		var encryptedData = tools.encrypt(dataToSend, MDK);
+
+		//compression then converted to a string from a byte array
+		dataToSend = Iuppiter.Base64.encode(Iuppiter.compress(dataToSend), true);
+
+		// adding meta data to compressed versions
+		var jsonDataToSend = {};
+		jsonDataToSend.data = dataToSend;
+		jsonDataToSend.compressed = true;
+
+		var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), MDK);
 		console.log("encrypted data length = " + encryptedData.length);
 		$.ajax({
 			type: "POST",
@@ -317,10 +338,12 @@ function receiveData(successCallback, sync, username, password, portSession,
 				console.log("wasn't a JSON");
 				return;
 			}
-			if (!MDK) //check this
-				setMDK(password, data.salt)
+			setMDK(password, data.salt)
 			console.log("MASTER DATA KEY: " + MDK);
-			data.info = tools.decrypt(data.info, MDK)
+			data.info = tools.decrypt(data.info, MDK);
+			data.info = getDecompressedData(data.info);
+			dd = data.info;
+			console.log(data.info);
 			if (successCallback)
 				successCallback();
 			if (portSession)
@@ -351,8 +374,32 @@ function receiveData(successCallback, sync, username, password, portSession,
 	});
 }
 
+//decompresses the data if is was compressed beforehand otherwise the data is returns unmodified
+function getDecompressedData(dataCompressedOrNot) {
+	try {
+		var json = JSON.parse(dataCompressedOrNot);
+		if (json.compressed) {
+		//decompress the data by first converting to byte array then base62
+			var s =  Iuppiter.decompress(Iuppiter.Base64.decode(
+						Iuppiter.toByteArray(json.data), true));
+			//bit of a hack but for some reason this process adds two empty chars at the end of the
+			//string which makes it fail when parsing
+			console.log("data decompressed successfully");
+			return s.substring(0, 1 + s.lastIndexOf('}'))
+		}
+		//otherwise the data is not compressed
+		console.log("data was a json but not compressed");
+		return dataCompressedOrNot;
+	} catch(err) {
+		console.log("error - data was not a json");
+		return dataCompressedOrNot;
+	}
+}
+
 //generates the master data key and stores it in localstorage
 function setMDK(password, salt){
+	console.log("in setMDK");
+	console.log("password " + password + " salt " + salt);
 	MDK = tools.getMasterDataKey(password, salt);
 	localStorage.setItem("MDK", JSON.stringify(MDK));
 }

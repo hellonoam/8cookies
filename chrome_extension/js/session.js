@@ -132,6 +132,6 @@ session.prototype.deSerializeAndApply = function(data, doNotInclude, merge) {
 		this.deSerialize(data);
 		this.applyAll(null, doNotInclude, merge);
 	} catch (err) {
-		console.log("failed to deSerialize data");
+		console.log("failed to deSerialize data " + err);
 	}
 }
