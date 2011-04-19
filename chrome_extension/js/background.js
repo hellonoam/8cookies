@@ -9,7 +9,6 @@ var idleInterval = 600; //600 every 10 minutes
 
 var MDK;
 
-var dd;
 // (function open(from) {
 // 	if (from > 75000) return;
 // 	chrome.tabs.create(
@@ -196,11 +195,11 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		current = old;
 		if (!notApply)
 			old.applyAll(null, doNotInclude);
-		localStorage.setItem("username", "");
-		localStorage.setItem("password", "");
-		localStorage.setItem("MDK", "");
-		localStorage.setItem("windows", "");
-		localStorage.setItem("serial", "");
+		localStorage.removeItem("username");
+		localStorage.removeItem("password");
+		localStorage.removeItem("MDK");
+		localStorage.removeItem("windows");
+		localStorage.removeItem("serial");
 		MDK = [];
 	};
 	if (dataDeleted)
@@ -249,63 +248,79 @@ function sendData(callback, doNotInclude, sync) {
 	}
 	console.log("serial "+localStorage.serial);
 	current.updateAll(function() {
-		console.log("sending sets #### " + current.info.windows.length);
-		var dataToSend = current.serialize();
-
-		//compression then converted to a string from a byte array
-		dataToSend = Iuppiter.Base64.encode(Iuppiter.compress(dataToSend), true);
-
-		// adding meta data to compressed versions
-		var jsonDataToSend = {};
-		jsonDataToSend.data = dataToSend;
-		jsonDataToSend.compressed = true;
-
-		var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), MDK);
-		console.log("encrypted data length = " + encryptedData.length);
-		$.ajax({
-			type: "POST",
-			//since the server receives the data
-			url: server + "/ReceiveData",
-			cache: false,
-			async: !sync,
-			timeout: 30000,
-			data: {
-				user: localStorage.getItem("username"),
-				pass: localStorage.getItem("password"),
-				serial: localStorage.serial,
-				version: localStorage.version,
-				dataFromClient: encryptedData
-			},
-			success: function(data) {
-				if ($.trim(data).toLowerCase() == "received") {
-					console.log("data from server: " + data);
-				} else if (data != "" && data.charAt(0) == '{') { //means there was a conflict
-					console.log("conflict - update rejected");
-					var answer = confirm("looks like the cloud has more up-to-date data." +
-					" would you like to load the windows from the cloud?");
-					if (answer) {
-						try {
-							current.deSerializeAndApply(
-								tools.decrypt(JSON.parse(data).info, MDK));
-						} catch (err) {
-							console.log("wasn't a JSON");
+		try {
+			console.log("sending sets #### " + current.info.windows.length);
+			var dataToSend = current.serialize();
+        	
+			//compression then converted to a string from a byte array
+			dataToSend = Iuppiter.Base64.encode(Iuppiter.compress(dataToSend), true);
+        	
+			// adding meta data to compressed versions
+			var jsonDataToSend = {};
+			jsonDataToSend.data = dataToSend;
+			jsonDataToSend.compressed = true;
+        	
+			var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), MDK);
+			console.log("encrypted data length = " + encryptedData.length);
+			$.ajax({
+				type: "POST",
+				//since the server receives the data
+				url: server + "/ReceiveData",
+				cache: false,
+				async: !sync,
+				timeout: 30000,
+				data: {
+					user: localStorage.getItem("username"),
+					pass: localStorage.getItem("password"),
+					serial: localStorage.serial,
+					version: localStorage.version,
+					dataFromClient: encryptedData
+				},
+				success: function(data) {
+					if ($.trim(data).toLowerCase() == "received") {
+						console.log("data from server: " + data);
+					} else if (data != "" && data.charAt(0) == '{') { //means there was a conflict
+						console.log("conflict - update rejected");
+						var answer = confirm("looks like the cloud has more up-to-date data." +
+						" would you like to load the windows from the cloud?");
+						if (answer) {
+							try {
+								current.deSerializeAndApply(
+									tools.decrypt(JSON.parse(data).info, MDK));
+							} catch (err) {
+								console.log("wasn't a JSON");
+							}
 						}
+					} else {//probably means the network is down
+						console.log("probably network down");
+						current.deSerialize();
+						//so update will happen next time even if nothing has changed
 					}
-				} else {//probably means the network is down
-					console.log("probably network down");
-					current.deSerialize();
-					//so update will happen next time even if nothing has changed
+				},
+				complete: function(xhr, status) {
+					if (callback)
+						callback();
+				},
+				error: function(error) {
+					errorFunction(error);
 				}
-			},
-			complete: function(xhr, status) {
-				if (callback)
-					callback();
-			},
-			error: function(error) {
-				errorFunction(error);
-			}
-		});
+			});
+		} catch(err) {
+			console.log("ERROR: " + err);
+			sendErrorToServer(err, "in send data");
+		}
 	}, doNotInclude);
+}
+
+function sendErrorToServer(err, place) {
+	$.ajax({
+		url: server + "/Error",
+		cache: false,
+		data: {
+			user: localStorage.getItem("username"),
+			error: place + " error: " + err
+		}
+	});
 }
 
 function getRandomSerial() { return Math.floor(Math.random()*100000); }
@@ -342,8 +357,6 @@ function receiveData(successCallback, sync, username, password, portSession,
 			console.log("MASTER DATA KEY: " + MDK);
 			data.info = tools.decrypt(data.info, MDK);
 			data.info = getDecompressedData(data.info);
-			dd = data.info;
-			console.log(data.info);
 			if (successCallback)
 				successCallback();
 			if (portSession)
