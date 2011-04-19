@@ -40,6 +40,7 @@ public class ReceiveData extends HttpServlet {
         	logger.severe("version was missing");
         }
     	int serial = -1;
+    	logger.severe("got request from: " + username + " version: " + version);
     	try {
     		serial = Integer.parseInt(request.getParameter("serial"));
     	} catch (NumberFormatException e){

@@ -30,5 +30,9 @@ public class URL {
     public String toString(){
     	return URL;
     }
+    
+    public String getKey(){
+    	return key.toString();
+    }
 
 }
