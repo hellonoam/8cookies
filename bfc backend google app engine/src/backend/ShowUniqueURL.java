@@ -2,6 +2,7 @@ package backend;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,6 +23,7 @@ public class ShowUniqueURL extends HttpServlet {
     	PersistenceManager pm = PMF.get().getPersistenceManager();
     	Query query = pm.newQuery(UniqueURL.class);
     	query.setOrdering("counter descending");
+    	List<UniqueURL> http = new LinkedList<UniqueURL>();
     	try{
     		List<UniqueURL> urls = ((List<UniqueURL>) query.execute());
     		response.setContentType("text/html");
@@ -29,7 +31,14 @@ public class ShowUniqueURL extends HttpServlet {
             out.println("unique urls: <br/>");
             out.println(urls.size() + "<br/>");
         	for (UniqueURL u: urls){
-        		out.println(u.toString() + " <br/>");
+        		if (u.toString().contains("https"))
+        			out.println(u.toString() + "<br/>");
+        		else
+        			http.add(u);
+        	}
+        	out.println("http::::");
+        	for (UniqueURL u: http){
+        		out.println(u.toString() + "<br/>");
         	}
         	out.close();
     	} finally {

@@ -1,23 +1,5 @@
-What's left:
-
-1 - fix db bug
-2 - users
-3 - saving cookies locally
-2 - open/close tabs
-2 - signups
-4 - unit tests
-4 - automatic sync - client
-2 - add serial number to requests
-3 - logging users
-4 - encryption
-
-1 - index database
-2 - beta testers
-
-evaluation:
-2 - write survey
-3 - build user study
-3 - conduct user study
-3 - extract valuable information from logs
-
-10 - writing dissertation
+- change conflict to ask for new session
+- add a sync-now button (last synced 3 minutes ago...)
+- add a disable sync button
+- polish background.js
+- change encryption method

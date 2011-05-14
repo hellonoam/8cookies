@@ -4,7 +4,7 @@ var current = new session();
 var sendDataIntervalId;
 
 //interval for sending and receiving data
-var sendInterval = 120000; //120000 every 2 minutes
+var sendInterval = 180000; //120000 every 3 minutes
 var idleInterval = 600; //600 every 10 minutes
 
 var MDK;
@@ -286,7 +286,10 @@ function sendData(callback, doNotInclude, sync) {
 						if (answer) {
 							try {
 								current.deSerializeAndApply(
-									tools.decrypt(JSON.parse(data).info, MDK));
+									getDecompressedData(
+										tools.decrypt(JSON.parse(data).info, MDK)
+									)
+								);
 							} catch (err) {
 								console.log("wasn't a JSON");
 							}
@@ -312,6 +315,7 @@ function sendData(callback, doNotInclude, sync) {
 	}, doNotInclude);
 }
 
+//sends an error message to the server, with the error err, and the place where it occurred place
 function sendErrorToServer(err, place) {
 	$.ajax({
 		url: server + "/Error",
@@ -328,7 +332,7 @@ function getRandomSerial() { return Math.floor(Math.random()*100000); }
 //asks the server for the data for the specific user and then 
 //sets the data as the current session. Username and password are sent again.
 function receiveData(successCallback, sync, username, password, portSession,
-	doNotInclude, checkIfUpdateNeeded, merge) {
+	doNotInclude, notApply, merge) {
 	console.log("in receiveData");
 	if (!username && !password){
 		username = localStorage.getItem("username"); //TODO: change this to username ||= local....
@@ -347,32 +351,30 @@ function receiveData(successCallback, sync, username, password, portSession,
 			serial: localStorage.serial
 		},
 		success: function(data) {
+			if (notApply)
+				return;
 			try {
 				data = JSON.parse(data);
 			} catch (err) {
 				console.log("wasn't a JSON");
+				sendErrorToServer("data received from server wasn't a json", "in receiveData");
 				return;
 			}
-			setMDK(password, data.salt)
-			console.log("MASTER DATA KEY: " + MDK);
-			data.info = tools.decrypt(data.info, MDK);
-			data.info = getDecompressedData(data.info);
-			if (successCallback)
-				successCallback();
-			if (portSession)
-				return;
-			if (checkIfUpdateNeeded) {
-				current.updateAll(function() {
-					if (JSON.stringify(current.info) == JSON.stringify(
-								JSON.parse(data.info)))
-						return;
-					current.deSerializeAndApply(data.info, doNotInclude, merge);
-				});
-			} else {
+			try {
+				setMDK(password, data.salt)
+				console.log("MASTER DATA KEY: " + MDK);
+				data.info = tools.decrypt(data.info, MDK);
+				data.info = getDecompressedData(data.info);
+				if (successCallback)
+					successCallback();
+				if (portSession)
+					return;
 				current.deSerializeAndApply(data.info, doNotInclude, merge);
 				console.log("length in receivedata ****** " + current.info.windows.length);
+				localStorage.setItem("tooManyTries", "false");
+			} catch(err) {
+				sendErrorToServer(err, "in receiveData");
 			}
-			localStorage.setItem("tooManyTries", "false");
 		},
 		error: function(error) {
 			localStorage.setItem("tooManyTries", "false");
@@ -405,6 +407,7 @@ function getDecompressedData(dataCompressedOrNot) {
 		return dataCompressedOrNot;
 	} catch(err) {
 		console.log("error - data was not a json");
+		sendErrorToServer(err, "in getDecompressedData");
 		return dataCompressedOrNot;
 	}
 }
@@ -415,13 +418,6 @@ function setMDK(password, salt){
 	console.log("password " + password + " salt " + salt);
 	MDK = tools.getMasterDataKey(password, salt);
 	localStorage.setItem("MDK", JSON.stringify(MDK));
-}
-
-//receives data from server only if it is needed, i.e., something was changed.
-//In practice this fail because of network latency, by the time the response
-//comes back, the state has almost certainly changed.
-function receiveDataIfNeeded() {
-	receiveData(null,null,null,null,null,null,true);
 }
 
 //deletes all information from the server.

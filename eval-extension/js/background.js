@@ -1,7 +1,6 @@
 var inputArr;
 
-function autoLogin(start) {
-	tools.deleteCookies();
+function autoLogin(start, end) {
 	if (!input) {
 		throw "input wasn't not detected";
 		return;
@@ -10,9 +9,8 @@ function autoLogin(start) {
 	$(inputArr).each(function(index, value) {
 		inputArr[index] = value.split("	");
 		start = parseInt(start);
-		if (index < start+10 && index >= start) {
+		if (index < end && index >= start) {
 			loginToArray(index);
-			// sleep(5000); //doesn't help
 		}
 	});
 }

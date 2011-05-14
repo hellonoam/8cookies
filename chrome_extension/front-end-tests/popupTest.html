@@ -39,11 +39,12 @@
 
 			//testing for login click
 			stub(this, "userLoggedIn", function(usernameReceived) {
-				equal($(".result").text(), "", "result is empty on good response")
+				equal($(".result").text(), "verifying", "result is empty on good response")
 				equal(usernameReceived, data[0],
 					"good response from bg on login");
 			});
-			var realData = { type: "login", username: data[0], password: data[1] };
+			var realData = { type: "login", username: data[0],
+			                 password: data[1], "merge": undefined };
 			stub(chrome.extension, "sendRequest", function(data, callback) {
 				deepEqual(data, realData, "data passed to background page on login");
 				callback({ success: true });
@@ -51,7 +52,7 @@
 				equal($(".result").text(), "wrong username or password",
 						"bad response from bg on login");
 			});
-			$(".login").click()
+			$(".login").click();
 		});
 	});
   </script>
