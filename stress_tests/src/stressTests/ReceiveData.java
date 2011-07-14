@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This servlet receives data from the user and stores it in the db 
+ * This servlet receives data from the user and sends data to the client that is not expected
+ * in order to test how the front-end reacts
  *
  * @author Noam Szpiro
  */

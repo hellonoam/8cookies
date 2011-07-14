@@ -170,6 +170,7 @@ tools = {
 
 	//decrypts the ciphertext with the master data key
 	decrypt: function(ciphertext, MDK) {
+	    if (ciphertext == "") return "";
 		// console.log("in decrypt");
 		if (ciphertext instanceof Array) ciphertext = ciphertext[0];
 		if (!ciphertext || ciphertext == "") return "";

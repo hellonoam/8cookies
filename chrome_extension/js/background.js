@@ -4,10 +4,11 @@ var current = new session();
 var sendDataIntervalId;
 
 //interval for sending and receiving data
-var sendInterval = 180000; //120000 every 3 minutes
+var sendInterval = 300000; //300000 every 5 minutes
 var idleInterval = 600; //600 every 10 minutes
 
 var MDK;
+var lastSync = new Date();
 
 // (function open(from) {
 // 	if (from > 75000) return;
@@ -22,7 +23,7 @@ var MDK;
 
 //for cases when the browser is re-opened and user is still logged in
 if (tools.isLoggedIn()) {
-	autoSendData();
+	autoSendDataAndIdleListener();
 	if (!localStorage.serial)
 		localStorage.serial = getRandomSerial();
 	if (localStorage.MDK)
@@ -51,7 +52,7 @@ if (!localStorage.restore){
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
-		console.log("received message " + request.type);
+        console.log("received message " + request.type);
 		switch (request.type) {
 			case "nameSet":
 				nameSet(request.index, request.name);
@@ -93,11 +94,9 @@ chrome.extension.onRequest.addListener(
 			    sendResponse({ result: tools.isLoggedIn(),
 							   username: localStorage.getItem("username") });
 				return; // return since the response is sent here
-			case "failedToReproduce":
-				chrome.tabs.getSelected(null, function(tab) {
-		    		sendFailedToReproduceURL(tab.url);
-				});
-				break;
+			case "sync":
+				syncNow();
+				return;
 			case "testing":
 			//converting the string function into a function and running it
 				var f = eval("(" + request.stringFunction + ")");
@@ -136,39 +135,60 @@ function login(username, nakedPass, portSession, doNotInclude, merge) {
 		var s = new session();
 		localStorage.setItem("username", username);
 		localStorage.setItem("password", password);
+		localStorage.setItem("nakedPass", nakedPass);
 		console.log("user logged in");
 		s.updateAll(function() {
 			localStorage.setItem("oldSession", s.serialize());
 		}, doNotInclude);
-	}, true, username, password, portSession, doNotInclude, undefined, merge);
+	}, true, username, password, portSession, doNotInclude, undefined, merge, nakedPass);
 
 	if (!tools.isLoggedIn())
 		return false;
 
-	autoSendData();
+    lastSync = new Date();
+	autoSendDataAndIdleListener();
 	return true;
 }
+
+function sendDataIfNeeded() {
+	console.log("sendDataIfNeeded was called after " + elapsedSinceLastSync());
+	lastSync = new Date();
+	var s = new session();
+	chrome.idle.queryState(idleInterval, function(state) {
+		if (state == "idle")
+			return;
+		//session is active
+		//checking if something has changed since the last sync
+		s.updateAll(function() {
+			if ( JSON.stringify(s.info) != JSON.stringify(current.info) ) {
+				sendData();
+			}
+		});
+	});
+};
 
 //setting up automatic data sending
 function autoSendData() {
 	// sending data to server every fixed number of minutes
-	sendDataIntervalId = setInterval(function() {
-		console.log("send-data-interval was called");
-		var s = new session();
-		chrome.idle.queryState(idleInterval, function(state) {
-			if (state == "idle")
-				return;
-			//session is active
-			s.updateAll(function() {
-				if ( JSON.stringify(s.info) != JSON.stringify(current.info) ) {
-					sendData();
-				}
-			});
-		});
-	}, sendInterval);
+	sendDataIntervalId = setInterval(sendDataIfNeeded, sendInterval);
+}
 
-	//logging urls once they are updated
-	chrome.tabs.onUpdated.addListener(urlSender);
+function elapsedSinceLastSync() {
+	var time = Math.round( (new Date() - lastSync) / 1000 );
+	if (time < 60) return "" + time + " seconds";
+	return "" + Math.round(time / 60) + " mins";
+}
+
+function syncNow() {
+    //removing listener
+	clearInterval(sendDataIntervalId);
+	sendDataIfNeeded();
+	//adding listener
+	autoSendData();
+}
+
+function autoSendDataAndIdleListener() {
+	autoSendData();
 	//sending data when the browser is no longer in the idle state
 	chrome.idle.onStateChanged.addListener(idleListener);
 }
@@ -178,15 +198,8 @@ function idleListener() {
 	sendData();
 }
 
-//the listner for update events on urls
-function urlSender(tabId, changeInfo) {
-	if (changeInfo.url)
-		sendVisitedURL(changeInfo.url);
-}
-
 //logs out the user, but sends the session to the server before then
 function logout(dataDeleted, notApply, doNotInclude, sync) {
-	chrome.tabs.onUpdated.removeListener(urlSender);
 	chrome.idle.onStateChanged.removeListener(idleListener);
 	clearInterval(sendDataIntervalId);
 	var callback = function() {
@@ -195,11 +208,11 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		current = old;
 		if (!notApply)
 			old.applyAll(null, doNotInclude);
-		localStorage.removeItem("username");
-		localStorage.removeItem("password");
-		localStorage.removeItem("MDK");
-		localStorage.removeItem("windows");
-		localStorage.removeItem("serial");
+		["username", "password", "MDK", "windows", "serial", "nakedPass"].forEach(
+		    function(value, index) {
+		        localStorage.removeItem(value);
+		    }
+		);
 		MDK = [];
 	};
 	if (dataDeleted)
@@ -217,29 +230,15 @@ function errorFunction(request) {
 	console.log(request.status + ": " + request.statusText);
 }
 
-function sendURLToServer(url, servlet) {
-	console.log("sending url " + url + " to server " + servlet);
-	$.ajax({
-		url: server + servlet,
-		cache: false,
-		data: { url: url },
-		error: errorFunction
-	});
-}
-
-//sends the url to server as a visited url
-function sendVisitedURL(url) {
-	sendURLToServer(url, "/VisitedURL");
-}
-
-//sends the url to server as a failed to reproduce url
-function sendFailedToReproduceURL(url) {
-	sendURLToServer(url, "/FailedToReproduceURL");
-}
-
 //sends the data from the current session to the server
 function sendData(callback, doNotInclude, sync) {
+    var password = localStorage.password;
+    var username = localStorage.username;
+    var serial = localStorage.serial;
+    var version = localStorage.version;
+    var _MDK = MDK;
 	console.log("in sendData");
+	lastSync = new Date();
 	if (!tools.isLoggedIn()) {
 		console.log("user not logged in send data cancelled");
 		if (callback)
@@ -249,9 +248,9 @@ function sendData(callback, doNotInclude, sync) {
 	console.log("serial "+localStorage.serial);
 	current.updateAll(function() {
 		try {
-			console.log("sending sets #### " + current.info.windows.length);
+		    if (callback)
+        		callback();
 			var dataToSend = current.serialize();
-        	
 			//compression then converted to a string from a byte array
 			dataToSend = Iuppiter.Base64.encode(Iuppiter.compress(dataToSend), true);
         	
@@ -260,7 +259,7 @@ function sendData(callback, doNotInclude, sync) {
 			jsonDataToSend.data = dataToSend;
 			jsonDataToSend.compressed = true;
         	
-			var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), MDK);
+			var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), _MDK);
 			console.log("encrypted data length = " + encryptedData.length);
 			$.ajax({
 				type: "POST",
@@ -270,10 +269,10 @@ function sendData(callback, doNotInclude, sync) {
 				async: !sync,
 				timeout: 30000,
 				data: {
-					user: localStorage.getItem("username"),
-					pass: localStorage.getItem("password"),
-					serial: localStorage.serial,
-					version: localStorage.version,
+					user: username,
+					pass: password,
+					serial: serial,
+					version: version,
 					dataFromClient: encryptedData
 				},
 				success: function(data) {
@@ -299,10 +298,6 @@ function sendData(callback, doNotInclude, sync) {
 						current.deSerialize();
 						//so update will happen next time even if nothing has changed
 					}
-				},
-				complete: function(xhr, status) {
-					if (callback)
-						callback();
 				},
 				error: function(error) {
 					errorFunction(error);
@@ -332,7 +327,7 @@ function getRandomSerial() { return Math.floor(Math.random()*100000); }
 //asks the server for the data for the specific user and then 
 //sets the data as the current session. Username and password are sent again.
 function receiveData(successCallback, sync, username, password, portSession,
-	doNotInclude, notApply, merge) {
+	doNotInclude, notApply, merge, nakedPass) {
 	console.log("in receiveData");
 	if (!username && !password){
 		username = localStorage.getItem("username"); //TODO: change this to username ||= local....
@@ -361,8 +356,7 @@ function receiveData(successCallback, sync, username, password, portSession,
 				return;
 			}
 			try {
-				setMDK(password, data.salt)
-				console.log("MASTER DATA KEY: " + MDK);
+				setMDK(nakedPass, data.salt)
 				data.info = tools.decrypt(data.info, MDK);
 				data.info = getDecompressedData(data.info);
 				if (successCallback)
@@ -391,6 +385,7 @@ function receiveData(successCallback, sync, username, password, portSession,
 
 //decompresses the data if is was compressed beforehand otherwise the data is returns unmodified
 function getDecompressedData(dataCompressedOrNot) {
+    if (dataCompressedOrNot == "") return "";
 	try {
 		var json = JSON.parse(dataCompressedOrNot);
 		if (json.compressed) {
@@ -415,8 +410,11 @@ function getDecompressedData(dataCompressedOrNot) {
 //generates the master data key and stores it in localstorage
 function setMDK(password, salt){
 	console.log("in setMDK");
-	console.log("password " + password + " salt " + salt);
+	if (!password || password == "")
+	    throw ("invalid password");
 	MDK = tools.getMasterDataKey(password, salt);
+	if (MDK == [] || MDK == "")
+	    console.log("ERROR: bad MDK");
 	localStorage.setItem("MDK", JSON.stringify(MDK));
 }
 

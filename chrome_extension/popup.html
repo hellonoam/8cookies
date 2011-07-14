@@ -7,19 +7,23 @@
 	<script src="js/popup.js"></script>
 	<script src="js/callInit.js"></script>
 	<div class="title">8cookies</div>
-	<div class="loggedInUser">
-		<p class="inputText"></p>
-		<input type="button" class="logout" value="logout">
-		<p class="failText">if the page selected failed to reproduce (i.e. you were logged out) click fail</p>
+	<div class="loggedInUser"> 
+	    <div>
+		    <p class="inputText"></p>
+		    <input type="button" class="logout" value="logout">
+		</div>
+		<div class="sync">
+		    <p class="syncText"></p>
+		    <input type="button" class="syncButton" value="sync now">
+		</div>
 		<div class="states">
 			<input type="button" class="saveState" value="save state">
-			<input type="button" class="showStates" value="show saved states">
+			<input type="button" class="showStates" value="show states">
 		</div>
-		<input type="button" class="fail" value="FAIL">
 	</div>
 	<div class="whenNotLoggedIn">
 		<div class="usernameDiv inputText">
-			username: <input type="text" class="username typeText enter">
+			username: <input type="text" autofocus class="username typeText enter">
 		</div>
 		<div class="passwordDiv inputText">
 			password: <input type="password" class="password typeText enter">

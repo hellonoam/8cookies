@@ -8,6 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+/**
+ * This servlets accepts signups and send data back that is not expected and not valid to the client
+ * in order to check if it handles it correctely
+ *
+ * @author Noam Szpiro
+ */
 
 @SuppressWarnings("serial")
 public class SignUp extends HttpServlet {

@@ -1,5 +1,3 @@
-- change conflict to ask for new session
-- add a sync-now button (last synced 3 minutes ago...)
-- add a disable sync button
 - polish background.js
-- change encryption method
+- change conflict to ask for new session
+- add a pause sync button

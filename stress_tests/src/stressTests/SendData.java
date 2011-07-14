@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * My test servlet
+ * This servlet sends information to the client that is not expexted and not valid
+ * in order to check if the client will handle the errors gracefully
  *
  * @author Noam Szpiro
  */

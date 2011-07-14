@@ -25,7 +25,7 @@ body {
 	margin-top: 13px;
 }
 
-.login, .logout, .fail, .saveState, .showStates {
+.login, .logout, .syncButton, .saveState, .showStates {
 	border-radius: 4px;
 	border: 1px solid #5C9FC0;
 	background:#5C9FC0;
@@ -37,20 +37,21 @@ body {
 .states {
 	width: 150px;
 	float: left;
-	margin-top: 10px;
-	margin-left: 18px;
+	margin-top: 15px;
+	margin-left: 28px;
 }
 
 .options {
 	margin-top: 10px;
 }
 
-.fail {
-	float:right;
-	margin-top:0px;
-	border: 1px solid #872020;
-	background: #872020;
-	font-size: 50%;
+.syncButton {
+ 	border: 1px solid white;
+ 	background: white;
+ 	color: #563c12;
+ 	text-decoration: underline;
+ 	margin: 6px;
+ 	margin-left: 4px;
 }
 
 .result {
@@ -63,12 +64,8 @@ body {
 	margin-left:30px;
 }
 
-.logout {
-	float:right;
-	margin-right:30px;
-}
 
-.failText {
+.syncText {
 	font-size: 75%;
 }
 
@@ -111,4 +108,14 @@ body {
 .inputText {
 	font-weight: bold;
 	font-size: 1em;
+}
+
+.saveState {
+    float:left;
+    margin: 0px;
+}
+
+.showStates {
+    float: right;
+    margin: 0px;
 }

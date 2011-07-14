@@ -22,6 +22,12 @@ function init() {
 				userLoggedOut();
 		}
 	);
+
+    setInterval(function() {
+        $(".syncText").text("synced " + 
+            chrome.extension.getBackgroundPage().elapsedSinceLastSync() + " ago...");
+    }, 1000);
+
 	//maps enter to submit
 	$(".enter").keypress(function(event) {
 		if (event.charCode == 13)
@@ -58,17 +64,32 @@ function init() {
 		chrome.extension.sendRequest({ type: "logout" });
 		userLoggedOut();
 	});
-	$(".fail").click(function() {
-		chrome.extension.sendRequest({ type: "failedToReproduce" });
-		$(".fail").hide();
-		$(".failText").text("thanks, we'll try to make it producible")
+
+	//used to disable sync after the first click for the situations 
+	//where someone clicks twice in a tow
+	var synced = false;
+	$(".syncButton").click(function() {
+	    if (!synced) {
+		    chrome.extension.sendRequest({ type: "sync" });
+		    $(".syncButton").val("synced");
+		    synced = true;
+		}
 	});
+
+	var showed = false;
 	$(".showStates").click(function() {
-		chrome.tabs.create({url:chrome.extension.getURL('states.html')});
+	    if (!showed)
+		    chrome.tabs.create({url:chrome.extension.getURL('states.html')});
+		showed = true;
 	});
+
+	var saved = false;
 	$(".saveState").click(function() {
-		chrome.extension.sendRequest({ type: "saveNewWindowsSet" });
-		$(".saveState").val("saved!");
+	    if (!saved) {
+		    chrome.extension.sendRequest({ type: "saveNewWindowsSet" });
+		    $(".saveState").val("saved!");
+		    saved = true;
+	    }
 	});
 	$(".signup").click(function() {
 		chrome.tabs.create({url:chrome.extension.getURL('signup.html')});
