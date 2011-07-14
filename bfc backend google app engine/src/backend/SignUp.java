@@ -8,7 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * This servlet accepts signup requests
+ * 
+ * @author Noam Szpiro
+ */
 @SuppressWarnings("serial")
 public class SignUp extends HttpServlet {
 	private Logger logger = Logger.getLogger(SignUp.class.getName()); 
@@ -18,12 +22,14 @@ public class SignUp extends HttpServlet {
         throws IOException, ServletException
     {
     	logger.finest("inside do get");
+		//reads the params of this request
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
     	String invitation = request.getParameter("invite");
     	String callback = sanitizeJsonpParam(request.getParameter("callback"));
     	String email = request.getParameter("email");
     	logger.fine("username received " + username);
+		//searches for existing user with the username
     	User u = DatabaseInteraction.getUser(username);
         response.setContentType("application/x-javascript");
         PrintWriter out = response.getWriter();
@@ -35,6 +41,7 @@ public class SignUp extends HttpServlet {
         	out.close();
         	return;
     	}
+		//checks for valid invitation
         if (!DatabaseInteraction.removeInvite(invitation)) {
         	logger.fine("unknown invite");
     		if (callback != null)

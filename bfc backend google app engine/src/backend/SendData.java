@@ -12,7 +12,7 @@ import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
- * My test servlet
+ * This servlet sends that was stored in the db for a specific user
  * 
  * @author Noam Szpiro
  */
@@ -26,9 +26,11 @@ public class SendData extends HttpServlet {
         throws IOException, ServletException
     {
     	logger.fine("got get");
+		//gets parameters of this request
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
         double version = 0;
+		//parses the version number of the extension given as a param
         try {
         	String versionString = request.getParameter("version");
         	if (versionString != null)
@@ -36,7 +38,8 @@ public class SendData extends HttpServlet {
         } catch (NumberFormatException e) {
         	logger.severe("version was missing");
         }
-        
+        //sets the serial to be the serial received or -1 which represents an extension version that
+		//does not yet have the new serial method
         int serial = -1;
     	try {
     		if (version != 0)
@@ -45,6 +48,7 @@ public class SendData extends HttpServlet {
     		response.sendError(HttpServletResponse.SC_CONFLICT, "invalid serial");
 			return;
     	}
+		//authenticates users
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
     	if (auth.getResponseType() == AuthenticationResponse.BLOCKED){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
@@ -57,16 +61,19 @@ public class SendData extends HttpServlet {
        		logger.config("received incorrect credentials");
        		return;
        	}
+		//user has been authenticated
         User u = DatabaseInteraction.getUser(username);
         if (version != 0)
         	u.setSerial(serial);
         else
         	u.setSerial(-1);
+		//updates the serial for the user in the db
     	boolean succ = DatabaseInteraction.updateOrSaveUser(u);
     	if (!succ)
     		logger.severe("failed to update serial of user");
         JSONObject json = DatabaseInteraction.newJSONInstance();
         try {
+			//sends needed information to the client
 			json.append("info", u.getInfo());
 			json.append("salt", u.getSalt());
 			response.setContentType("text/html");

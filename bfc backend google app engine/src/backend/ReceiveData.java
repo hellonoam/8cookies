@@ -27,11 +27,13 @@ public class ReceiveData extends HttpServlet {
         throws IOException, ServletException
     {
     	logger.severe("inside do get");
+		//reading the params in this request
     	//reading the cookies as json
     	String reqString = request.getParameter("dataFromClient");
     	String username = request.getParameter("user");
     	String password = request.getParameter("pass");
     	double version = 0;
+		//reading version number and raising exception if missing
         try {
         	String versionString = request.getParameter("version");
         	if (versionString != null)
@@ -39,6 +41,8 @@ public class ReceiveData extends HttpServlet {
         } catch (NumberFormatException e) {
         	logger.severe("version was missing");
         }
+		//setting serial to be -1 or the serial received. if serial isn't received, an old version
+		//of the extension made this request. shouldn't happen
     	int serial = -1;
     	logger.severe("got request from: " + username + " version: " + version);
     	try {
@@ -50,6 +54,7 @@ public class ReceiveData extends HttpServlet {
     	}
 
     	logger.fine("serial " + serial);
+		//authenticates users
     	AuthenticationResponse auth = DatabaseInteraction.authenticate(username, password);
     	if (auth.getResponseType() == AuthenticationResponse.BLOCKED){
     		response.sendError(HttpServletResponse.SC_FORBIDDEN, "wrong passwrod too many times wait:"
@@ -62,13 +67,15 @@ public class ReceiveData extends HttpServlet {
        		logger.fine("received incorrect credentials");
     		return;
     	}
+		//user has been authenticated
     	User u = DatabaseInteraction.getUser(username);
     	if (version == 0)
     		u.setSerial(-1);
     	else if (u.getSerial() == -1)
     		u.setSerial(serial);
-    	else if (serial != u.getSerial()){
+    	else if (serial != u.getSerial()){//CONFLICT!!
 			u.setSerial(serial);
+			//saves user to db after serial has been updated
 			boolean succ = DatabaseInteraction.updateOrSaveUser(u);
 			if (!succ)
 				logger.severe("failed to update serial of user");
@@ -76,10 +83,12 @@ public class ReceiveData extends HttpServlet {
     		if (infoString != null && !infoString.equals("")){
     			JSONObject jsonResponse = DatabaseInteraction.newJSONInstance();
     	        try {
+					//sends needed information to the server
     	        	jsonResponse.append("info", u.getInfo());
     	        	jsonResponse.append("salt", u.getSalt());
     	        	response.setContentType("text/html");
     	        	PrintWriter out = response.getWriter();
+					//sends the users the updated browsing session
     	        	out.println(jsonResponse);
     	        	out.close();
     	        } catch (JSONException e) {
@@ -89,11 +98,13 @@ public class ReceiveData extends HttpServlet {
     	    }
     		return;
     	}
+		//no conflict
     	u.setInfo(reqString);
     	logger.fine("updated data of existing user");
     	if (DatabaseInteraction.updateOrSaveUser(u)){
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
+			//sends message to client that the info has been received successfully
     		out.println("received");
         	out.close();
     		logger.fine("data received successfully");

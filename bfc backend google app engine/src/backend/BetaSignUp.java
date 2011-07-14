@@ -15,7 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * This servlet accepts beta signups
+ * 
+ * @author Noam Szpiro
+ */
 @SuppressWarnings("serial")
 public class BetaSignUp extends HttpServlet {
 	private Logger logger = Logger.getLogger(SignUp.class.getName()); 

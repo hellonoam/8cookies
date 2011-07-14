@@ -11,7 +11,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * This servlet receives errors that occured on the client side
+ * 
+ * @author Noam Szpiro
+ */
 public class Error extends HttpServlet {
 	private Logger logger = Logger.getLogger(Error.class.getName()); 
 

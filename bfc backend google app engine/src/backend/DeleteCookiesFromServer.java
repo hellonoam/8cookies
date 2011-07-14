@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * My test servlet
+ * This sevlets delete all information about a user from the db after authentication, of course!
  *
  * @author Noam Szpiro
  */
