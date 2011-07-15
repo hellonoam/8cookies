@@ -1,8 +1,0 @@
-visited url needs to be stored as text not string or deal with < 500 chars
-
-
-check valid email
-
-sending to server data that is not in a json format will cause an error (not null though)
-
-session in gmail => login => logout => close browser => open => gmail session is gone
