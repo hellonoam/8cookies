@@ -1,4 +1,16 @@
+/*
+ * This class represents the extension, it contains information about the extension such as version number and
+ * restore options
+ */
+
+/*
+ * the ctor for the class
+ * @backup
+ *  the backup option for the class, usually localStorage
+ */
 var Extension = function(backup) {
+    if (!(this instanceof Extension)) //in case this was called as a function rather than a cons
+        return new Extension(backup);
     this.version = this.getVersion();
     this.backup = backup;
     if (!this.backup.restore)
@@ -11,6 +23,9 @@ var Extension = function(backup) {
     this.idleInterval = 600; //600 every 10 minutes
 }
 
+/*
+ * gets the version number of the extension
+ */
 Extension.prototype.getVersion = function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
@@ -19,6 +34,9 @@ Extension.prototype.getVersion = function() {
     return manifest.version;
 }
 
+/*
+ * creates a restore point and saves it in backup
+ */
 Extension.prototype.createRestorePoint = function() {
     var self = this;
     var restoreSession = new session();
@@ -28,11 +46,17 @@ Extension.prototype.createRestorePoint = function() {
 	});
 }
 
+/*
+ * goes to the restore point
+ */
 Extension.prototype.doRestore = function() {
     var s = new session();
 	s.deSerializeAndApply(backup.restore);
 }
 
+/*
+ * generates a random number berween 0 and 100,000
+ */
 Extension.prototype.getRandomSerial = function() {
     return Math.floor(Math.random()*100000);
 }
