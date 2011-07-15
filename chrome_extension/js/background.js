@@ -3,7 +3,7 @@ var current = new session();
 //value for setInteval of sending and receiving data every X seconds
 var sendDataIntervalId;
 
-//interval for sending and receiving data
+//interval for sending data and when does the browser move to the idle state
 var sendInterval = 300000; //300000 every 5 minutes
 var idleInterval = 600; //600 every 10 minutes
 
