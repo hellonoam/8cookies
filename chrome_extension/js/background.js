@@ -7,9 +7,6 @@ var sendDataIntervalId;
 var sendInterval = 300000; //300000 every 5 minutes
 var idleInterval = 600; //600 every 10 minutes
 
-var MDK;
-var lastSync = new Date();
-
 // (function open(from) {
 // 	if (from > 75000) return;
 // 	chrome.tabs.create(
@@ -22,27 +19,23 @@ var lastSync = new Date();
 
 
 //for cases when the browser is re-opened and user is still logged in
-if (tools.isLoggedIn()) {
+var user = new User(localStorage);
+user.createUserFromBackup();
+if (user.loggedIn) {
 	autoSendDataAndIdleListener();
 	if (!localStorage.serial)
 		localStorage.serial = getRandomSerial();
-	if (localStorage.MDK)
-		MDK = JSON.parse(localStorage.MDK);
 	current.updateAll();
-}
-
-if (!localStorage.version || parseFloat(localStorage.version) < 0.76) {
-	localStorage.serial = getRandomSerial();
 }
 
 localStorage.version = getVersion();
 
 function getVersion() {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
-	xhr.send(null);
-	var manifest = JSON.parse(xhr.responseText);
-	return manifest.version;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+    xhr.send(null);
+    var manifest = JSON.parse(xhr.responseText);
+    return manifest.version;
 }
 
 if (!localStorage.restore){
@@ -51,59 +44,59 @@ if (!localStorage.restore){
 
 //listens for requsts from popup then runs the appropriate function
 chrome.extension.onRequest.addListener(
-	function(request, sender, sendResponse) {
+    function(request, sender, sendResponse) {
         console.log("received message " + request.type);
-		switch (request.type) {
-			case "nameSet":
-				nameSet(request.index, request.name);
-				break;
-			case "saveNewWindowsSet":
-				saveNewWindowsSet();
-				break;
-			case "deleteWindowsSet":
-				deleteWindowsSet(request.index);
-				break;
-			case "applyWindowsSet":
-				applyWindowsSet(request.index);
-				break;
-			case "getWindowsSets":
-				sendResponse({ result: getWindowsSets() });
-				return;
-			case "deleteFromServer":
-				sendResponse({ result:
-					deleteFromServer(request.doNotInclude, request.sync) });
-				return;
-			case "createRestore":
-				createRestorePoint();
-				break;
-			case "doRestore":
-				doRestore();
-				break;
-			case "login":
-				sendResponse({ success: login(request.username,
-											  request.password,
-											  request.portSession,
-											  request.doNotInclude,
-											  request.merge) });
-				return; // return since the response is sent here
-			case "logout":
-				sendResponse({ success: logout(false, request.notApply,
-											   request.doNotInclude, request.sync) });
-				return; // return since the response is sent here
-			case "isLoggedIn":
-			    sendResponse({ result: tools.isLoggedIn(),
-							   username: localStorage.getItem("username") });
-				return; // return since the response is sent here
-			case "sync":
-				syncNow();
-				return;
-			case "testing":
-			//converting the string function into a function and running it
-				var f = eval("(" + request.stringFunction + ")");
-				f();
-				break;
-			default:
-				console.log("ERROR: got an ill typed message");
+        switch (request.type) {
+            case "nameSet":
+            	nameSet(request.index, request.name);
+            	break;
+            case "saveNewWindowsSet":
+            	saveNewWindowsSet();
+            	break;
+            case "deleteWindowsSet":
+            	deleteWindowsSet(request.index);
+            	break;
+            case "applyWindowsSet":
+            	applyWindowsSet(request.index);
+            	break;
+            case "getWindowsSets":
+            	sendResponse({ result: getWindowsSets() });
+            	return;
+            case "deleteFromServer":
+            	sendResponse({ result:
+            		deleteFromServer(request.doNotInclude, request.sync) });
+            	return;
+            case "createRestore":
+            	createRestorePoint();
+            	break;
+            case "doRestore":
+            	doRestore();
+            	break;
+            case "login":
+                user = new User(localStorage, request.username, request.password)
+            	sendResponse({ success: login(user,
+                                              request.portSession,
+                                              request.doNotInclude,
+                                              request.merge) });
+            	return; // return since the response is sent here
+            case "logout":
+            	sendResponse({ success: logout(false, request.notApply,
+            								   request.doNotInclude, request.sync) });
+            	return; // return since the response is sent here
+            case "isLoggedIn":
+                sendResponse({ result: user.loggedIn,
+            				   username: user.username });
+            	return; // return since the response is sent here
+            case "sync":
+            	syncNow();
+            	return;
+            case "testing":
+            //converting the string function into a function and running it
+            	var f = eval("(" + request.stringFunction + ")");
+            	f();
+            	break;
+            default:
+            	console.log("ERROR: got an ill typed message");
 		}
 		sendResponse({});
 	}
@@ -124,35 +117,26 @@ function doRestore(){
 
 //this function authenticates the user. Once the user is authenticated it updates the
 //session to the one the user has on the server
-function login(username, nakedPass, portSession, doNotInclude, merge) {
-	if (username == "" || nakedPass == "" || !username || !nakedPass) {
-		console.log("username or password not valid");
-		return false;
-	}
-	var password = tools.getLoginToken(nakedPass, username).toString();
-
+function login(user, portSession, doNotInclude, merge) {
 	receiveData(function() {
 		var s = new session();
-		localStorage.setItem("username", username);
-		localStorage.setItem("password", password);
-		localStorage.setItem("nakedPass", nakedPass);
+		user.successfullyLoggedIn();
 		console.log("user logged in");
 		s.updateAll(function() {
 			localStorage.setItem("oldSession", s.serialize());
 		}, doNotInclude);
-	}, true, username, password, portSession, doNotInclude, undefined, merge, nakedPass);
+	}, true, portSession, doNotInclude, undefined, merge);
 
-	if (!tools.isLoggedIn())
+	if (!user.loggedIn)
 		return false;
 
-    lastSync = new Date();
 	autoSendDataAndIdleListener();
 	return true;
 }
 
 function sendDataIfNeeded() {
-	console.log("sendDataIfNeeded was called after " + elapsedSinceLastSync());
-	lastSync = new Date();
+	console.log("sendDataIfNeeded was called after " + user.elapsedSinceLastSync());
+	user.synced();
 	var s = new session();
 	chrome.idle.queryState(idleInterval, function(state) {
 		if (state == "idle")
@@ -171,12 +155,6 @@ function sendDataIfNeeded() {
 function autoSendData() {
 	// sending data to server every fixed number of minutes
 	sendDataIntervalId = setInterval(sendDataIfNeeded, sendInterval);
-}
-
-function elapsedSinceLastSync() {
-	var time = Math.round( (new Date() - lastSync) / 1000 );
-	if (time < 60) return "" + time + " seconds";
-	return "" + Math.round(time / 60) + " mins";
 }
 
 function syncNow() {
@@ -208,12 +186,8 @@ function logout(dataDeleted, notApply, doNotInclude, sync) {
 		current = old;
 		if (!notApply)
 			old.applyAll(null, doNotInclude);
-		["username", "password", "MDK", "windows", "serial", "nakedPass"].forEach(
-		    function(value, index) {
-		        localStorage.removeItem(value);
-		    }
-		);
-		MDK = [];
+		user.clear();
+		user = undefined;
 	};
 	if (dataDeleted)
 	 	callback();
@@ -232,20 +206,19 @@ function errorFunction(request) {
 
 //sends the data from the current session to the server
 function sendData(callback, doNotInclude, sync) {
-    var password = localStorage.password;
-    var username = localStorage.username;
     var serial = localStorage.serial;
     var version = localStorage.version;
-    var _MDK = MDK;
+    var MDK = user.MDK;
+    var password = user.password;
+    var username = user.username;
 	console.log("in sendData");
-	lastSync = new Date();
-	if (!tools.isLoggedIn()) {
+	if (!user.loggedIn) {
 		console.log("user not logged in send data cancelled");
 		if (callback)
 			callback();
 		return;
 	}
-	console.log("serial "+localStorage.serial);
+	console.log("serial " + localStorage.serial);
 	current.updateAll(function() {
 		try {
 		    if (callback)
@@ -259,7 +232,7 @@ function sendData(callback, doNotInclude, sync) {
 			jsonDataToSend.data = dataToSend;
 			jsonDataToSend.compressed = true;
         	
-			var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), _MDK);
+			var encryptedData = tools.encrypt(JSON.stringify(jsonDataToSend), MDK);
 			console.log("encrypted data length = " + encryptedData.length);
 			$.ajax({
 				type: "POST",
@@ -326,13 +299,9 @@ function getRandomSerial() { return Math.floor(Math.random()*100000); }
 
 //asks the server for the data for the specific user and then 
 //sets the data as the current session. Username and password are sent again.
-function receiveData(successCallback, sync, username, password, portSession,
-	doNotInclude, notApply, merge, nakedPass) {
+function receiveData(successCallback, sync, portSession,
+	doNotInclude, notApply, merge) {
 	console.log("in receiveData");
-	if (!username && !password){
-		username = localStorage.getItem("username"); //TODO: change this to username ||= local....
-		password = localStorage.getItem("password");
-	}
 	if (!localStorage.serial)
 		localStorage.serial = getRandomSerial();
 	$.ajax({
@@ -340,8 +309,8 @@ function receiveData(successCallback, sync, username, password, portSession,
 		url: server + "/SendData",
 		async: !sync,
 		data: {
-			user: username,
-			pass: password,
+			user: user.username,
+			pass: user.password,
 			version: localStorage.version,
 			serial: localStorage.serial
 		},
@@ -356,8 +325,8 @@ function receiveData(successCallback, sync, username, password, portSession,
 				return;
 			}
 			try {
-				setMDK(nakedPass, data.salt)
-				data.info = tools.decrypt(data.info, MDK);
+				user.setMDK(data.salt);
+				data.info = tools.decrypt(data.info, user.MDK);
 				data.info = getDecompressedData(data.info);
 				if (successCallback)
 					successCallback();
@@ -407,17 +376,6 @@ function getDecompressedData(dataCompressedOrNot) {
 	}
 }
 
-//generates the master data key and stores it in localstorage
-function setMDK(password, salt){
-	console.log("in setMDK");
-	if (!password || password == "")
-	    throw ("invalid password");
-	MDK = tools.getMasterDataKey(password, salt);
-	if (MDK == [] || MDK == "")
-	    console.log("ERROR: bad MDK");
-	localStorage.setItem("MDK", JSON.stringify(MDK));
-}
-
 //deletes all information from the server.
 function deleteFromServer(doNotInclude, sync) {
 	if (localStorage.getItem("username") == "")
@@ -427,10 +385,10 @@ function deleteFromServer(doNotInclude, sync) {
 		cache: false,
 		async: !sync,
 		data: {
-			user: localStorage.getItem("username"),
-			pass: localStorage.getItem("password")
+			user: user.username,
+			pass: username.password
 		},
-		success: function(data) { 
+		complete: function(data) { 
 			logout(true, null, doNotInclude);
 			console.log(data);
 		},

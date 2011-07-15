@@ -7,7 +7,7 @@
   */
 var User = function(backup, username, nakedPass) {
     if (!(this instanceof User)) //in case this was called as a function rather than a cons
-        return new User(...);
+        return new User(backup, username, nakedPass);
 
     this.backup = backup;
     this.username = username;
@@ -16,7 +16,9 @@ var User = function(backup, username, nakedPass) {
     this.windows;
     this.lastSync = new Date();
     this.loggedIn = false;
-    this.createBackup();
+    //so the backup won't be overwritted with undefined values
+    if (username)
+        this.createBackup();
 }
 
 /*
@@ -26,9 +28,10 @@ User.prototype.createUserFromBackup = function() {
     this.password = this.backup.password;
     this.username = this.backup.username;
     this.nakedPass = this.backup.nakedPass;
-    this.MDK = JSON.parse(this.backup.MDK);
     this.loggedIn = this.backup.loggedIn;
-    this.windows = this.backup.windows;//check this
+    this.windows = this.backup.windows;
+    if (this.backup.MDK && this.backup.MDK != "undefined")
+        this.MDK = JSON.parse(this.backup.MDK);
 }
 
 /*
@@ -39,12 +42,13 @@ User.prototype.createUserFromBackup = function() {
  *  if it's undefined all fields are backup up.
  */
 User.prototype.createBackup = function(item) {
+    var self = this;
     var stringArr = ["username", "password", "MDK", "windows", "nakedPass", "loggedIn"];
-    var argArr = [this.password, this.username, JSON.stringify(this.MDK),
+    var argArr = [this.username, this.password, JSON.stringify(this.MDK),
                   this.windows, this.nakedPass, this.loggedIn];
     stringArr.forEach(function(value, index) {
         if (!item || item == value)
-            this.backup.setItem(value, argArr[index]);
+            self.backup.setItem(value, argArr[index]);
     });
 }
 
@@ -52,12 +56,22 @@ User.prototype.createBackup = function(item) {
  * removes any traces of the user
  */
 User.prototype.clear = function(backup) {
+    var self = this;
     ["username", "password", "MDK", "windows", "nakedPass", "loggedIn"].forEach(
         function(value, index) {
-            backup.removeItem(value);
+            self.backup.removeItem(value);
         }
     );
-    this = undefined; //check that this works
+}
+
+User.prototype.synced = function() {
+    this.lastSync = new Date();
+}
+
+User.prototype.elapsedSinceLastSync = function() {
+	var time = Math.round( (new Date() - this.lastSync) / 1000 );
+	if (time < 60) return "" + time + " seconds";
+	return "" + Math.round(time / 60) + " mins";
 }
 
 /*

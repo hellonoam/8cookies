@@ -16,7 +16,8 @@ function init() {
 	chrome.extension.sendRequest(
 		{ type: "isLoggedIn" },
 		function(response) {
-			if (response.result)
+		    console.log(response)
+			if (response.result && response.result != "false")
 				userLoggedIn(response.username);
 			else
 				userLoggedOut();
@@ -25,7 +26,7 @@ function init() {
 
     setInterval(function() {
         $(".syncText").text("synced " + 
-            chrome.extension.getBackgroundPage().elapsedSinceLastSync() + " ago...");
+            chrome.extension.getBackgroundPage().user.elapsedSinceLastSync() + " ago...");
     }, 1000);
 
 	//maps enter to submit
