@@ -39,7 +39,7 @@ Extension.prototype.getVersion = function() {
  */
 Extension.prototype.createRestorePoint = function() {
     var self = this;
-    var restoreSession = new session();
+    var restoreSession = new Session();
 	restoreSession.updateAll(function() {
 		self.backup.restore = restoreSession.serialize();
 		console.log("restore point was created");
@@ -50,7 +50,7 @@ Extension.prototype.createRestorePoint = function() {
  * goes to the restore point
  */
 Extension.prototype.doRestore = function() {
-    var s = new session();
+    var s = new Session();
 	s.deSerializeAndApply(this.backup.restore);
 }
 

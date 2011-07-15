@@ -1,11 +1,15 @@
+/*
+ * This is the Background class it uses 
+ */
+
 var Background = function(backup) {
     if (!(this instanceof Background)) //in case this was called as a function rather than a cons
         return new Background(backup);
 
     this.backup = backup;
 
-    //used to hold the current session
-    this.current = new session();
+    //used to hold the current Session
+    this.current = new Session();
     this.extension = new Extension(backup);
     this.user = new User(backup);
 
@@ -86,11 +90,11 @@ Background.prototype.setListeners = function() {
 }
 
 //this function authenticates the user. Once the user is authenticated it updates the
-//session to the one the user has on the server
+//Session to the one the user has on the server
 Background.prototype.login = function(user, portSession, doNotInclude, merge) {
     var self = this;
     self.receiveData(function() {
-        var s = new session();
+        var s = new Session();
         self.user.successfullyLoggedIn();
         console.log("user logged in");
         s.updateAll(function() {
@@ -109,11 +113,11 @@ Background.prototype.sendDataIfNeeded = function() {
     var self = this;
     console.log("sendDataIfNeeded was called after " + self.user.elapsedSinceLastSync());
     self.user.synced();
-    var s = new session();
+    var s = new Session();
     chrome.idle.queryState(self.extension.idleInterval, function(state) {
         if (state == "idle")
             return;
-        //session is active
+        //Session is active
         //checking if something has changed since the last sync
         s.updateAll(function() {
             if (JSON.stringify(s.info) != JSON.stringify(self.current.info) ) {
@@ -148,13 +152,13 @@ Background.prototype.idleListener = function() {
     this.sendData();
 }
 
-//logs out the user, but sends the session to the server before then
+//logs out the user, but sends the Session to the server before then
 Background.prototype.logout = function(dataDeleted, notApply, doNotInclude, sync) {
     var self = this;
     chrome.idle.onStateChanged.removeListener(self.idleListener);
     clearInterval(self.sendDataIntervalId);
     var callback = function() {
-        var old = new session();
+        var old = new Session();
         old.deSerialize(localStorage.getItem("oldSession")); //todo: move this
         self.current = old;
         if (!notApply)
@@ -176,7 +180,7 @@ Background.prototype.errorFunction = function(request) {
     console.log(request.status + ": " + request.statusText);
 }
 
-//sends the data from the current session to the server
+//sends the data from the current Session to the server
 Background.prototype.sendData = function(callback, doNotInclude, sync) {
     var self = this;
     var MDK = self.user.MDK;
@@ -268,7 +272,7 @@ Background.prototype.sendErrorToServer = function(err, place) {
 }
 
 //asks the server for the data for the specific user and then 
-//sets the data as the current session. Username and password are sent again.
+//sets the data as the current Session. Username and password are sent again.
 Background.prototype.receiveData = function(successCallback, sync, portSession,
         doNotInclude, notApply, merge) {
     var self = this;

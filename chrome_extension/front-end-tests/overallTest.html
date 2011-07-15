@@ -16,13 +16,13 @@
 	var server = "http://localhost";
 	localStorage.oldSession = "";
 	$(document).ready(function(){
-		var localhostIndex = new session();
+		var localhostIndex = new Session();
 		var doNotInclude;
-		var session1 = new session();
+		var session1 = new Session();
 		var test1 = function() {
 			test("login with porting session", 1, function() {
 				stop();
-				var current = new session();
+				var current = new Session();
 				chrome.windows.getCurrent(function(currentWin) {
 					doNotInclude = currentWin.id;
 					current.updateAll(null, doNotInclude);
@@ -30,7 +30,7 @@
 							password: "pass1", portSession: true, doNotInclude: 
 							doNotInclude },
 						function() {
-							var s = new session();
+							var s = new Session();
 							s.updateAll(function() {
 								console.log("password = ")
 								console.log(localStorage.password);
@@ -51,11 +51,11 @@
 			console.log(localStorage.password);
 			test("logout returns previous session", 1, function(){
 				stop();
-				var current = new session();
+				var current = new Session();
 				current.updateAll(function() {
 					var newWin = getLocalhostWin();
 					var afterLogout = function() {
-						var s = new session();
+						var s = new Session();
 						setTimeout(function() { 
 //this is cheeky but it problematic to make afterLogout exactly after logout is complete
 							s.updateAll(function(){
@@ -87,7 +87,7 @@
 				chrome.extension.sendRequest({ type: "login", username: "user1",
 						password: "pass1", doNotInclude: doNotInclude },
 					function() {
-						var s = new session();
+						var s = new Session();
 						setTimeout(function() { //timeout so cookies will be set
 							s.updateAll(function() {
 								console.log("test3");

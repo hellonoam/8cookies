@@ -1,7 +1,7 @@
-//this represents a browsing session
-var session = function(cookies, windows){
-	if (!(this instanceof session)) //in case this was called as a function rather than a cons
-		return new session(cookies, windows);
+//this represents a browsing Session
+var Session = function(cookies, windows){
+	if (!(this instanceof Session)) //in case this was called as a function rather than a cons
+		return new Session(cookies, windows);
 
 	this.info = new Object();
 	this.info.cookies = cookies;
@@ -10,13 +10,13 @@ var session = function(cookies, windows){
 	this.info.windows = windows;
 }
 
-// //returns a JSON representation of session
-session.prototype.serialize = function() {
+// //returns a JSON representation of Session
+Session.prototype.serialize = function() {
 	return JSON.stringify(this.info);
 }
 
 //updates the cookies variable to hold the up-to-date values
-session.prototype.updateCookies = function(callback) {
+Session.prototype.updateCookies = function(callback) {
 	var s = this;
 	chrome.cookies.getAll({}, function(cks) {
 		s.info.cookies = cks;
@@ -28,7 +28,7 @@ session.prototype.updateCookies = function(callback) {
 
 //updates the windows[0] variable to hold the up-to-date values
 //the rest of the windows array stays the same
-session.prototype.updateWindows = function(callback, doNotInclude) {
+Session.prototype.updateWindows = function(callback, doNotInclude) {
 	var s = this;
 	chrome.windows.getAll({populate: true}, function(windows) {
 		if (doNotInclude){
@@ -51,14 +51,14 @@ session.prototype.updateWindows = function(callback, doNotInclude) {
 }
 
 //updates both windows and tabs
-session.prototype.updateAll = function(callback, doNotInclude) {
+Session.prototype.updateAll = function(callback, doNotInclude) {
 	var s = this;
 	this.updateCookies(function() {
 		s.updateWindows(callback, doNotInclude)
 	});
 }
 
-session.prototype.saveNewWindowsSet = function() {
+Session.prototype.saveNewWindowsSet = function() {
 	var s = this;
 	this.updateWindows(function() {
 		var length = s.info.windows.length;
@@ -68,29 +68,29 @@ session.prototype.saveNewWindowsSet = function() {
 	});
 }
 
-session.prototype.nameSet = function(index, name) {
+Session.prototype.nameSet = function(index, name) {
 	this.info.windows[index][0].setName = name;
 	localStorage.setItem("windows", JSON.stringify(this.info.windows));
 }
 
-session.prototype.deleteWindowsSet = function(index) {
+Session.prototype.deleteWindowsSet = function(index) {
 	this.info.windows.splice(index,1);
 	localStorage.setItem("windows", JSON.stringify(this.info.windows));
 }
 
-session.prototype.applyWindowsSet = function(index) {
+Session.prototype.applyWindowsSet = function(index) {
 	if (index >= this.info.windows.length)
 		return;
 	this.info.windows[0] = this.info.windows[index];
 	this.applyWindows(undefined, undefined, true);
 }
 
-session.prototype.getWindowsSets = function() {
+Session.prototype.getWindowsSets = function() {
 	return JSON.stringify(this.info.windows);
 }
 
-//sets the cookies of this session to be the cookies of the browser
-session.prototype.applyCookies = function(callback) {
+//sets the cookies of this Session to be the cookies of the browser
+Session.prototype.applyCookies = function(callback) {
 	var s = this;
 	tools.deleteCookies(function() {
 		if (s.info.cookies)
@@ -100,21 +100,21 @@ session.prototype.applyCookies = function(callback) {
 	});
 }
 
-//sets the windows of this session to be the windows of the browser
-session.prototype.applyWindows = function(callback, doNotInclude, merge) {
+//sets the windows of this Session to be the windows of the browser
+Session.prototype.applyWindows = function(callback, doNotInclude, merge) {
 	tools.setWindows(this.info.windows[0], callback, merge, doNotInclude);
 }
 
-//sets both windows and cookies of this session to be those of the browser
-session.prototype.applyAll = function(callback, doNotInclude, merge) {
+//sets both windows and cookies of this Session to be those of the browser
+Session.prototype.applyAll = function(callback, doNotInclude, merge) {
 	var s = this;
 	this.applyCookies(function() {
 		s.applyWindows(callback, doNotInclude, merge);
 	});
 }
 
-//updates the data of this session to json after de serializing it
-session.prototype.deSerialize = function(json) {
+//updates the data of this Session to json after de serializing it
+Session.prototype.deSerialize = function(json) {
 	var s = this;
 	console.log("deserialize was called");
 	if (json)
@@ -127,7 +127,7 @@ session.prototype.deSerialize = function(json) {
 		localStorage.setItem("windows", JSON.stringify(s.info.windows));
 }
 
-session.prototype.deSerializeAndApply = function(data, doNotInclude, merge) {
+Session.prototype.deSerializeAndApply = function(data, doNotInclude, merge) {
 	try {
 		this.deSerialize(data);
 		this.applyAll(null, doNotInclude, merge);
