@@ -51,7 +51,7 @@ Extension.prototype.createRestorePoint = function() {
  */
 Extension.prototype.doRestore = function() {
     var s = new session();
-	s.deSerializeAndApply(backup.restore);
+	s.deSerializeAndApply(this.backup.restore);
 }
 
 /*

@@ -26,7 +26,7 @@ function init() {
 
     setInterval(function() {
         $(".syncText").text("synced " + 
-            chrome.extension.getBackgroundPage().user.elapsedSinceLastSync() + " ago...");
+            chrome.extension.getBackgroundPage().background.user.elapsedSinceLastSync() + " ago...");
     }, 1000);
 
 	//maps enter to submit

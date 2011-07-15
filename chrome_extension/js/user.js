@@ -60,6 +60,7 @@ User.prototype.clear = function(backup) {
     ["username", "password", "MDK", "windows", "nakedPass", "loggedIn"].forEach(
         function(value, index) {
             self.backup.removeItem(value);
+            self[value] = undefined;
         }
     );
 }
