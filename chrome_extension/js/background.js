@@ -303,19 +303,19 @@ Background.prototype.receiveData = function(successCallback, sync, portSession,
                     return;
                 self.current.deSerializeAndApply(data.info, doNotInclude, merge);
                 console.log("length in receivedata ****** " + self.current.info.windows.length);
-                localStorage.setItem("tooManyTries", "false"); // move this
+                self.tooManyTries = false;
             } catch(err) {
                 self.sendErrorToServer(err, "in receiveData");
             }
         },
         error: function(error) {
-            localStorage.setItem("tooManyTries", "false");//move this
+            self.tooManyTries = false;
             self.errorFunction(error);
             console.log(error);
             if (error.status == 403) {
                 time = error.responseText.substr(error.responseText.indexOf(':') + 1);
-                localStorage.setItem("tooManyTries", "true");//
-                localStorage.setItem("waitTime", time)
+                self.tooManyTries = true;
+                self.waitTime = time;
             }
         }
     });

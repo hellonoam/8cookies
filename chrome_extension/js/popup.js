@@ -50,9 +50,9 @@ function init() {
 				if (response.success)
 					userLoggedIn($(".username").val());
 				else {
-					if (localStorage.tooManyTries == "true")
+					if (chrome.extension.getBackgroundPage().background.tooManyTries)
 						$(".result").text("too many attemps, please wait "
-						  + parseInt(localStorage.waitTime)/60 + " minutes");
+						  + parseInt(chrome.extension.getBackgroundPage().background.waitTime)/60 + " minutes");
 					else
 						$(".result").text("wrong username or password");
 				}
