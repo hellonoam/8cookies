@@ -12,6 +12,7 @@ var User = function(backup, username, nakedPass) {
     this.backup = backup;
     this.username = username;
     this.nakedPass = nakedPass;
+    this.paused = false;
     this.password = tools.getLoginToken(this.nakedPass, this.username).toString();
     this.windows;
     this.lastSync = new Date();
@@ -28,8 +29,9 @@ User.prototype.createUserFromBackup = function() {
     this.password = this.backup.password;
     this.username = this.backup.username;
     this.nakedPass = this.backup.nakedPass;
-    this.loggedIn = this.backup.loggedIn;
-    this.windows = this.backup.windows;
+    this.loggedIn = this.backup.loggedIn == "true";
+    this.windows = this.backup.windows;  
+    this.paused = this.backup.paused == "true";
     if (this.backup.MDK && this.backup.MDK != "undefined")
         this.MDK = JSON.parse(this.backup.MDK);
 }
@@ -43,9 +45,9 @@ User.prototype.createUserFromBackup = function() {
  */
 User.prototype.createBackup = function(item) {
     var self = this;
-    var stringArr = ["username", "password", "MDK", "windows", "nakedPass", "loggedIn"];
+    var stringArr = ["username", "password", "MDK", "windows", "nakedPass", "loggedIn", "paused"];
     var argArr = [this.username, this.password, JSON.stringify(this.MDK),
-                  this.windows, this.nakedPass, this.loggedIn];
+                  this.windows, this.nakedPass, this.loggedIn, this.paused];
     stringArr.forEach(function(value, index) {
         if (!item || item == value)
             self.backup.setItem(value, argArr[index]);
@@ -57,7 +59,7 @@ User.prototype.createBackup = function(item) {
  */
 User.prototype.clear = function(backup) {
     var self = this;
-    ["username", "password", "MDK", "windows", "nakedPass", "loggedIn"].forEach(
+    ["username", "password", "MDK", "windows", "nakedPass", "loggedIn", "paused"].forEach(
         function(value, index) {
             self.backup.removeItem(value);
             self[value] = undefined;
@@ -65,10 +67,26 @@ User.prototype.clear = function(backup) {
     );
 }
 
+/*
+ * changes the state of sync for the user from pause to continue and vice versa
+ */
+User.prototype.togglePaused = function() {
+    this.paused = !this.paused;
+    this.createBackup("paused");
+}
+
+/*
+ * called when the user has been synced
+ */
 User.prototype.synced = function() {
     this.lastSync = new Date();
 }
 
+/*
+ * calculates the time since last sync
+ * @return
+ *  time since last sync with 'min' or 'seconds' added
+ */
 User.prototype.elapsedSinceLastSync = function() {
 	var time = Math.round( (new Date() - this.lastSync) / 1000 );
 	if (time < 60) return "" + time + " seconds";

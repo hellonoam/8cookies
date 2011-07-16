@@ -25,7 +25,7 @@ body {
 	margin-top: 13px;
 }
 
-.login, .logout, .syncButton, .saveState, .showStates {
+.login, .logout, .syncButton, .saveState, .showStates, .togglePause {
 	border-radius: 4px;
 	border: 1px solid #5C9FC0;
 	background:#5C9FC0;
@@ -34,24 +34,27 @@ body {
 	cursor: pointer;
 }
 
-.states {
-	width: 150px;
-	float: left;
-	margin-top: 15px;
-	margin-left: 28px;
-}
-
 .options {
 	margin-top: 10px;
 }
 
-.syncButton {
+.syncButton, .togglePause {
  	border: 1px solid white;
  	background: white;
  	color: #563c12;
  	text-decoration: underline;
  	margin: 6px;
  	margin-left: 4px;
+}
+
+.pause {
+    width: 150px;
+    float: left;
+}
+
+.togglePause {
+    float: left;
+    margin-left: 55px;
 }
 
 .result {
@@ -108,6 +111,13 @@ body {
 .inputText {
 	font-weight: bold;
 	font-size: 1em;
+}
+
+.states {
+	width: 150px;
+	float: left;
+	margin-top: 15px;
+	margin-left: 28px;
 }
 
 .saveState {

@@ -125,6 +125,18 @@ public class DatabaseInteraction {
         }
         return result;
     }
+    
+    public static List<Email> getAllEmails(){
+    	PersistenceManager pm = PMF.get().getPersistenceManager();      
+        Query query = pm.newQuery("select from " + Email.class.getName());
+        List<Email> result = null;
+        try {
+        	result = (List<Email>) query.execute();
+        } finally {
+        	query.closeAll();
+        }
+        return result;
+    }
 
     public static List<User> getAllUsers(){
     	PersistenceManager pm = PMF.get().getPersistenceManager();      

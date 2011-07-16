@@ -4,16 +4,14 @@
 
 <html>
 <body>
-	List of failed-to-reproduce urls <br/>
-	<% 
-		int i=0;
-		List<URL> urls = DatabaseInteraction.getAllFailedURLs();
-		for (URL u: urls){ 
-	%>
+	 
+		List<Email> emails = DatabaseInteraction.getAllEmails();
+		for (Email e: emails){ 
+	
 			<br/>
-			<%= ++i + ") " + u.toString() %>
-	<%
+			e.toString()
+	
 		}
-	%>
+	
 </body>
 </html>

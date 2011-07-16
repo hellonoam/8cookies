@@ -10,6 +10,7 @@
 	<p><a href="/index.jsp">join</a></p>
 	<p><a href="/watch.jsp">watch</a></p>
 	<p><a href="/faq.jsp">faq</a></p>
+	<p><a href="/download.html">download</a></p>
 </div>
 <div class="title">
 	<p class="name">8cookies</p>

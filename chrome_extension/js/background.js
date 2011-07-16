@@ -71,10 +71,14 @@ Background.prototype.setListeners = function() {
                     return; // return since the response is sent here
                 case "isLoggedIn":
                     sendResponse({ result: self.user.loggedIn,
-                                   username: self.user.username });
+                                   username: self.user.username,
+                                   paused: self.user.paused });
                     return; // return since the response is sent here
                 case "sync":
                     self.syncNow();
+                    return;
+                case "togglePause":
+                    self.togglePause();
                     return;
                 case "testing":
                 //converting the string function into a function and running it
@@ -109,11 +113,9 @@ Background.prototype.login = function(user, portSession, doNotInclude, merge) {
     return true;
 }
 
-Background.prototype.sendDataIfNeeded = function() {
-    var self = this;
-    var time = "undetermined";
-    if (self.user) time = self.user.elapsedSinceLastSync();
-    console.log("sendDataIfNeeded was called after " + time);
+Background.prototype.sendDataIfNeeded = function(self) {
+    console.log("sendDataIfNeeded was called after " +
+                self.user.elapsedSinceLastSync());
     self.user.synced();
     var s = new Session();
     chrome.idle.queryState(self.extension.idleInterval, function(state) {
@@ -131,19 +133,35 @@ Background.prototype.sendDataIfNeeded = function() {
 
 //setting up automatic data sending
 Background.prototype.autoSendData = function() {
+    var self = this;
     // sending data to server every fixed number of minutes
-    this.sendDataIntervalId = setInterval(this.sendDataIfNeeded, this.extension.sendInterval);
+    self.sendDataIntervalId = setInterval(function() {
+            self.sendDataIfNeeded(self);
+        }, self.extension.sendInterval);
 }
 
 Background.prototype.syncNow = function() {
     //removing listener
     clearInterval(this.sendDataIntervalId);
-    this.sendDataIfNeeded();
+    this.sendDataIfNeeded(this);
     //adding listener
-    this.autoSendData();
+    if (!this.user.paused)
+        this.autoSendData();
 }
 
-Background.prototype.autoSendDataAndIdleListener = function() {
+Background.prototype.togglePause = function() {
+    if (!this.user.paused) {
+        clearInterval(this.sendDataIntervalId);
+        chrome.idle.onStateChanged.removeListener(self.idleListener);
+    } else {
+        this.sendDataIfNeeded(this);
+        this.autoSendDataAndIdleListener(true);
+    }
+    this.user.togglePaused();
+}
+
+Background.prototype.autoSendDataAndIdleListener = function(override) {
+    if (!override && this.user.paused) return;
     this.autoSendData();
     //sending data when the browser is no longer in the idle state
     chrome.idle.onStateChanged.addListener(this.idleListener);

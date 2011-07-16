@@ -2,8 +2,16 @@ package backend;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +74,28 @@ public class SignUp extends HttpServlet {
        		logger.severe("failed to sign up user");
        	}
    		out.close();
+   		
+		//sending email
+		Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        String msgBody = email + " signed up using invite: " + invitation;
+        try {
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress("hellonoam@gmail.com", "8cookies"));
+            msg.addRecipient(Message.RecipientType.TO,
+                             new InternetAddress("noam@8cookies.com", "8cookies"));
+            msg.setSubject("signup: " + email);
+            msg.setText(msgBody);
+            Transport.send(msg);
+            logger.fine("email sent");
+        } catch (AddressException e) {
+        	logger.severe("send email failed: " + e.toString());
+            e.printStackTrace();
+        } catch (MessagingException e) {
+        	logger.severe("send email failed: " + e.toString());
+            e.printStackTrace();
+        }
+   		
     }
     
     private boolean validUsernameAndPassword(String username, String password) {
