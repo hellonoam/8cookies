@@ -111,7 +111,9 @@ Background.prototype.login = function(user, portSession, doNotInclude, merge) {
 
 Background.prototype.sendDataIfNeeded = function() {
     var self = this;
-    console.log("sendDataIfNeeded was called after " + self.user.elapsedSinceLastSync());
+    var time = "undetermined";
+    if (self.user) time = self.user.elapsedSinceLastSync();
+    console.log("sendDataIfNeeded was called after " + time);
     self.user.synced();
     var s = new Session();
     chrome.idle.queryState(self.extension.idleInterval, function(state) {
