@@ -5,12 +5,13 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="auther" content="Noam Szpiro">
-<meta name="description" content="8cookies let's users browse from the cloud">
+<meta name="description" content="8cookies lets users browse from the cloud">
 <div class="menu">
 	<p><a href="/index.jsp">join</a></p>
 	<p><a href="/watch.jsp">watch</a></p>
 	<p><a href="/faq.jsp">faq</a></p>
 	<p><a href="/download.html">download</a></p>
+	<p><a href="/authentication.jsp">security</a></p>
 </div>
 <div class="title">
 	<p class="name">8cookies</p>

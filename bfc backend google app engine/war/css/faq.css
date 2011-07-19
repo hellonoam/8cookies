@@ -18,7 +18,8 @@
 .main p {
 	margin-left:20px;
 	margin-bottom: 30px;
-	font-size: 110%;
+	font-size: .8250em;
+	font-family: Helvetica, Arial, Verdana, sans-serif;
 }
 
 .main li {
