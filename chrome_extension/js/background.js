@@ -215,9 +215,9 @@ Background.prototype.sendData = function(callback, doNotInclude, sync) {
     }
     self.current.updateAll(function() {
         try {
+            var dataToSend = self.current.serialize();
             if (callback)
                 callback();
-            var dataToSend = self.current.serialize();
             //compression then converted to a string from a byte array
             dataToSend = Iuppiter.Base64.encode(Iuppiter.compress(dataToSend), true);
             
