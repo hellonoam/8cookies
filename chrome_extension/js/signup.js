@@ -34,10 +34,10 @@ function init() {
 							type: "login",
 							username: $(".username").val(),
 							password: $(".password").val(),
-							portSession: $(".portSession").attr("checked")
+							portSession: !$(".portSession").attr("checked")
 						},
 						function() {
-							if ($(".portSession").attr("checked")) {
+							if (!$(".portSession").attr("checked")) {
 								setTimeout(function() {
 									chrome.tabs.getSelected(null, function(tab) {
 							    		chrome.tabs.remove(tab.id);
